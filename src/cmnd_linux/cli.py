@@ -15,6 +15,7 @@ from .packages import build_room_package, serve_packages
 from .runtime import (RuntimeErrorCMND, backup_runtime, install_release, preflight,
                       restore_runtime, rollback, status, uninstall)
 from .simulator import serve
+from .callbacks import serve_callbacks
 
 
 def emit(value) -> None:
@@ -71,6 +72,7 @@ def parser() -> argparse.ArgumentParser:
     q = sub.add_parser("uninstall"); q.add_argument("--root", required=True, type=Path); q.add_argument("--keep-data", action="store_true"); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("simulator"); q.add_argument("--bind", default="127.0.0.1"); q.add_argument("--port", type=int, default=9079); q.add_argument("--identity", default="SIMULATOR00000001")
     q = sub.add_parser("serve-packages"); q.add_argument("--root", required=True, type=Path); q.add_argument("--bind", default="127.0.0.1"); q.add_argument("--port", type=int, default=8080)
+    q = sub.add_parser("callback-server"); q.add_argument("--port", type=int, default=8080)
     q = sub.add_parser("build-room-package"); q.add_argument("output", type=Path); q.add_argument("--serial", required=True); q.add_argument("--room-id", required=True); q.add_argument("--tv-settings-template", required=True, type=Path)
     q = sub.add_parser("discover"); q.add_argument("target"); q.add_argument("--port", type=int, default=9079)
     q = sub.add_parser("power"); q.add_argument("target"); q.add_argument("state", choices=("On", "Standby")); q.add_argument("--identity", required=True); q.add_argument("--port", type=int, default=9079); q.add_argument("--execute", action="store_true")
@@ -106,6 +108,8 @@ def main(argv=None) -> int:
         elif args.command == "uninstall": emit(uninstall(args.root, keep_data=args.keep_data, execute=args.execute))
         elif args.command == "simulator": serve(args.bind, args.port, args.identity)
         elif args.command == "serve-packages": serve_packages(args.root, args.bind, args.port)
+        elif args.command == "callback-server":
+            cfg = load_config(args.config); serve_callbacks(cfg.bind, args.port)
         elif args.command == "build-room-package":
             build_room_package(args.output, args.serial, args.room_id, args.tv_settings_template)
             emit({"output": str(args.output.resolve()), "room_id": args.room_id, "final_state_verified": False})

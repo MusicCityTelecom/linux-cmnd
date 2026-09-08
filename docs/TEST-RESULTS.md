@@ -6,7 +6,7 @@ Checkpoint: source `0.1.0`, Windows development host, 2026-09-07.
 |---|---|---|
 | Five WAR presence/integrity | PASS | all five present; `7z t` passed in read-only audit |
 | Capture reassembly | PASS | tshark 4.6.8; discovery, power, callback, clone, and range streams decoded |
-| Python unit suite | PASS | 17 tests passed with Python 3.9.7 on Windows; archive, config safety, room/range package, WIXP simulator, message, and lifecycle tests |
+| Python unit suite | PASS | 18 tests passed with Python 3.9.7 on Windows; archive, config safety, callback/polling, room/range package, WIXP simulator, message, and lifecycle tests |
 | Installer static integrity | PASS | `innounp` 0.50 `-t` returned exit 0 for installer SHA-256 `4cc2…2348`; this does not run installer actions |
 | Installer extraction | PASS | `cmndctl extract` + `innounp` 0.50 exit 0; isolated staging contains all five required WAR names |
 | Ubuntu clean runtime | INFRASTRUCTURE_BLOCKED | no disposable Ubuntu runtime executed |
