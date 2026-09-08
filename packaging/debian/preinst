@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+[ -r /etc/os-release ] || { echo "linux-cmnd requires Debian or Ubuntu" >&2; exit 1; }
+. /etc/os-release
+case "${ID:-}:${VERSION_ID:-}" in
+  ubuntu:24.04|debian:12|debian:13) ;;
+  *) echo "Unsupported platform ${ID:-unknown} ${VERSION_ID:-unknown}; use Ubuntu 24.04 or Debian 12/13" >&2; exit 1 ;;
+esac
+case "$(dpkg --print-architecture)" in amd64) ;; *) echo "linux-cmnd requires amd64" >&2; exit 1 ;; esac
+exit 0

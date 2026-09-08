@@ -10,6 +10,10 @@
 !/LICENSE
 !/VERSION
 !/pyproject.toml
+!/packaging/
+!/packaging/**
+!/scripts/
+!/scripts/**
 !/config/
 !/config/**
 !/deploy/

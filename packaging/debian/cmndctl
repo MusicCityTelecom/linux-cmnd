@@ -1,0 +1,4 @@
+#!/bin/sh
+CMND_CONFIG=${CMND_CONFIG:-/etc/cmnd/cmnd.toml}
+export CMND_CONFIG
+PYTHONPATH=/opt/linux-cmnd/current/src exec python3 -m cmnd_linux "$@"

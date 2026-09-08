@@ -7,6 +7,15 @@ bind = "127.0.0.1"
 callback_base_url = "http://127.0.0.1:8080"
 timeout_seconds = 5
 
+[ports]
+# Original CMND listener defaults. Change these only after checking conflicts
+# and TV/browser reachability in both directions.
+tomcat_http = 8080
+tomcat_https = 8443
+apache_http = 8082
+apache_https = 8444
+database = 3306
+
 [[tv.allowlist]]
 ip = "127.0.0.1"
 identity = "SIMULATOR00000001"

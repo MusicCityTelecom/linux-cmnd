@@ -2,7 +2,9 @@
 
 Original Music City Telecom tooling for qualifying and deploying operator-supplied Philips CMND applications on Ubuntu 24.04 x86_64. Vendor software is imported locally and is **not** distributed by this repository. This project is not affiliated with or endorsed by Philips.
 
-Current release: `0.1.0` (development). Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`, so application/database coherence is not yet qualified.
+Current release: `0.2.0` (development). Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`, so application/database coherence is not yet qualified.
+
+Install on Ubuntu 24.04 or Debian 12/13 amd64 using `scripts/install.sh`, or build/install `dist/linux-cmnd_0.2.0_amd64.deb`. See [installation](docs/INSTALL.md) and [configuration](docs/CONFIGURATION.md). Original ports are the defaults and are configurable in `/etc/cmnd/cmnd.toml`.
 
 ## What works now
 

@@ -8,6 +8,8 @@ import shutil
 import socket
 import tarfile
 
+from .config import Config
+
 
 REQUIRED_WARS = ("cas.war", "usermanagement.war", "smartcontrol.war", "SmartInstall.war", "smartcms.war")
 
@@ -16,17 +18,37 @@ class RuntimeErrorCMND(RuntimeError):
     pass
 
 
+def render_runtime_config(config: Config, output: Path, execute: bool) -> dict:
+    files = {
+        "tomcat.env": (f"CATALINA_OPTS=-DCMND_BIND_ADDRESS={config.bind} "
+                       f"-DCMND_TOMCAT_HTTP_PORT={config.tomcat_http} "
+                       f"-DCMND_TOMCAT_HTTPS_PORT={config.tomcat_https}\n"),
+        "apache.env": f"CMND_APACHE_HTTP_PORT={config.apache_http}\nCMND_APACHE_HTTPS_PORT={config.apache_https}\n",
+        "compose.env": f"CMND_DATABASE_PORT={config.database_port}\n",
+    }
+    result = {"output": str(output.resolve()), "files": sorted(files), "executed": execute}
+    if not execute:
+        return result
+    output.mkdir(parents=True, exist_ok=True)
+    for name, content in files.items():
+        target, pending = output / name, output / f".{name}.next"
+        pending.write_text(content, encoding="utf-8")
+        os.chmod(pending, 0o640)
+        pending.replace(target)
+    return result
+
+
 def check_port(host: str, port: int) -> bool:
     with socket.socket() as sock:
         sock.settimeout(0.2)
         return sock.connect_ex((host, port)) == 0
 
 
-def preflight(source: Path | None = None) -> dict:
+def preflight(source: Path | None = None, ports: tuple[int, ...] = (3306, 8080, 8082, 8443, 8444)) -> dict:
     result = {
         "platform": os.name,
         "ports": {str(port): ("in-use" if check_port("127.0.0.1", port) else "available")
-                  for port in (3306, 3307, 8080, 8082, 8443, 8444)},
+                  for port in ports},
         "tools": {name: shutil.which(name) for name in ("java", "systemctl", "docker", "podman", "innoextract", "innounp")},
     }
     if source:

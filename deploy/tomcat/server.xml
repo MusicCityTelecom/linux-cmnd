@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Server port="-1">
   <Service name="Catalina">
-    <Connector address="${CMND_BIND_ADDRESS}" port="8080" protocol="org.apache.coyote.http11.Http11NioProtocol"
+    <Connector address="${CMND_BIND_ADDRESS}" port="${CMND_TOMCAT_HTTP_PORT}" protocol="org.apache.coyote.http11.Http11NioProtocol"
                connectionTimeout="20000" maxParameterCount="1000" server="CMND" />
     <Engine name="Catalina" defaultHost="localhost">
       <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false" deployOnStartup="true" />

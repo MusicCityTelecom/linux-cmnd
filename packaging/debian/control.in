@@ -1,0 +1,10 @@
+Package: linux-cmnd
+Version: @VERSION@
+Section: admin
+Priority: optional
+Architecture: amd64
+Depends: python3 (>= 3.11), adduser
+Maintainer: Music City Telecom <tommy@tomcom.us>
+Description: Linux CMND deployment and Philips TV qualification tooling
+ Original operator tooling for safe import and qualification of a separately
+ supplied Philips CMND payload. Philips vendor applications are not included.

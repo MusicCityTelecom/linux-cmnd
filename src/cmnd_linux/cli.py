@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -13,9 +14,10 @@ from .config import ConfigError, load_config
 from .protocol import ProtocolError, WIXPClient, clone_request, clone_session_state, discovery_request, power_request
 from .packages import build_room_package, serve_packages
 from .runtime import (RuntimeErrorCMND, backup_runtime, install_release, preflight,
-                      restore_runtime, rollback, status, uninstall)
+                      render_runtime_config, restore_runtime, rollback, status, uninstall)
 from .simulator import serve
 from .callbacks import serve_callbacks
+from .backups import BackupError, inspect_windows_backup, prepare_windows_restore, read_password
 
 
 def emit(value) -> None:
@@ -52,7 +54,7 @@ def extract_installer(installer: Path, output: Path, tool: str | None) -> dict:
 
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="cmndctl")
-    p.add_argument("--config", default="config/cmnd.example.toml")
+    p.add_argument("--config", default=os.environ.get("CMND_CONFIG", "config/cmnd.example.toml"))
     sub = p.add_subparsers(dest="command", required=True)
     for name in ("preflight", "doctor"):
         q = sub.add_parser(name); q.add_argument("--source", type=Path)
@@ -60,6 +62,7 @@ def parser() -> argparse.ArgumentParser:
     q = sub.add_parser("safe-extract"); q.add_argument("archive", type=Path); q.add_argument("output", type=Path)
     q = sub.add_parser("extract"); q.add_argument("--installer", required=True, type=Path); q.add_argument("--output", required=True, type=Path); q.add_argument("--tool")
     q = sub.add_parser("validate-config")
+    q = sub.add_parser("render-runtime-config"); q.add_argument("--output", required=True, type=Path); q.add_argument("--execute", action="store_true")
     for name in ("install", "upgrade"):
         q = sub.add_parser(name); q.add_argument("--source", required=True, type=Path); q.add_argument("--root", type=Path, default=Path("/opt/cmnd")); q.add_argument("--release", required=True)
         mode = q.add_mutually_exclusive_group(); mode.add_argument("--execute", action="store_true"); mode.add_argument("--dry-run", action="store_true")
@@ -68,6 +71,8 @@ def parser() -> argparse.ArgumentParser:
         q = sub.add_parser(name); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("backup"); q.add_argument("--root", required=True, type=Path); q.add_argument("--output", required=True, type=Path)
     q = sub.add_parser("restore"); q.add_argument("--backup", required=True, type=Path); q.add_argument("--root", required=True, type=Path); q.add_argument("--execute", action="store_true")
+    q = sub.add_parser("inspect-windows-backup"); q.add_argument("--backup", required=True, type=Path); q.add_argument("--password-file", type=Path); q.add_argument("--prompt-password", action="store_true")
+    q = sub.add_parser("prepare-windows-restore"); q.add_argument("--backup", required=True, type=Path); q.add_argument("--staging", required=True, type=Path); q.add_argument("--password-file", type=Path); q.add_argument("--prompt-password", action="store_true"); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("rollback"); q.add_argument("--root", required=True, type=Path); q.add_argument("--release", required=True); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("uninstall"); q.add_argument("--root", required=True, type=Path); q.add_argument("--keep-data", action="store_true"); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("simulator"); q.add_argument("--bind", default="127.0.0.1"); q.add_argument("--port", type=int, default=9079); q.add_argument("--identity", default="SIMULATOR00000001")
@@ -85,7 +90,8 @@ def main(argv=None) -> int:
     try:
         if args.command in {"preflight", "doctor"}:
             cfg = load_config(args.config)
-            result = preflight(args.source); result["configuration"] = {"valid": True, "mode": cfg.mode}; emit(result)
+            checked_ports = (cfg.database_port, cfg.tomcat_http, cfg.tomcat_https, cfg.apache_http, cfg.apache_https)
+            result = preflight(args.source, checked_ports); result["configuration"] = {"valid": True, "mode": cfg.mode}; emit(result)
         elif args.command == "inventory":
             records = inventory(args.root)
             if args.output: write_inventory(records, args.output)
@@ -94,6 +100,8 @@ def main(argv=None) -> int:
         elif args.command == "extract": emit(extract_installer(args.installer, args.output, args.tool))
         elif args.command == "validate-config":
             cfg = load_config(args.config); emit({"valid": True, "mode": cfg.mode, "allowlisted_tvs": len(cfg.allowed_tvs)})
+        elif args.command == "render-runtime-config":
+            cfg = load_config(args.config); emit(render_runtime_config(cfg, args.output, args.execute))
         elif args.command in {"install", "upgrade"}:
             load_config(args.config); emit(install_release(args.source, args.root, args.release, execute=args.execute))
         elif args.command == "status": emit(status(args.root))
@@ -104,6 +112,11 @@ def main(argv=None) -> int:
                 return run.returncode
         elif args.command == "backup": emit(backup_runtime(args.root, args.output))
         elif args.command == "restore": emit(restore_runtime(args.backup, args.root, execute=args.execute))
+        elif args.command == "inspect-windows-backup":
+            emit(inspect_windows_backup(args.backup, read_password(args.password_file, args.prompt_password)))
+        elif args.command == "prepare-windows-restore":
+            password = read_password(args.password_file, args.prompt_password)
+            emit(prepare_windows_restore(args.backup, args.staging, password, args.execute))
         elif args.command == "rollback": emit(rollback(args.root, args.release, execute=args.execute))
         elif args.command == "uninstall": emit(uninstall(args.root, keep_data=args.keep_data, execute=args.execute))
         elif args.command == "simulator": serve(args.bind, args.port, args.identity)
@@ -124,7 +137,7 @@ def main(argv=None) -> int:
             response = WIXPClient(cfg.timeout_seconds).send(args.target, clone_request(args.identity, args.item, args.version, args.url), args.port)
             emit({"response": response, "initial_clone_state": clone_session_state(response, args.item), "final_state_verified": False})
         return 0
-    except (ConfigError, ProtocolError, RuntimeErrorCMND, ValueError, OSError) as exc:
+    except (BackupError, ConfigError, ProtocolError, RuntimeErrorCMND, ValueError, OSError) as exc:
         print(f"cmndctl: {exc}", file=sys.stderr)
         return 2
 

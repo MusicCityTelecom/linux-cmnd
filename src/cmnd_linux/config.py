@@ -34,6 +34,11 @@ class Config:
     permitted_ranges: tuple[str, ...]
     allowed_tvs: tuple[AllowedTV, ...]
     timeout_seconds: float = 5.0
+    tomcat_http: int = 8080
+    tomcat_https: int = 8443
+    apache_http: int = 8082
+    apache_https: int = 8444
+    database_port: int = 3306
 
     def authorize(self, target: str, identity: str, operation: str, execute: bool) -> None:
         if operation not in WRITE_OPERATIONS:
@@ -67,6 +72,7 @@ def load_config(path: str | Path) -> Config:
         raw = tomllib.load(handle)
     safety = raw.get("safety", {})
     network = raw.get("network", {})
+    ports = raw.get("ports", {})
     mode = safety.get("mode", "")
     if mode not in {"isolated", "lab", "production-candidate"}:
         raise ConfigError("safety.mode must be isolated, lab, or production-candidate")
@@ -98,6 +104,15 @@ def load_config(path: str | Path) -> Config:
     timeout = float(network.get("timeout_seconds", 5.0))
     if not math.isfinite(timeout) or not 0 < timeout <= 120:
         raise ConfigError("network.timeout_seconds must be greater than zero and at most 120")
+    port_values = {"tomcat_http": int(ports.get("tomcat_http", 8080)),
+                   "tomcat_https": int(ports.get("tomcat_https", 8443)),
+                   "apache_http": int(ports.get("apache_http", 8082)),
+                   "apache_https": int(ports.get("apache_https", 8444)),
+                   "database": int(ports.get("database", 3306))}
+    if any(not 1 <= value <= 65535 for value in port_values.values()):
+        raise ConfigError("all configured ports must be in 1..65535")
+    if len(set(port_values.values())) != len(port_values):
+        raise ConfigError("CMND listener ports must be distinct")
     return Config(
         mode=mode,
         bind=bind,
@@ -105,4 +120,7 @@ def load_config(path: str | Path) -> Config:
         permitted_ranges=ranges,
         allowed_tvs=tuple(allowed),
         timeout_seconds=timeout,
+        tomcat_http=port_values["tomcat_http"], tomcat_https=port_values["tomcat_https"],
+        apache_http=port_values["apache_http"], apache_https=port_values["apache_https"],
+        database_port=port_values["database"],
     )

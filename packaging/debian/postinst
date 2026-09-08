@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+VERSION=$(dpkg-query -W -f='${Version}' linux-cmnd)
+VERSION=${VERSION%%-*}
+getent group cmnd >/dev/null || addgroup --system cmnd
+id cmnd >/dev/null 2>&1 || adduser --system --ingroup cmnd --home /var/lib/cmnd --no-create-home --disabled-login cmnd
+install -d -o root -g root -m 0755 /opt/linux-cmnd/releases
+install -d -o cmnd -g cmnd -m 0750 /opt/cmnd/releases /var/lib/cmnd /var/log/cmnd
+install -d -o root -g cmnd -m 0750 /etc/cmnd
+chown root:cmnd /etc/cmnd/cmnd.toml
+chmod 0640 /etc/cmnd/cmnd.toml
+ln -sfn "releases/$VERSION" /opt/linux-cmnd/current
+CMND_CONFIG=/etc/cmnd/cmnd.toml PYTHONPATH="/opt/linux-cmnd/releases/$VERSION/src" \
+  python3 -m cmnd_linux render-runtime-config --output /etc/cmnd --execute
+chown root:cmnd /etc/cmnd/*
+chmod 0640 /etc/cmnd/*
+exit 0

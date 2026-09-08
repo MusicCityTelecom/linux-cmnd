@@ -1,17 +1,21 @@
 # Test results
 
-Checkpoint: source `0.1.0`, Windows development host, 2026-09-07.
+Checkpoint: source `0.2.0`, Windows development host, 2026-09-07.
 
 | Area | Status | Actual evidence |
 |---|---|---|
 | Five WAR presence/integrity | PASS | all five present; `7z t` passed in read-only audit |
 | Capture reassembly | PASS | tshark 4.6.8; discovery, power, callback, clone, and range streams decoded |
-| Python unit suite | PASS | 18 tests passed with Python 3.9.7 on Windows; archive, config safety, callback/polling, room/range package, WIXP simulator, message, and lifecycle tests |
+| Python unit suite | PASS | 22 tests passed with Python 3.9.7 on Windows; archive, config/runtime rendering, callback/polling, room/range package, WIXP simulator, Windows-backup, Debian-package, message, and lifecycle tests |
+| Debian package contents | PASS | stdlib package builder; validates control/data members and absence of vendor payload extensions |
+| Installer OS detection/dry-run | PASS | shell syntax checks and Ubuntu 24.04 root-prefix dry-run completed; non-dry-run Linux filesystem semantics not available on NTFS |
+| Debian package install on Ubuntu/Debian | NOT_RUN | no local Debian-family VM/container was available |
+| CMND 7.4.8 backup structure | PASS | reference archive is unencrypted; all five exact SQL members and expected database headers validated read-only |
 | Installer static integrity | PASS | `innounp` 0.50 `-t` returned exit 0 for installer SHA-256 `4cc2…2348`; this does not run installer actions |
 | Installer extraction | PASS | `cmndctl extract` + `innounp` 0.50 exit 0; isolated staging contains all five required WAR names |
 | Ubuntu clean runtime | INFRASTRUCTURE_BLOCKED | no disposable Ubuntu runtime executed |
 | Vendor login/browser | NOT_RUN | applications not started |
-| Five-database restore/migration | NOT_RUN | private backup not imported |
+| Five-database restore/migration | NOT_RUN | 7.4.8 backup validated/stageable but SQL not imported; 7.5.1 artifact unavailable in current workspace |
 | Simulator protocol slice | NOT_RUN | code implemented, execution pending |
 | Physical TV | HARDWARE_BLOCKED | no current device allowlist/approval |
 | Security/recovery qualification | NOT_RUN | partial controls implemented only |

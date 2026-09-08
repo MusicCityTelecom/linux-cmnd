@@ -6,3 +6,4 @@
 - Package server supports byte ranges but lacks a production authorization layer and must remain isolated.
 - Filesystem lifecycle commands do not provision users/services/databases and are not a full installer or recovery system.
 - MGate, PSG, SIServer, native process helpers, optional hardware absence, TLS reload, schema migrations, and supported modern PHP/database profiles remain unresolved.
+- Windows backup archives can be validated and safely staged, but SQL import/migration into MySQL is not yet executed by the tool.

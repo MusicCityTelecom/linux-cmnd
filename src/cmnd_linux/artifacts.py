@@ -71,7 +71,8 @@ def _safe_member(name: str) -> PurePosixPath:
 
 
 def safe_extract_zip(source: str | Path, destination: str | Path, *, max_files: int = 20_000,
-                     max_bytes: int = 4 * 1024**3, max_ratio: int = 200) -> list[str]:
+                     max_bytes: int = 4 * 1024**3, max_ratio: int = 200,
+                     password: bytes | None = None) -> list[str]:
     archive, target = Path(source), Path(destination).resolve()
     extracted: list[str] = []
     seen: set[str] = set()
@@ -111,7 +112,7 @@ def safe_extract_zip(source: str | Path, destination: str | Path, *, max_files: 
                 fd = os.open(output, flags, 0o600)
                 created_files.append(output)
                 try:
-                    with os.fdopen(fd, "wb") as dst, zf.open(member) as src:
+                    with os.fdopen(fd, "wb") as dst, zf.open(member, pwd=password) as src:
                         while chunk := src.read(1024 * 1024):
                             dst.write(chunk)
                 except Exception:

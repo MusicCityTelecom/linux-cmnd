@@ -13,4 +13,6 @@ Private workspace observation on 2026-09-07:
 
 The extracted payload says `version.txt=7.5.9` and `buildnr.txt=7.5.10.3168`. Internal manifests include SmartInstall `7.0.0.5698`, smartcontrol `2.6.0-SNAPSHOT.377`, and usermanagement `1.2.13-RELEASE.62`. This is evidence of component versioning, not yet proof of an incoherent bundle.
 
+A separate reference-only CMND 7.4.8 full backup and fourteen TPM191HN clone/content packages were confirmed outside the repository. See `REFERENCE-ARTIFACTS.md`; none is redistributed.
+
 Expected 7.5.9 baseline: Java 17.0.16, Tomcat 9.0.109, MySQL 5.7.44. Separate backup 7.5.1 reports Java 17.0.10, Tomcat 9.0.85, MySQL 5.7.43. Migration between them is NOT_RUN. Full hashes belong in a private generated inventory, not this public-capable source tree.

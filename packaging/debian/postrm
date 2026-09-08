@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+if [ "${1:-}" = "purge" ]; then
+  # dpkg owns the conffile decision. Runtime data and imported vendor payloads
+  # remain under /opt/cmnd and /var/lib/cmnd for explicit operator recovery.
+  rm -f /opt/linux-cmnd/current
+fi
+exit 0
