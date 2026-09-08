@@ -1,0 +1,13 @@
+[safety]
+mode = "isolated"
+permitted_ranges = ["127.0.0.0/8"]
+
+[network]
+bind = "127.0.0.1"
+callback_base_url = "http://127.0.0.1:8080"
+timeout_seconds = 5
+
+[[tv.allowlist]]
+ip = "127.0.0.1"
+identity = "SIMULATOR00000001"
+operations = ["power", "room-id", "clone"]

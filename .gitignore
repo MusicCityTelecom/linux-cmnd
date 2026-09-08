@@ -1,0 +1,46 @@
+# This repository is developed beside licensed/private CMND source artifacts.
+# Deny by default so vendor binaries, captures, certificates, backups, and
+# customer data cannot be committed accidentally.
+/*
+!/.gitignore
+!/README.md
+!/AGENTS.md
+!/CHANGELOG.md
+!/HANDOFF.md
+!/LICENSE
+!/VERSION
+!/pyproject.toml
+!/config/
+!/config/**
+!/deploy/
+!/deploy/**
+!/docs/
+!/docs/**
+!/src/
+!/src/**
+!/tests/
+!/tests/**
+
+# Generated/runtime data inside allowed trees.
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.coverage
+**/htmlcov/
+**/*.log
+**/*.p12
+**/*.pem
+**/*.key
+**/*.crt
+**/*.sql
+**/*.zip
+**/*.war
+**/*.jar
+**/*.exe
+**/*.pcap
+**/*.pcapng
+**/.env
+**/secrets/
+**/state/
+**/backups/
+**/support-bundles/

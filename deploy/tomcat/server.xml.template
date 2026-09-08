@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Shutdown port is disabled. TLS secrets are supplied outside source control. -->
+<Server port="-1">
+  <Service name="Catalina">
+    <Connector address="${CMND_BIND_ADDRESS}" port="${CMND_HTTP_PORT}" protocol="org.apache.coyote.http11.Http11NioProtocol" connectionTimeout="20000" maxPostSize="104857600" />
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false" />
+    </Engine>
+  </Service>
+</Server>

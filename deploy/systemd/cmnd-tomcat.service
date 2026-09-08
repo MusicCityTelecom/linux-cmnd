@@ -1,0 +1,27 @@
+[Unit]
+Description=Philips CMND Tomcat runtime
+After=network-online.target cmnd-mysql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=cmnd
+Group=cmnd
+EnvironmentFile=/etc/cmnd/tomcat.env
+WorkingDirectory=/opt/cmnd/current
+ExecStart=/opt/cmnd/tomcat/bin/catalina.sh run
+ExecStop=/opt/cmnd/tomcat/bin/catalina.sh stop 20 -force
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/cmnd /var/log/cmnd /opt/cmnd/current
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
