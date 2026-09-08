@@ -13,14 +13,19 @@ from cmnd_linux.protocol import WIXPClient, clone_request, discovery_request
 from cmnd_linux.simulator import TVState, handler_factory
 
 
-def room_zip(serial: str, room_id: str) -> bytes:
+def room_zip(serial: str, room_id: str, *, nested: bool = True, ambiguous: bool = False) -> bytes:
     stream = BytesIO()
     xml = (f'<RoomSpecificSettings><TV><SerialNumber>{serial}</SerialNumber>'
-           '<Item><Name>Professional Settings.Advanced.Identification Settings.RoomID</Name>'
-           f'<Value>{room_id}</Value></Item></TV></RoomSpecificSettings>')
+           '<item><Name>Professional Settings.Advanced.Identification Settings.RoomID</Name>'
+           f'<Value>{room_id}</Value></item></TV></RoomSpecificSettings>')
     with zipfile.ZipFile(stream, "w", zipfile.ZIP_DEFLATED) as archive:
-        archive.writestr("RoomSpecificSettings.xml", xml)
-        archive.writestr("TVSettings.xml", "<TVSettings/>")
+        room_path = "RoomSpecificSettings/RoomSpecificSettings.xml" if nested else "RoomSpecificSettings.xml"
+        archive.writestr(room_path, xml)
+        archive.writestr("RoomSpecificSettings/RoomSpecificSettings_Identifier.txt", "2026090800000000")
+        archive.writestr("TVSettings/TVSettings_Identifier.txt", "2026090800000000")
+        archive.writestr("TVSettings/TVSettings.xml", "<TVSettings/>")
+        if ambiguous:
+            archive.writestr("RoomSpecificSettings.xml", xml)
     return stream.getvalue()
 
 
@@ -131,6 +136,15 @@ class NativeSimulatorTests(unittest.TestCase):
         self.assertEqual(evidence["sha256"], hashlib.sha256(OriginHandler.payload).hexdigest())
         self.assertEqual(evidence["path"], path)
         self.assertGreater(evidence["uncompressed_bytes"], 0)
+
+    def test_ambiguous_flat_and_nested_room_xml_is_rejected(self):
+        OriginHandler.payload = room_zip("SIMULATOR00000001", "00704", ambiguous=True)
+        url = self.base_url + "/SmartInstall/Profile/Clone/device/RoomSpecificSettings.zip"
+        self.send(clone_request(self.state.identity, "RoomSpecificSettings", "v3", url, correlation=13))
+        self.assertTrue(OriginHandler.callback_event.wait(2))
+        self.assertEqual(self.state.clone_status["RoomSpecificSettings"], "Failed")
+        self.assertIn("ambiguous", self.state.clone_details["RoomSpecificSettings"]["error"])
+        self.assertEqual(self.state.room_id, "0001")
 
     def test_pk_prefix_alone_is_not_accepted_as_a_zip(self):
         OriginHandler.payload = b"PKthis is not a real ZIP"

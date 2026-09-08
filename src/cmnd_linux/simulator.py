@@ -148,8 +148,14 @@ def _validate_zip(payload: bytes) -> tuple[zipfile.ZipFile, int]:
 
 
 def _room_values(archive: zipfile.ZipFile) -> tuple[str, str]:
+    allowed_paths = {"RoomSpecificSettings.xml", "RoomSpecificSettings/RoomSpecificSettings.xml"}
+    candidates = [name for name in archive.namelist() if name in allowed_paths]
+    if not candidates:
+        raise ValueError("RoomSpecificSettings.xml is missing")
+    if len(candidates) != 1:
+        raise ValueError("clone ZIP has ambiguous RoomSpecificSettings.xml entries")
     try:
-        xml = archive.read("RoomSpecificSettings.xml")
+        xml = archive.read(candidates[0])
     except KeyError as exc:
         raise ValueError("RoomSpecificSettings.xml is missing") from exc
     if b"<!DOCTYPE" in xml.upper() or b"<!ENTITY" in xml.upper():
@@ -162,7 +168,7 @@ def _room_values(archive: zipfile.ZipFile) -> tuple[str, str]:
                    if _local_name(node.tag) == "SerialNumber"), "")
     room_id = ""
     for node in root.iter():
-        if _local_name(node.tag) != "Item":
+        if _local_name(node.tag) not in {"item", "Item"}:
             continue
         children = {_local_name(child.tag): str(child.text or "").strip() for child in node}
         name = node.attrib.get("Name", children.get("Name", ""))

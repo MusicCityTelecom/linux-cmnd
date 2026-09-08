@@ -32,9 +32,12 @@ Vendor Java and PHP run as non-root identities. IPv4/IPv6 OUTPUT rules allow the
 | CMS sensitive-file HTTP denial | PASS | settings.php and config.properties both returned 403 |
 | CMS new content editor | PASS | Actual Create new content action opened the My templates editor at `/SmartCMS/website/edit/6208`; synthetic content only, not published |
 | Tooling .deb on Ubuntu | PASS after fix | First attempt exposed missing directory entries; fixed package unpack/configuration and CLI validation succeeded |
-| Unit/integration source suite | PASS | 71 tests on Windows Python 3.13 and Ubuntu Python 3.12; source-only checkpoint also built a Debian package inside Ubuntu |
+| Unit/integration source suite | PASS | 72 tests on Windows Python 3.13 and Ubuntu Python 3.12; source-only checkpoint also built a Debian package inside Ubuntu |
 | Vendor TV discovery/onboarding | SIMULATOR_PASS | Actual browser Add/Detect/Auto Import found one synthetic 43HFL6114U/27 at 172.30.44.4 and inserted it into Philips inventory; loopback failed route selection |
-| Real configuration delivery/readback | NOT_RUN | Must distinguish simulator from physical-TV proof |
+| Native room delivery/readback | SIMULATOR_PASS | Real UI generated a 1553-byte nested ZIP; simulator parsed actual lowercase item XML, matched serial, applied room `0042`, sent callback to SmartInstall, and independent discovery read back `0042` |
+| Native power control/readback | SIMULATOR_PASS | Real remote-control dialog sent Standby; independent simulator discovery/state readback confirmed Standby |
+| Native room persistence after navigation | SIMULATOR_PASS | Subsequent edit to `0043` survived a fresh vendor TVs page request; UI value and independent simulator readback both matched |
+| Complete assigned clone/content deployment | NOT_RUN | Room-only success is not full clone/content-job qualification |
 | Windows five-database restore preparation | PASS | Original 7.4.8 archive: five SQL dumps staged privately; exactly 11 proven definer rewrites, all literals/Flyway text preserved |
 | Windows five-database import/migration | APPROVAL_PENDING | Safety review requires explicit approval to copy customer SQL into the disposable VM; no SQL copied/imported |
 | Debian 12/13 runtime | NOT_RUN | Distribution detection is not runtime qualification |
@@ -50,6 +53,7 @@ Evidence comes from the supplied WAR resources and targeted class/method analysi
 - The internal simulator uses `python@sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea`. Its synthetic UID is the uppercase serial concatenated with colon-free MAC, as required by the native importer. This is simulator evidence, not hardware certification.
 - CMS CAS configuration contains Windows debug and proxy-ticket paths in serialized Drupal variables. Use `variable_set`, not SQL string replacement. The lab sets `cas_cert` to its guest CA bundle, disables CAS debug logging, and uses a private writable Linux proxy-ticket directory.
 - The supplied CAS login page has a `$ is not defined` error at line 37. Authentication succeeds, but the vendor script ordering issue remains recorded.
+- Actual room packages contain `RoomSpecificSettings/RoomSpecificSettings.xml` and `TVSettings/TVSettings.xml` plus identifiers. Room XML uses lowercase `item` with child `Name`/`Value`. Strict validation initially failed until the simulator matched this observed layout. Successful room package SHA-256: `c561a8fef99bf286b9f09ee36ea5f94ecdd58d50f79cdb69a17338dd795d6efb`; expanded size 2232 bytes. Synthetic material only.
 - `ScheduleListener` unconditionally starts background jobs and certificate tasks. Keep restored data isolated until those jobs are reviewed.
 - Preserve `reload.jar` and the ROOT rewrite mappings for `/webservices.jsp`. Synthetic HTTPS startup with the vendor ReloadProtocol has been exercised; full certificate regeneration/reload qualification is pending.
 - `CertUtils` has Linux OpenSSL selection but residual Windows paths/import/restart operations. Pre-provision CA/server material; preserve existing enrollment CAs during restore. Set a stable `COMPUTERNAME` and SANs covering the JVM's actual interface addresses.

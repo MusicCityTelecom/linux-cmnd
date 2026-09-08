@@ -3,6 +3,7 @@ import json
 import secrets
 import sys
 import socket
+import time
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -26,6 +27,18 @@ if control_test:
         raise SystemExit('This runner is restricted to the synthetic identity')
     cfg.authorize(selected_tv.ip, selected_tv.identity, 'clone', True)
     verify_identity(cfg, selected_tv.ip, selected_tv.identity)
+
+
+def await_readback(field, expected):
+    deadline = time.monotonic() + 10
+    while time.monotonic() < deadline:
+        observed = verify_identity(cfg, selected_tv.ip, selected_tv.identity)
+        if observed[field] == expected:
+            return True
+        time.sleep(0.1)
+    return False
+
+
 output.mkdir(mode=0o700, exist_ok=True)
 with sync_playwright() as runtime:
     browser = runtime.chromium.launch()
@@ -62,7 +75,7 @@ with sync_playwright() as runtime:
             room.fill(expected_room)
             room.press('Tab')
             report['room_after_local'] = room.input_value()
-            report['room_readback_verified'] = False
+            report['room_readback_verified'] = await_readback('room_id', expected_room)
         if '--remote-dialog' in sys.argv:
             cfg.authorize(selected_tv.ip, selected_tv.identity, 'power', True)
             verify_identity(cfg, selected_tv.ip, selected_tv.identity)
@@ -74,9 +87,11 @@ with sync_playwright() as runtime:
                 '(nodes)=>nodes.map(n=>({id:n.id,name:n.name,options:Array.from(n.options).slice(0,8).map(o=>({label:o.label,value:o.value})),parent:n.parentElement.outerHTML.slice(0,1600)}))')
             if '--power-simulator' in sys.argv:
                 page.locator('#power').select_option('Standby')
-                page.get_by_role('button', name='Send', exact=True).first.click()
+                report['power_send_controls'] = page.locator('button:visible').evaluate_all(
+                    '(nodes)=>nodes.filter(n=>n.innerText.trim()==="Send").map(n=>n.outerHTML)')
+                page.locator('button:visible').filter(has_text='Send').first.click()
                 report['power_command_submitted'] = 'Standby'
-                report['power_readback_verified'] = False
+                report['power_readback_verified'] = await_readback('power', 'Standby')
         if '--inspect-controls' in sys.argv:
             page.locator('body').filter(has_text='172.30.44.4').wait_for(timeout=15000)
             report['controls'] = page.locator('input:visible,button:visible,a:visible').evaluate_all(
@@ -119,6 +134,15 @@ with sync_playwright() as runtime:
                     report['simulator_detection_wait_failed'] = True
                 report['after_scan'] = page.locator('body').inner_text()[-5000:]
                 page.screenshot(path=str(output / 'after-scan.png'), full_page=True)
+    if '--room-simulator' in sys.argv:
+        page.goto('https://127.0.0.1:8443/SmartInstall/dev?type=index', wait_until='domcontentloaded')
+        try:
+            report['vendor_room_after_reload'] = page.locator('#tv_RID_' + selected_tv.identity).input_value(timeout=10000)
+            report['vendor_room_persisted'] = report['vendor_room_after_reload'] == expected_room
+        except Exception:
+            report['vendor_room_persisted'] = False
+            report['reload_diagnostic'] = {'url': page.url.split('?')[0], 'title': page.title(),
+                'body': page.locator('body').inner_text()[:1800]}
     report['javascript_errors'] = errors
     (output / 'latest-report.json').write_text(json.dumps(report, indent=2))
     if '--summary' in sys.argv:
@@ -129,3 +153,5 @@ with sync_playwright() as runtime:
                 report[key] = {field: value for field, value in report[key].items() if field not in {'body', 'links'}}
     print(json.dumps(report, indent=2))
     browser.close()
+    if any(report.get(key) is False for key in ('room_readback_verified', 'vendor_room_persisted', 'power_readback_verified')):
+        raise SystemExit(1)

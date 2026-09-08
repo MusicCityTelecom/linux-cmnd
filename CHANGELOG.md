@@ -4,6 +4,7 @@
 
 - Started all five real Philips WARs on isolated Ubuntu 24.04, Java 17, Tomcat 9, and MySQL 5.7.44; tested real CAS/browser authentication over verified TLS.
 - Added bounded discovery and independently owned, identity-revalidated inventory.
+- Verified actual Philips browser discovery/import, native Standby control, and room clone delivery/callback/readback against an isolated synthetic TV; validated CMS SSO and content-editor navigation.
 - Added exact WAR and SmartCMS settings renderers with synthetic tests and credential-safe handling.
 - Added static five-database SQL scope/privilege auditing; this is not a SQL execution sandbox.
 - Added reproducible VM-only qualification scripts, synthetic TLS, and legacy PHP fidelity experiment.

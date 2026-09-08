@@ -13,6 +13,7 @@ The tooling installer accepts Ubuntu 24.04 or Debian 12/13 amd64. Build with `sh
 - Capture-derived WIXP discovery, power, and clone command encoding with response correlation.
 - Bounded unicast scan and identity-revalidated addition to a separate tooling inventory. This does not silently modify Philips database tables or grant control permissions.
 - Exact, secret-aware rendering of all five operator-supplied WARs and the separate PHP SmartCMS application.
+- Actual Ubuntu lab qualification of Philips browser login, TV scan/import, native room delivery/readback/persistence and Standby against a synthetic TV, plus CMS SSO/content-editor navigation. These are not physical-TV or complete deployment certifications.
 - Identity/IP/operation allowlists and mandatory `--execute` for TV writes.
 - Room-ID clone package creation from an operator-supplied model template; room IDs remain strings.
 - Restricted ZIP package serving with HTTP byte-range support.

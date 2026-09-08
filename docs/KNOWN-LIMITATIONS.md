@@ -1,8 +1,8 @@
 # Known limitations
 
-- Real Linux Java runtime, fresh databases/migrations, and browser CAS login now have evidence; see QUALIFICATION-LAB.md. Complete CMS, discovery/delivery, restore, recovery, reboot, and physical-TV acceptance remain incomplete.
+- Real Linux Java runtime, fresh migrations, browser CAS/CMS login, synthetic TV discovery/import, native Standby control, and room delivery/readback have evidence; see QUALIFICATION-LAB.md. Complete CMS publishing/assigned clone deployment, restore, recovery, reboot, and physical-TV acceptance remain incomplete.
 - The lab callback/polling receiver is implemented in memory, but is not integrated with vendor SmartInstall persistence, authentication, or restart recovery.
-- Room package XML is capture-derived but still requires an operator-supplied model-specific `TVSettings.xml`; final room readback is not implemented.
+- The tooling room-package builder still requires an operator-supplied model-specific `TVSettings.xml`. The separate native CMND room path now has simulator download/XML/callback/readback evidence; physical-TV readback remains unqualified.
 - Package server supports byte ranges but lacks a production authorization layer and must remain isolated.
 - Filesystem lifecycle commands do not provision users/services/databases and are not a full installer or recovery system.
 - RF-only MGate/PSG/DekTec functionality is explicitly out of scope. Modern TPM191/TPM215 IP packaging is Java-based. Legacy DWPack and AAB signing have separate native-helper gaps.
