@@ -2,9 +2,9 @@
 
 Original Music City Telecom tooling for qualifying and deploying operator-supplied Philips CMND applications on Ubuntu 24.04 x86_64. Vendor software is imported locally and is **not** distributed by this repository. This project is not affiliated with or endorsed by Philips.
 
-Current tooling version: `0.3.0` (development). Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
+Current tooling version: `0.4.0` (development). Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
 
-The tooling installer accepts Ubuntu 24.04 or Debian 12/13 amd64. Build with `sh scripts/build-deb.sh`. The `0.3.0` tooling package has been installed on Ubuntu 24.04; Debian runtime qualification remains pending. This is not yet a complete production installer. See [installation](docs/INSTALL.md), [configuration](docs/CONFIGURATION.md), and [actual lab evidence](docs/QUALIFICATION-LAB.md).
+The tooling installer accepts Ubuntu 24.04 or Debian 12/13 amd64. Build with `sh scripts/build-deb.sh`. The `0.4.0` tooling package has been installed on Ubuntu 24.04; Debian runtime qualification remains pending. This is not yet a complete production installer. See [installation](docs/INSTALL.md), [configuration](docs/CONFIGURATION.md), and [actual lab evidence](docs/QUALIFICATION-LAB.md).
 
 ## What works now
 
@@ -13,7 +13,11 @@ The tooling installer accepts Ubuntu 24.04 or Debian 12/13 amd64. Build with `sh
 - Capture-derived WIXP discovery, power, and clone command encoding with response correlation.
 - Bounded unicast scan and identity-revalidated addition to a separate tooling inventory. This does not silently modify Philips database tables or grant control permissions.
 - Exact, secret-aware rendering of all five operator-supplied WARs and the separate PHP SmartCMS application.
+- Private staging of native Tomcat/Apache/PHP configuration with callback-port consistency checks; actual Apache and PHP-FPM syntax validated in the Ubuntu VM. This is not automatic service activation.
+- Native certificate preprovisioning with validated CA preservation, and complete private application assembly from the supplied vendor payload. The actual assembled candidate is inactive; clean installation and recovery remain acceptance gates.
 - Actual Ubuntu lab qualification of Philips browser login, TV scan/import, native room delivery/readback/persistence and Standby against a synthetic TV, plus CMS SSO/content-editor navigation. These are not physical-TV or complete deployment certifications.
+- Persistent lab egress restrictions survived an actual VM reboot; guarded manual resume restored CAS/CMS login and synthetic room/power control. Full automatic installer recovery remains unfinished.
+- Native CMS content cloning/local export produced a validated ZIP after provisioning the vendor Linux worker's PCNTL dependency. Thumbnail generation and publication to TVs remain unqualified.
 - Identity/IP/operation allowlists and mandatory `--execute` for TV writes.
 - Room-ID clone package creation from an operator-supplied model template; room IDs remain strings.
 - Restricted ZIP package serving with HTTP byte-range support.

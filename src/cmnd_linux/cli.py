@@ -20,10 +20,23 @@ from .callbacks import serve_callbacks
 from .backups import BackupError, inspect_windows_backup, prepare_windows_restore, read_password
 from .discovery import scan, scan_targets, add_tv, verify_identity
 from .restore_prepare import prepare_windows_748_sql
+from .native_config import stage_native_config
+from .application_stage import ApplicationInputs, certificate_stage_paths, stage_application
 
 
 def emit(value) -> None:
     print(json.dumps(value, indent=2, sort_keys=True))
+
+
+def load_secrets(path: Path) -> dict[str, str]:
+    if not path.is_file() or path.is_symlink():
+        raise ConfigError('secrets source must be a regular non-symlink file')
+    if os.name == 'posix' and path.stat().st_mode & 0o077:
+        raise ConfigError('secrets file must deny group and other access')
+    values = json.loads(path.read_text(encoding='utf-8'))
+    if not isinstance(values, dict) or any(not isinstance(value, str) for value in values.values()):
+        raise ConfigError('secrets file must contain a JSON object of string values')
+    return values
 
 
 def extract_installer(installer: Path, output: Path, tool: str | None) -> dict:
@@ -65,6 +78,12 @@ def parser() -> argparse.ArgumentParser:
     q = sub.add_parser("extract"); q.add_argument("--installer", required=True, type=Path); q.add_argument("--output", required=True, type=Path); q.add_argument("--tool")
     q = sub.add_parser("validate-config")
     q = sub.add_parser("render-runtime-config"); q.add_argument("--output", required=True, type=Path); q.add_argument("--execute", action="store_true")
+    q = sub.add_parser('stage-native-config'); q.add_argument('--output', required=True, type=Path); q.add_argument('--secrets-file', required=True, type=Path); q.add_argument('--execute', action='store_true')
+    q = sub.add_parser('stage-application')
+    q.add_argument('--source', required=True, type=Path); q.add_argument('--tomcat-archive', required=True, type=Path)
+    q.add_argument('--certificate-stage', required=True, type=Path); q.add_argument('--secrets-file', required=True, type=Path)
+    q.add_argument('--output', required=True, type=Path); q.add_argument('--execute', action='store_true')
+    q.add_argument('--database-host', default='127.0.0.1')
     for name in ("install", "upgrade"):
         q = sub.add_parser(name); q.add_argument("--source", required=True, type=Path); q.add_argument("--root", type=Path, default=Path("/opt/cmnd")); q.add_argument("--release", required=True)
         mode = q.add_mutually_exclusive_group(); mode.add_argument("--execute", action="store_true"); mode.add_argument("--dry-run", action="store_true")
@@ -110,6 +129,14 @@ def main(argv=None) -> int:
             cfg = load_config(args.config); emit({"valid": True, "mode": cfg.mode, "allowlisted_tvs": len(cfg.allowed_tvs)})
         elif args.command == "render-runtime-config":
             cfg = load_config(args.config); emit(render_runtime_config(cfg, args.output, args.execute))
+        elif args.command == 'stage-native-config':
+            cfg = load_config(args.config)
+            emit(stage_native_config(cfg, load_secrets(args.secrets_file), args.output, execute=args.execute))
+        elif args.command == 'stage-application':
+            cfg = load_config(args.config)
+            inputs = ApplicationInputs(args.source, args.tomcat_archive, certificate_stage_paths(args.certificate_stage))
+            emit(stage_application(inputs, cfg, load_secrets(args.secrets_file), args.output,
+                                   execute=args.execute, database_host=args.database_host))
         elif args.command in {"install", "upgrade"}:
             load_config(args.config); emit(install_release(args.source, args.root, args.release, execute=args.execute))
         elif args.command == "status": emit(status(args.root))

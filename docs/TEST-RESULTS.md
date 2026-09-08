@@ -1,6 +1,8 @@
 # Test results
 
-Current evidence: [Ubuntu 0.3.0 qualification](QUALIFICATION-LAB.md). All five actual WARs have now run in a disposable Ubuntu VM; real CAS/browser login and fresh migration checks passed. Full runtime acceptance is still incomplete.
+Current evidence: [Ubuntu 0.4.0 qualification](QUALIFICATION-LAB.md). All five actual WARs run in a disposable Ubuntu VM; real CAS/browser login, fresh migrations, reboot-persistent isolation, and synthetic controls after guarded resume passed. Full runtime acceptance is still incomplete.
+
+On 2026-09-08, the source suite ran 102 tests on Windows Python 3.13 (one expected POSIX-permission skip) and passed all 102 on Ubuntu Python 3.12. The 0.4.0 development `.deb` unpacked/configured successfully on Ubuntu and `sudo cmndctl --config /etc/cmnd/cmnd.toml validate-config` passed. These are tooling/package results, not a complete application-installer claim.
 
 The table below is the preserved historical `0.2.0` checkpoint from Windows on 2026-09-07, not the current infrastructure state.
 

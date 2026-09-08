@@ -155,3 +155,11 @@ with sync_playwright() as runtime:
     browser.close()
     if any(report.get(key) is False for key in ('room_readback_verified', 'vendor_room_persisted', 'power_readback_verified')):
         raise SystemExit(1)
+    if credentials.exists() and '/SmartInstall/' not in report.get('correct_login', {}).get('url', ''):
+        raise SystemExit(1)
+    if '--cms' in sys.argv:
+        cms_result = report.get('cms', {})
+        if cms_result.get('status') != 200 or cms_result.get('php_error'):
+            raise SystemExit(1)
+    if report.get('cms_editor_navigation_failed') or report.get('simulator_detection_wait_failed'):
+        raise SystemExit(1)

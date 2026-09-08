@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 import zipfile
 
-from cmnd_linux.vendor_cms import VendorCmsError, render_settings, stage_smartcms
+from cmnd_linux.vendor_cms import VendorCmsError, configure_cms_rewrite_base, prepare_cms_writable_directories, render_settings, stage_smartcms
 
 
 SETTINGS = """<?php
@@ -56,7 +56,56 @@ class VendorCmsTests(unittest.TestCase):
             self.assertIn("$another_setting = TRUE;", rendered)
             self.assertEqual(result.writable_files, result.root / "sites" / "default" / "files")
             self.assertTrue((result.root / ".htaccess").is_file())
+            self.assertIn('RewriteBase /SmartCMS', (result.root / '.htaccess').read_text())
             self.assertFalse((result.root / "htbakcess").exists())
+            self.assertTrue((result.writable_files / 'export').is_dir())
+            self.assertTrue((result.writable_files / 'tpvision').is_dir())
+
+    def test_rewrite_base_is_idempotent_and_preserves_rules(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path = root / '.htaccess'
+            path.write_text('# vendor attribution\n<IfModule mod_rewrite.c>\n  RewriteEngine on\n  RewriteRule ^ index.php [L]\n</IfModule>\n')
+            self.assertTrue(configure_cms_rewrite_base(root))
+            first = path.read_bytes()
+            self.assertFalse(configure_cms_rewrite_base(root))
+            self.assertEqual(first, path.read_bytes())
+            self.assertIn(b'# vendor attribution', first)
+            self.assertIn(b'RewriteRule ^ index.php [L]', first)
+
+    def test_unknown_rewrite_base_is_preserved(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path = root / '.htaccess'
+            original = 'RewriteEngine on\nRewriteBase /custom\n'
+            path.write_text(original)
+            with self.assertRaises(VendorCmsError):
+                configure_cms_rewrite_base(root)
+            self.assertEqual(original, path.read_text())
+
+    def test_export_directory_setup_is_rerunnable_and_does_not_touch_code(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / 'SmartCMS'
+            files = root / 'sites/default/files'
+            files.mkdir(parents=True)
+            code = root / 'index.php'
+            code.write_text('unchanged')
+            before = code.stat().st_mode
+            first = prepare_cms_writable_directories(root)
+            self.assertEqual(first, prepare_cms_writable_directories(root))
+            self.assertEqual(code.stat().st_mode, before)
+            self.assertEqual(code.read_text(), 'unchanged')
+
+    def test_bad_export_destination_fails_before_other_directory_creation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / 'SmartCMS'
+            files = root / 'sites/default/files'
+            files.mkdir(parents=True)
+            (files / 'tpvision').write_text('preserve')
+            with self.assertRaises(VendorCmsError):
+                prepare_cms_writable_directories(root)
+            self.assertFalse((files / 'export').exists())
+            self.assertEqual((files / 'tpvision').read_text(), 'preserve')
 
     def test_existing_stage_is_refused_without_changes(self):
         with tempfile.TemporaryDirectory() as temp:

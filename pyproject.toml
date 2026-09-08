@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "linux-cmnd"
-version = "0.3.0"
+version = "0.4.0"
 description = "Safe Linux deployment and Philips Professional TV protocol qualification tooling"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }

@@ -1,0 +1,4 @@
+# Isolated legacy-fidelity experiment only; not a supported production profile.
+# The exact local base already contains PHP 5.6.40 sources and build dependencies.
+FROM sha256:94e10e115eaf9f009105bd0f6248d61798c4336875c5f730cc4e9f89e946a299
+RUN docker-php-ext-install pcntl

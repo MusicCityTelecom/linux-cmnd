@@ -20,6 +20,44 @@ class VendorCmsStage:
     writable_files: Path
 
 
+def configure_cms_rewrite_base(root: Path) -> bool:
+    """Keep Drupal's public subdirectory stable when DocumentRoot is CMS itself."""
+    path = Path(root) / '.htaccess'
+    if path.is_symlink() or not path.is_file() or any(p.is_symlink() for p in path.parents):
+        raise VendorCmsError('SmartCMS rewrite configuration must be a regular file')
+    content = path.read_text(encoding='utf-8')
+    active = re.findall(r'^\s*RewriteBase\s+([^\s#]+)\s*$', content, re.MULTILINE)
+    if active == ['/SmartCMS']:
+        return False
+    if active:
+        raise VendorCmsError('Unexpected active SmartCMS RewriteBase; preserve for review')
+    engine = re.compile(r'^(\s*RewriteEngine\s+on)\s*$', re.MULTILINE | re.IGNORECASE)
+    if len(engine.findall(content)) != 1:
+        raise VendorCmsError('Expected exactly one SmartCMS RewriteEngine')
+    rendered = engine.sub(lambda m: m.group(1) + '\n  RewriteBase /SmartCMS\n', content)
+    path.write_text(rendered, encoding='utf-8', newline='')
+    return True
+
+
+def prepare_cms_writable_directories(root: Path) -> tuple[Path, Path]:
+    """Create only the vendor export/content directories, never writable code."""
+    root = Path(root)
+    files = root / 'sites/default/files'
+    if not root.is_dir() or not files.is_dir():
+        raise VendorCmsError('SmartCMS writable files root is missing')
+    for parent in (files, files.parent, files.parent.parent, root):
+        if parent.is_symlink():
+            raise VendorCmsError('SmartCMS writable path must not traverse symbolic links')
+    directories = tuple(files / name for name in ('export', 'tpvision'))
+    # Validate the entire set before creating anything.
+    for directory in directories:
+        if directory.is_symlink() or (directory.exists() and not directory.is_dir()):
+            raise VendorCmsError('SmartCMS export/content destination is not a regular directory')
+    for directory in directories:
+        directory.mkdir(mode=0o750, exist_ok=True)
+    return directories
+
+
 _DATABASE_BLOCK = re.compile(
     r"^\$databases\['default'\]\['default'\]\s*=\s*array\(\s*$"
     r".*?"
@@ -148,6 +186,8 @@ def stage_smartcms(
         )
         if source_htaccess.exists():
             source_htaccess.rename(destination_htaccess)
+        configure_cms_rewrite_base(root)
+        prepare_cms_writable_directories(root)
         return VendorCmsStage(root=root, settings=settings, writable_files=files)
     except Exception:
         shutil.rmtree(staging, ignore_errors=True)

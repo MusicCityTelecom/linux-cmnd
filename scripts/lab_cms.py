@@ -51,6 +51,7 @@ def main():
     for port in (8082, 8444):
         configuration += f'''<VirtualHost *:{port}>
 ServerName 127.0.0.1
+DocumentRoot {stage.root}
 Alias /SmartCMS {stage.root}
 <Directory {stage.root}>
     Require all granted
