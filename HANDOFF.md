@@ -1,6 +1,27 @@
 # Handoff checkpoint
 
+LATEST USER BOUNDARY: Do not stop while useful in-scope implementation/qualification remains. User may connect a VPN reaching ~200 TVs, but has not yet supplied a current target. The FIRST hardware test must download a clone FROM one selected TV, before any push/power/room/firmware/content changes. Do not scan the VPN subnet/fleet or infer IPs from customer backups. The new clone-export permission grants no push permissions. No live TV has been contacted. Continue non-hardware installer work while awaiting the selected IP/identity.
+
 Branch: `main`. Tooling version: `0.4.0` development. Private remote: `MusicCityTelecom/linux-cmnd`. Full production installer remains unfinished; do not label this production-ready or 1.0.
+
+## Receive-only hardware preparation
+
+Implemented `clone-info` and `export-clone` with a distinct `clone-export` permission.
+See docs/FIRST-TV-TEST.md. The receiver never imports or pushes received content.
+It checks serial/MAC/unique identity twice and uses the verified TVUniqueID on wire.
+Fifteen synthetic export tests cover complete/partial uploads, readiness/identity
+failure, sender/token restrictions, safe paths, empty archives, and CRC corruption.
+Current full suite: Ubuntu117passed; Windows117run,116passed/one POSIX-only skip.
+No physical TV has been contacted. The current target IP/model/identity and VPN
+callback route are still needed. Do not open a listener or scan a subnet meanwhile.
+
+Uncommitted installer/helper work remains separate from this tested export path:
+native_deploy.py is an unreviewed, unwired draft, NOT an installer to execute.
+It still needs import/preflight/permissions/startup-readiness review and fresh-VM
+qualification. Do not package or deploy it as completed application functionality.
+The PHP helper image is now 69c32774056e5b31462d7f3bf994b28fe36cc9e0e5adec8b0c19a7ae0cc17436;
+lab_resume.py still pins the earlier image and must be updated/reviewed before use.
+A CutyCapt probe produced a blank PNG; meaningful thumbnail rendering is NOT passed.
 
 ## Accepted evidence
 

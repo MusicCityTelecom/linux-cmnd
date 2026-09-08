@@ -16,7 +16,7 @@ class ConfigError(ValueError):
     pass
 
 
-WRITE_OPERATIONS = {"power", "room-id", "clone"}
+WRITE_OPERATIONS = {"power", "room-id", "clone", "clone-export"}
 
 
 @dataclass(frozen=True)

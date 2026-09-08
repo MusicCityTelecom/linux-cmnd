@@ -37,6 +37,49 @@ def power_request(state: str, *, correlation: int | None = None) -> dict:
     }
 
 
+EXPORT_ITEMS = frozenset({
+    'TVSettings', 'TVChannelList', 'WelcomeLogo', 'SmartInfoImages', 'SmartInfoPages',
+    'AndroidApps', 'RoomSpecificSettings', 'DataDump', 'CustomDashboardFallback',
+    'Script', 'MediaChannels', 'WeatherForecast', 'HTVCfg.xml', 'Banner', 'PMS',
+    'AndroidAppsData', 'ProfessionalApps', 'ProfessionalAppsData', 'Schedules', 'MyChoice', 'Vsecure',
+})
+
+
+def clone_info_request(service_version: str = '3.0', *, correlation: int | None = None) -> dict:
+    if service_version not in {'1.0', '3.0', '5.0'}:
+        raise ValueError('clone service version must match the inspected vendor mapping: 1.0, 3.0, or 5.0')
+    return {'Svc': 'WebListeningServices', 'SvcVer': service_version,
+            'Cookie': correlation if correlation is not None else cookie(),
+            'CmdType': 'Request', 'Fun': 'IPCloneService'}
+
+
+def clone_export_request(identity: str, items: list[str], upload_url: str,
+                         service_version: str = '3.0', *, correlation: int | None = None) -> dict:
+    """Vendor TV-to-server operation, deliberately separate from clone-to-TV."""
+    from urllib.parse import urlsplit
+    import re
+    parsed = urlsplit(upload_url)
+    if (not re.fullmatch(r'[A-Za-z0-9:._-]{8,128}', identity)
+            or not items or len(set(items)) != len(items) or not set(items) <= EXPORT_ITEMS
+            or parsed.scheme != 'http' or not parsed.hostname
+            or parsed.username is not None or parsed.password is not None or parsed.query or parsed.fragment
+            or not re.fullmatch(r'/SmartInstall/CloneToServer/[a-f0-9]{48}', parsed.path)):
+        raise ValueError('invalid identity, export items, or private receive URL')
+    if parsed.port is not None and not 1 <= parsed.port <= 65535:
+        raise ValueError('invalid receiver port')
+    address = ip_address(parsed.hostname)
+    if address.is_unspecified or address.is_multicast:
+        raise ValueError('receiver must have an explicit unicast address')
+    message = clone_info_request(service_version, correlation=correlation)
+    message['CmdType'] = 'Change'  # Starts export, not a TV configuration change.
+    message['CommandDetails'] = {
+        'WebListeningServiceParameters': {'TVUniqueID': identity},
+        'CloneToServerParameters': {'CloneToServerDetails': [
+            {'CloneItemName': item, 'URL': upload_url} for item in items]},
+    }
+    return message
+
+
 def clone_request(identity: str, item: str, version: str, url: str, *, correlation: int | None = None) -> dict:
     if item not in {"RoomSpecificSettings", "TVSettings", "TVChannelList", "AndroidApps", "MyChoice", "HTVCfg.xml", "ProfessionalAppsData"}:
         raise ValueError("clone item is not in the capture-qualified set")

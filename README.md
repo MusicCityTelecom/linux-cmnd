@@ -19,6 +19,9 @@ The tooling installer accepts Ubuntu 24.04 or Debian 12/13 amd64. Build with `sh
 - Persistent lab egress restrictions survived an actual VM reboot; guarded manual resume restored CAS/CMS login and synthetic room/power control. Full automatic installer recovery remains unfinished.
 - Native CMS content cloning/local export produced a validated ZIP after provisioning the vendor Linux worker's PCNTL dependency. Thumbnail generation and publication to TVs remain unqualified.
 - Identity/IP/operation allowlists and mandatory `--execute` for TV writes.
+- Receive-only TV clone export with a separate permission, identity rechecks,
+  private bounded uploads, and ZIP validation. The [first TV test](docs/FIRST-TV-TEST.md)
+  must download from one selected TV before any push; hardware evidence is pending.
 - Room-ID clone package creation from an operator-supplied model template; room IDs remain strings.
 - Restricted ZIP package serving with HTTP byte-range support.
 - Synthetic TV endpoint for discovery, power, clone download, failures, and asynchronous state inspection.

@@ -2,7 +2,9 @@
 
 Current evidence: [Ubuntu 0.4.0 qualification](QUALIFICATION-LAB.md). All five actual WARs run in a disposable Ubuntu VM; real CAS/browser login, fresh migrations, reboot-persistent isolation, and synthetic controls after guarded resume passed. Full runtime acceptance is still incomplete.
 
-On 2026-09-08, the source suite ran 102 tests on Windows Python 3.13 (one expected POSIX-permission skip) and passed all 102 on Ubuntu Python 3.12. The 0.4.0 development `.deb` unpacked/configured successfully on Ubuntu and `sudo cmndctl --config /etc/cmnd/cmnd.toml validate-config` passed. These are tooling/package results, not a complete application-installer claim.
+On 2026-09-08, the source suite ran 117 tests on Windows Python 3.13 (116 passed, one expected POSIX-permission skip) and passed all 117 on Ubuntu Python 3.12. This includes 15 receive-only clone-export tests with actual loopback HTTP uploads and mocked TV control responses: complete/partial receipt, timeout, CRC corruption, empty/traversal ZIPs, sender/token checks, readiness, identity drift, and export-only permissions. None constitutes physical-TV qualification.
+
+The earlier 0.4.0 development `.deb` unpacked/configured successfully on Ubuntu and `sudo cmndctl --config /etc/cmnd/cmnd.toml validate-config` passed. That package predates the receive-only export checkpoint. These are tooling/package results, not a complete application-installer claim.
 
 The table below is the preserved historical `0.2.0` checkpoint from Windows on 2026-09-07, not the current infrastructure state.
 

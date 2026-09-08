@@ -2,6 +2,10 @@
 
 ## 0.4.0 - 2026-09-08 (development)
 
+- Added identity-gated TV-to-server clone export, a separate export-only permission,
+  bounded private multipart receipt, CRC checks, and a first-hardware-test guide.
+  Full/partial loopback uploads, identity drift, empty/corrupt ZIPs, wrong senders,
+  and unsafe archive paths are tested; no physical-TV evidence is claimed.
 - Added Linux-native CA/server certificate preprovisioning with PKCS12 aliases,
   full IPv4 SAN coverage, preserved-CA validation, secret-file handling, and
   non-overwriting/symlink-safe staging. Eight certificate tests passed on Ubuntu.
@@ -19,7 +23,7 @@
 - Added the missing PCNTL dependency in the isolated PHP fidelity profile. Native
   CMS cloning/local ZIP export passed byte-level validation after rejecting an
   earlier vendor-reported success whose ZIP contained no generated HTML.
-- Source suite: 102 tests passed on Ubuntu; Windows ran 102 with one expected
+- Source suite: 117 tests passed on Ubuntu; Windows ran 117 with one expected
   POSIX-permission skip. Installed and validated the 0.4.0 tooling package on Ubuntu.
 - Complete installer activation/automatic recovery, Debian runtime, and physical-TV
   acceptance remain unqualified. This is a development checkpoint, not 1.0.

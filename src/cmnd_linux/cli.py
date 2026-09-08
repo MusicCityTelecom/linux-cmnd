@@ -22,6 +22,8 @@ from .discovery import scan, scan_targets, add_tv, verify_identity
 from .restore_prepare import prepare_windows_748_sql
 from .native_config import stage_native_config
 from .application_stage import ApplicationInputs, certificate_stage_paths, stage_application
+from .clone_export import export_clone, export_capabilities
+from .protocol import clone_info_request
 
 
 def emit(value) -> None:
@@ -109,6 +111,12 @@ def parser() -> argparse.ArgumentParser:
     q = sub.add_parser("add-tv"); q.add_argument("target"); q.add_argument("--identity", required=True); q.add_argument("--inventory", type=Path, required=True); q.add_argument("--port", type=int, default=9079)
     q = sub.add_parser("power"); q.add_argument("target"); q.add_argument("state", choices=("On", "Standby")); q.add_argument("--identity", required=True); q.add_argument("--port", type=int, default=9079); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("clone"); q.add_argument("target"); q.add_argument("item"); q.add_argument("version"); q.add_argument("url"); q.add_argument("--identity", required=True); q.add_argument("--port", type=int, default=9079); q.add_argument("--execute", action="store_true")
+    q = sub.add_parser('clone-info'); q.add_argument('target'); q.add_argument('--identity', required=True)
+    q.add_argument('--service-version', choices=('1.0', '3.0', '5.0'), default='3.0')
+    q = sub.add_parser('export-clone'); q.add_argument('target'); q.add_argument('--identity', required=True)
+    q.add_argument('--item', action='append', required=True); q.add_argument('--output', type=Path, required=True)
+    q.add_argument('--service-version', choices=('1.0', '3.0', '5.0'), default='3.0')
+    q.add_argument('--wait-seconds', type=int, default=600); q.add_argument('--execute', action='store_true')
     return p
 
 
@@ -189,6 +197,18 @@ def main(argv=None) -> int:
             verify_identity(cfg, args.target, args.identity, port=args.port)
             response = WIXPClient(cfg.timeout_seconds).send(args.target, clone_request(args.identity, args.item, args.version, args.url), args.port)
             emit({"response": response, "initial_clone_state": clone_session_state(response, args.item), "final_state_verified": False})
+        elif args.command == 'clone-info':
+            cfg = load_config(args.config)
+            scan_targets(cfg, [args.target], 1)
+            verify_identity(cfg, args.target, args.identity)
+            emit(export_capabilities(WIXPClient(cfg.timeout_seconds).send(args.target, clone_info_request(args.service_version))))
+        elif args.command == 'export-clone':
+            cfg = load_config(args.config)
+            result = export_clone(cfg, args.target, args.identity, args.output, items=args.item,
+                                  service_version=args.service_version, execute=args.execute, wait_seconds=args.wait_seconds)
+            emit(result)
+            if args.execute and not result['completed']:
+                return 1
         return 0
     except (BackupError, ConfigError, ProtocolError, RuntimeErrorCMND, ValueError, OSError) as exc:
         print(f"cmndctl: {exc}", file=sys.stderr)
