@@ -12,6 +12,8 @@ chmod 0640 /etc/cmnd/cmnd.toml
 ln -sfn "releases/$VERSION" /opt/linux-cmnd/current
 CMND_CONFIG=/etc/cmnd/cmnd.toml PYTHONPATH="/opt/linux-cmnd/releases/$VERSION/src" \
   python3 -m cmnd_linux render-runtime-config --output /etc/cmnd --execute
-chown root:cmnd /etc/cmnd/*
-chmod 0640 /etc/cmnd/*
+for rendered in tomcat.env apache.env compose.env; do
+  chown root:cmnd "/etc/cmnd/$rendered"
+  chmod 0640 "/etc/cmnd/$rendered"
+done
 exit 0

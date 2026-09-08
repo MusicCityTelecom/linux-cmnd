@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-TOOL_VERSION="0.2.0"
+TOOL_VERSION="0.3.0"
 TOMCAT_VERSION="9.0.121"
 TOMCAT_URL="https://downloads.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
 TOMCAT_SHA512="16494dd4745f808d3c506807b5275521fd71044d976f441d18eeeab0f5a38bc1b5344ca395292f6f26eb7612cd8c8e746d01ccdfb29893d394052d9f4b1f4c11"
@@ -71,6 +71,19 @@ fi
 if [ -n "$TOMCAT_ARCHIVE" ] && [ -z "$TOMCAT_ARCHIVE_SHA512" ]; then
   echo "--tomcat-archive requires --tomcat-sha512" >&2; exit 2
 fi
+if [ "$ENABLE_SERVICE" -eq 1 ]; then
+  echo "Full vendor deployment is not qualified; --enable-service is unavailable. No changes made." >&2
+  exit 9
+fi
+if [ -n "$PAYLOAD" ]; then
+  for war in cas.war usermanagement.war smartcontrol.war SmartInstall.war smartcms.war; do
+    [ -f "$PAYLOAD/$war" ] || { echo "Missing required payload: $PAYLOAD/$war" >&2; exit 7; }
+  done
+fi
+if [ "$INSTALL_DEPS" -eq 1 ] && [ "${ID:-}:${VERSION_ID:-}" = "debian:13" ]; then
+  echo "Debian 13 Java 17 provisioning is not qualified; install an approved JDK separately." >&2
+  exit 3
+fi
 
 run() {
   if [ "$DRY_RUN" -eq 1 ]; then printf '+ '; printf '%s ' "$@"; printf '\n'; else "$@"; fi
@@ -131,8 +144,10 @@ if [ -z "$ROOT_PREFIX" ] && [ "$DRY_RUN" -eq 0 ]; then
   getent group cmnd >/dev/null || groupadd --system cmnd
   id cmnd >/dev/null 2>&1 || useradd --system --gid cmnd --home-dir /var/lib/cmnd --shell /usr/sbin/nologin cmnd
   chown cmnd:cmnd "$VAR_DIR" "$LOG_DIR" "$CMND_ROOT/releases"
-  chown root:cmnd "$ETC_DIR"/*
-  chmod 0640 "$ETC_DIR"/*
+  for rendered in cmnd.toml tomcat.env apache.env compose.env; do
+    chown root:cmnd "$ETC_DIR/$rendered"
+    chmod 0640 "$ETC_DIR/$rendered"
+  done
 fi
 
 install_tomcat_archive() {
@@ -148,7 +163,13 @@ install_tomcat_archive() {
 }
 
 if [ "$DOWNLOAD_TOMCAT" -eq 1 ]; then
-  tmp="${TMPDIR:-/tmp}/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
+  if [ "$DRY_RUN" -eq 1 ]; then
+    tmp="PRIVATE_TEMP/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
+  else
+    task_tmp=$(mktemp -d)
+    trap 'rm -f "$task_tmp/tomcat.tar.gz"; rmdir "$task_tmp"' EXIT INT TERM
+    tmp="$task_tmp/tomcat.tar.gz"
+  fi
   run curl --fail --location --proto '=https' --tlsv1.2 -o "$tmp" "$TOMCAT_URL"
   [ "$DRY_RUN" -eq 1 ] || install_tomcat_archive "$tmp" "$TOMCAT_SHA512"
 elif [ -n "$TOMCAT_ARCHIVE" ]; then

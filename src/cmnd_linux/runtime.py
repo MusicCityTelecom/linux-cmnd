@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import json
 import os
+import re
 import shutil
 import socket
 import tarfile
@@ -18,11 +19,20 @@ class RuntimeErrorCMND(RuntimeError):
     pass
 
 
+def release_path(root: Path, release: str) -> Path:
+    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}', release):
+        raise RuntimeErrorCMND('release must be a simple version/directory name')
+    destination = root / 'releases' / release
+    if root.is_symlink() or (root / 'releases').is_symlink() or destination.is_symlink():
+        raise RuntimeErrorCMND('release paths must not be symbolic links')
+    return destination
+
+
 def render_runtime_config(config: Config, output: Path, execute: bool) -> dict:
     files = {
-        "tomcat.env": (f"CATALINA_OPTS=-DCMND_BIND_ADDRESS={config.bind} "
+        "tomcat.env": (f'CATALINA_OPTS="-DCMND_BIND_ADDRESS={config.bind} '
                        f"-DCMND_TOMCAT_HTTP_PORT={config.tomcat_http} "
-                       f"-DCMND_TOMCAT_HTTPS_PORT={config.tomcat_https}\n"),
+                       f'-DCMND_TOMCAT_HTTPS_PORT={config.tomcat_https}"\n'),
         "apache.env": f"CMND_APACHE_HTTP_PORT={config.apache_http}\nCMND_APACHE_HTTPS_PORT={config.apache_https}\n",
         "compose.env": f"CMND_DATABASE_PORT={config.database_port}\n",
     }
@@ -57,10 +67,10 @@ def preflight(source: Path | None = None, ports: tuple[int, ...] = (3306, 8080, 
 
 
 def install_release(source: Path, root: Path, release: str, *, execute: bool) -> dict:
+    destination = release_path(root, release)
     missing = [name for name in REQUIRED_WARS if not (source / name).is_file()]
     if missing:
         raise RuntimeErrorCMND(f"required application payload missing: {', '.join(missing)}")
-    destination = root / "releases" / release
     if destination.exists():
         marker = destination / "release.json"
         if marker.is_file():
@@ -103,6 +113,8 @@ def install_release(source: Path, root: Path, release: str, *, execute: bool) ->
 def backup_runtime(root: Path, output: Path) -> dict:
     if not root.is_dir() or not (root / "current.txt").is_file():
         raise RuntimeErrorCMND("runtime root is not an initialized cmndctl installation")
+    if output.resolve().is_relative_to(root.resolve()):
+        raise RuntimeErrorCMND('backup output must be outside the runtime root')
     output.parent.mkdir(parents=True, exist_ok=True)
     if output.exists():
         raise RuntimeErrorCMND("backup output already exists")
@@ -119,14 +131,16 @@ def restore_runtime(backup: Path, root: Path, *, execute: bool) -> dict:
         raise RuntimeErrorCMND("backup does not exist")
     with tarfile.open(backup, "r:gz") as archive:
         members = archive.getmembers()
+        if len(members) > 20000 or sum(member.size for member in members) > 4 * 1024**3:
+            raise RuntimeErrorCMND('backup exceeds extraction limits')
         for member in members:
             path = Path(member.name)
-            if path.is_absolute() or ".." in path.parts or member.issym() or member.islnk():
+            if path.is_absolute() or ".." in path.parts or not (member.isfile() or member.isdir()):
                 raise RuntimeErrorCMND(f"unsafe backup member: {member.name}")
         plan = {"backup": str(backup.resolve()), "root": str(root.resolve()), "members": len(members), "executed": execute}
         if not execute:
             return plan
-        if (root / "current.txt").exists():
+        if root.is_symlink() or (root.exists() and (not root.is_dir() or any(root.iterdir()))):
             raise RuntimeErrorCMND("restore destination is populated; use a clean root")
         root.mkdir(parents=True, exist_ok=True)
         archive.extractall(root, filter="data")
@@ -136,13 +150,13 @@ def restore_runtime(backup: Path, root: Path, *, execute: bool) -> dict:
 def status(root: Path) -> dict:
     current_file = root / "current.txt"
     current = current_file.read_text(encoding="utf-8").strip() if current_file.is_file() else None
-    marker = root / "releases" / current / "release.json" if current else None
+    marker = release_path(root, current) / "release.json" if current else None
     return {"root": str(root.resolve()), "current_release": current,
             "release_metadata": json.loads(marker.read_text(encoding="utf-8")) if marker and marker.is_file() else None}
 
 
 def rollback(root: Path, release: str, *, execute: bool) -> dict:
-    marker = root / "releases" / release / "release.json"
+    marker = release_path(root, release) / "release.json"
     if not marker.is_file():
         raise RuntimeErrorCMND("requested rollback release is not installed")
     result = {"root": str(root.resolve()), "release": release, "executed": execute}

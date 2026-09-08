@@ -4,7 +4,12 @@ from dataclasses import dataclass
 import json
 import random
 from ipaddress import ip_address
-from urllib.request import Request, urlopen
+from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler
+
+
+class NoRedirects(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise ProtocolError("TV redirected the request; refusing a different target")
 
 
 class ProtocolError(RuntimeError):
@@ -62,7 +67,7 @@ class WIXPClient:
             headers={"Content-Type": "application/x-www-form-urlencoded", "Cache-Control": "no-cache"},
         )
         try:
-            with urlopen(request, timeout=self.timeout) as response:
+            with build_opener(ProxyHandler({}), NoRedirects()).open(request, timeout=self.timeout) as response:
                 content_type = response.headers.get_content_type()
                 if content_type != "application/json":
                     raise ProtocolError(f"unexpected response content type: {content_type}")
@@ -72,6 +77,8 @@ class WIXPClient:
                 parsed = json.loads(body.decode("utf-8"))
         except Exception as exc:
             raise ProtocolError(f"WIXP request failed: {exc}") from exc
+        if not isinstance(parsed, dict):
+            raise ProtocolError("TV response must be a JSON object")
         if parsed.get("Cookie") != message.get("Cookie"):
             raise ProtocolError("response correlation cookie does not match request")
         if parsed.get("Fun") != message.get("Fun") or parsed.get("CmdType") != "Response":

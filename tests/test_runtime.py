@@ -3,10 +3,18 @@ import unittest
 from pathlib import Path
 
 from cmnd_linux.config import Config
-from cmnd_linux.runtime import REQUIRED_WARS, install_release, render_runtime_config, rollback, status
+from cmnd_linux.runtime import REQUIRED_WARS, RuntimeErrorCMND, install_release, render_runtime_config, rollback, status
 
 
 class RuntimeLifecycleTests(unittest.TestCase):
+    def test_invalid_release_rejected_before_source_or_destination_access(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / 'runtime'
+            for release in ('../outside', '/absolute', 'C:\\outside', '.', '..', 'a/b'):
+                with self.subTest(release=release), self.assertRaises(RuntimeErrorCMND):
+                    install_release(Path(temp) / 'missing', root, release, execute=True)
+                self.assertFalse(root.exists())
+
     def test_dry_run_and_idempotent_install(self):
         with tempfile.TemporaryDirectory() as temp:
             base = Path(temp); source = base / "input"; root = base / "runtime"; source.mkdir()

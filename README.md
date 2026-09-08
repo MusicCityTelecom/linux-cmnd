@@ -2,22 +2,24 @@
 
 Original Music City Telecom tooling for qualifying and deploying operator-supplied Philips CMND applications on Ubuntu 24.04 x86_64. Vendor software is imported locally and is **not** distributed by this repository. This project is not affiliated with or endorsed by Philips.
 
-Current release: `0.2.0` (development). Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`, so application/database coherence is not yet qualified.
+Current tooling version: `0.3.0` (development). Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
 
-Install on Ubuntu 24.04 or Debian 12/13 amd64 using `scripts/install.sh`, or build/install `dist/linux-cmnd_0.2.0_amd64.deb`. See [installation](docs/INSTALL.md) and [configuration](docs/CONFIGURATION.md). Original ports are the defaults and are configurable in `/etc/cmnd/cmnd.toml`.
+The tooling installer accepts Ubuntu 24.04 or Debian 12/13 amd64. Build with `sh scripts/build-deb.sh`. The `0.3.0` tooling package has been installed on Ubuntu 24.04; Debian runtime qualification remains pending. This is not yet a complete production installer. See [installation](docs/INSTALL.md), [configuration](docs/CONFIGURATION.md), and [actual lab evidence](docs/QUALIFICATION-LAB.md).
 
 ## What works now
 
 - Safe ZIP extraction with Windows separator normalization, traversal/symlink/collision/expansion guards, and rollback of partial file writes.
 - SHA-256 artifact inventory.
 - Capture-derived WIXP discovery, power, and clone command encoding with response correlation.
+- Bounded unicast scan and identity-revalidated addition to a separate tooling inventory. This does not silently modify Philips database tables or grant control permissions.
+- Exact, secret-aware rendering of all five operator-supplied WARs and the separate PHP SmartCMS application.
 - Identity/IP/operation allowlists and mandatory `--execute` for TV writes.
 - Room-ID clone package creation from an operator-supplied model template; room IDs remain strings.
 - Restricted ZIP package serving with HTTP byte-range support.
 - Synthetic TV endpoint for discovery, power, clone download, failures, and asynchronous state inspection.
 - Rerunnable release staging, dry-run, status, filesystem backup/clean restore, rollback selection, and preserve-data uninstall marker.
 
-This is not production-ready. Vendor applications have not been started on Linux; login, databases, PHP/Apache, browser workflows, callbacks, migration, and physical-TV application/readback remain unqualified. See [test results](docs/TEST-RESULTS.md) and [limitations](docs/KNOWN-LIMITATIONS.md).
+This is not production-ready. The genuine five-WAR stack runs in a disposable Ubuntu VM; CAS rejected an incorrect password and accepted a generated account into the actual TV-management UI with TLS validation enabled. Fresh SmartInstall and smartcontrol migrations reached their expected versions. The native Add/Detect workflow imported a synthetic TV into Philips inventory, and Apache/PHP SmartCMS SSO reaches Websites overview after Linux path corrections. Complete delivery/readback, CMS content workflows, Windows restore, recovery, and physical TVs still require qualification. See [test results](docs/TEST-RESULTS.md) and [limitations](docs/KNOWN-LIMITATIONS.md).
 
 ## Developer quick start
 

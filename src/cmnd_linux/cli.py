@@ -18,6 +18,8 @@ from .runtime import (RuntimeErrorCMND, backup_runtime, install_release, preflig
 from .simulator import serve
 from .callbacks import serve_callbacks
 from .backups import BackupError, inspect_windows_backup, prepare_windows_restore, read_password
+from .discovery import scan, scan_targets, add_tv, verify_identity
+from .restore_prepare import prepare_windows_748_sql
 
 
 def emit(value) -> None:
@@ -73,13 +75,19 @@ def parser() -> argparse.ArgumentParser:
     q = sub.add_parser("restore"); q.add_argument("--backup", required=True, type=Path); q.add_argument("--root", required=True, type=Path); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("inspect-windows-backup"); q.add_argument("--backup", required=True, type=Path); q.add_argument("--password-file", type=Path); q.add_argument("--prompt-password", action="store_true")
     q = sub.add_parser("prepare-windows-restore"); q.add_argument("--backup", required=True, type=Path); q.add_argument("--staging", required=True, type=Path); q.add_argument("--password-file", type=Path); q.add_argument("--prompt-password", action="store_true"); q.add_argument("--execute", action="store_true")
+    q = sub.add_parser('prepare-windows-sql'); q.add_argument('--backup', required=True, type=Path); q.add_argument('--staging', required=True, type=Path); q.add_argument('--password-file', type=Path); q.add_argument('--prompt-password', action='store_true'); q.add_argument('--execute', action='store_true')
     q = sub.add_parser("rollback"); q.add_argument("--root", required=True, type=Path); q.add_argument("--release", required=True); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("uninstall"); q.add_argument("--root", required=True, type=Path); q.add_argument("--keep-data", action="store_true"); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("simulator"); q.add_argument("--bind", default="127.0.0.1"); q.add_argument("--port", type=int, default=9079); q.add_argument("--identity", default="SIMULATOR00000001")
+    q.add_argument('--model', default='SIMULATOR')
+    q.add_argument('--serial')
+    q.add_argument('--callback-base-url')
     q = sub.add_parser("serve-packages"); q.add_argument("--root", required=True, type=Path); q.add_argument("--bind", default="127.0.0.1"); q.add_argument("--port", type=int, default=8080)
     q = sub.add_parser("callback-server"); q.add_argument("--port", type=int, default=8080)
     q = sub.add_parser("build-room-package"); q.add_argument("output", type=Path); q.add_argument("--serial", required=True); q.add_argument("--room-id", required=True); q.add_argument("--tv-settings-template", required=True, type=Path)
     q = sub.add_parser("discover"); q.add_argument("target"); q.add_argument("--port", type=int, default=9079)
+    q = sub.add_parser("scan"); q.add_argument("targets", nargs="+"); q.add_argument("--port", type=int, default=9079); q.add_argument("--concurrency", type=int, default=8); q.add_argument("--max-targets", type=int, default=512); q.add_argument("--rate", type=float, default=10)
+    q = sub.add_parser("add-tv"); q.add_argument("target"); q.add_argument("--identity", required=True); q.add_argument("--inventory", type=Path, required=True); q.add_argument("--port", type=int, default=9079)
     q = sub.add_parser("power"); q.add_argument("target"); q.add_argument("state", choices=("On", "Standby")); q.add_argument("--identity", required=True); q.add_argument("--port", type=int, default=9079); q.add_argument("--execute", action="store_true")
     q = sub.add_parser("clone"); q.add_argument("target"); q.add_argument("item"); q.add_argument("version"); q.add_argument("url"); q.add_argument("--identity", required=True); q.add_argument("--port", type=int, default=9079); q.add_argument("--execute", action="store_true")
     return p
@@ -117,9 +125,18 @@ def main(argv=None) -> int:
         elif args.command == "prepare-windows-restore":
             password = read_password(args.password_file, args.prompt_password)
             emit(prepare_windows_restore(args.backup, args.staging, password, args.execute))
+        elif args.command == 'prepare-windows-sql':
+            password = read_password(args.password_file, args.prompt_password)
+            if args.execute:
+                emit(prepare_windows_748_sql(args.backup, args.staging, password=password))
+            else:
+                emit({'backup': inspect_windows_backup(args.backup, password),
+                      'executed': False, 'sql_audit_performed': False,
+                      'database_execution_performed': False,
+                      'supported_preparation_version': '7.4.8', 'staging': str(args.staging)})
         elif args.command == "rollback": emit(rollback(args.root, args.release, execute=args.execute))
         elif args.command == "uninstall": emit(uninstall(args.root, keep_data=args.keep_data, execute=args.execute))
-        elif args.command == "simulator": serve(args.bind, args.port, args.identity)
+        elif args.command == "simulator": serve(args.bind, args.port, args.identity, args.model, args.serial, callback_base_url=args.callback_base_url)
         elif args.command == "serve-packages": serve_packages(args.root, args.bind, args.port)
         elif args.command == "callback-server":
             cfg = load_config(args.config); serve_callbacks(cfg.bind, args.port)
@@ -128,12 +145,21 @@ def main(argv=None) -> int:
             emit({"output": str(args.output.resolve()), "room_id": args.room_id, "final_state_verified": False})
         elif args.command == "discover":
             cfg = load_config(args.config)
+            scan_targets(cfg, [args.target], 1)
             emit(WIXPClient(cfg.timeout_seconds).send(args.target, discovery_request(), args.port))
+        elif args.command == "scan":
+            cfg = load_config(args.config)
+            emit(scan(cfg, args.targets, port=args.port, concurrency=args.concurrency, max_targets=args.max_targets, rate=args.rate))
+        elif args.command == "add-tv":
+            cfg = load_config(args.config)
+            emit(add_tv(cfg, args.target, args.identity, args.inventory, port=args.port))
         elif args.command == "power":
             cfg = load_config(args.config); cfg.authorize(args.target, args.identity, "power", args.execute)
+            verify_identity(cfg, args.target, args.identity, port=args.port)
             emit(WIXPClient(cfg.timeout_seconds).send(args.target, power_request(args.state), args.port))
         elif args.command == "clone":
             cfg = load_config(args.config); cfg.authorize(args.target, args.identity, "clone", args.execute); cfg.validate_package_url(args.url)
+            verify_identity(cfg, args.target, args.identity, port=args.port)
             response = WIXPClient(cfg.timeout_seconds).send(args.target, clone_request(args.identity, args.item, args.version, args.url), args.port)
             emit({"response": response, "initial_clone_state": clone_session_state(response, args.item), "final_state_verified": False})
         return 0

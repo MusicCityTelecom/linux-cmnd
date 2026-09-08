@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from ipaddress import ip_address, ip_network
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 import math
 import re
 try:
@@ -42,13 +42,15 @@ class Config:
 
     def authorize(self, target: str, identity: str, operation: str, execute: bool) -> None:
         if operation not in WRITE_OPERATIONS:
-            return
+            raise ConfigError('unsupported control operation')
         if not execute:
             raise ConfigError("write blocked: pass --execute after reviewing the exact target")
         try:
             addr = ip_address(target)
         except ValueError as exc:
             raise ConfigError("write target must be a literal IP address") from exc
+        if self.mode == 'isolated' and not addr.is_loopback:
+            raise ConfigError('isolated mode permits only loopback TV targets')
         if not any(addr in ip_network(net, strict=False) for net in self.permitted_ranges):
             raise ConfigError(f"write target {target} is outside permitted_ranges")
         canonical = str(addr)
@@ -60,9 +62,14 @@ class Config:
 
     def validate_package_url(self, url: str) -> None:
         expected, candidate = urlparse(self.callback_base_url), urlparse(url)
-        if candidate.scheme not in {"http", "https"} or candidate.hostname != expected.hostname or candidate.port != expected.port:
+        if candidate.scheme != expected.scheme or candidate.hostname != expected.hostname or candidate.port != expected.port:
             raise ConfigError("clone URL must use the configured callback host and port")
-        if not candidate.path.startswith("/SmartInstall/Profile/Clone/"):
+        path = unquote(candidate.path)
+        if candidate.username or candidate.password or candidate.fragment or candidate.query:
+            raise ConfigError('clone URLs must not contain credentials, query, or fragment')
+        if '\\' in path or '%' in path or any(ord(c) < 32 for c in path) or any(part in {'.', '..'} for part in path.split('/')):
+            raise ConfigError('clone URL contains ambiguous path encoding or traversal')
+        if not path.startswith("/SmartInstall/Profile/Clone/"):
             raise ConfigError("clone URL is outside the authorized SmartInstall clone prefix")
 
 

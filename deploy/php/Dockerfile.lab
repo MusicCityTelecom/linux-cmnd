@@ -1,0 +1,24 @@
+# Isolated fidelity experiment only: PHP 5.6 is end-of-life, not a security
+# supported deployment recommendation. No vendor/customer input enters layers.
+FROM debian@sha256:88200866dfff7ea7f5cbcb6ec7c8a701889efe6fe859fe64d6990e4b07ea4171 AS archive-keyring
+
+FROM php@sha256:4f070f1b7b93cc5ab364839b79a5b26f38d5f89461f7bc0cd4bab4a3ad7d67d7
+
+# Stretch is archived and its Release metadata is intentionally no longer
+# fresh. Keep signature verification enabled, using Debian's current removed-
+# keys keyring, while disabling only the metadata Valid-Until time check.
+COPY --from=archive-keyring /usr/share/keyrings/debian-archive-removed-keys.gpg \
+    /etc/apt/trusted.gpg.d/debian-archive-removed-keys.gpg
+RUN rm -f /etc/apt/trusted.gpg.d/debian-archive-stretch-*.gpg \
+    && sed -i 's|deb.debian.org/debian|archive.debian.org/debian|g; s|security.debian.org/debian-security|archive.debian.org/debian-security|g; /stretch-updates/d' /etc/apt/sources.list \
+    && printf '%s\n' 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99cmnd-archive \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libfreetype6-dev=2.6.3-3.2+deb9u2 \
+        libjpeg62-turbo-dev=1:1.5.1-2+deb9u2 \
+        libpng-dev=1.6.28-1+deb9u1 \
+        libxml2-dev=2.9.4+dfsg1-2.2+deb9u7 \
+        zlib1g-dev=1:1.2.8.dfsg-5+deb9u1 \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include \
+    && docker-php-ext-install -j2 pdo_mysql mysqli opcache gd zip xmlrpc \
+    && rm -rf /var/lib/apt/lists/*

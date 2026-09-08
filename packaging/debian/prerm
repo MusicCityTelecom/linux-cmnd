@@ -1,7 +1,6 @@
 #!/bin/sh
 set -eu
-if command -v systemctl >/dev/null 2>&1; then
-  systemctl disable --now cmnd-tomcat.service >/dev/null 2>&1 || true
-fi
+# This tooling package does not install/own a live vendor service. Do not stop
+# an operator-managed service merely because it has the same suggested name.
 # Configuration, imported vendor releases, databases, logs, and backups are preserved.
 exit 0

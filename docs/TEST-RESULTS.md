@@ -1,6 +1,8 @@
 # Test results
 
-Checkpoint: source `0.2.0`, Windows development host, 2026-09-07.
+Current evidence: [Ubuntu 0.3.0 qualification](QUALIFICATION-LAB.md). All five actual WARs have now run in a disposable Ubuntu VM; real CAS/browser login and fresh migration checks passed. Full runtime acceptance is still incomplete.
+
+The table below is the preserved historical `0.2.0` checkpoint from Windows on 2026-09-07, not the current infrastructure state.
 
 | Area | Status | Actual evidence |
 |---|---|---|

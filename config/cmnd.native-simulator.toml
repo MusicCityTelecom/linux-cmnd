@@ -1,0 +1,12 @@
+# Synthetic identity only. Never copy this allowlist to a real TV.
+[safety]
+mode = "lab"
+permitted_ranges = ["172.30.44.4/32"]
+[network]
+bind = "127.0.0.1"
+callback_base_url = "http://172.30.44.1:8080"
+timeout_seconds = 5
+[[tv.allowlist]]
+ip = "172.30.44.4"
+identity = "SIMULATOR00000001020000000001"
+operations = ["power", "room-id", "clone"]

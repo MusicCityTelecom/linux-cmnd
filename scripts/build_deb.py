@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from hashlib import sha256
 from io import BytesIO
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import gzip
 import os
 import stat
@@ -19,8 +19,20 @@ def tar_blob(entries: list[tuple[Path | None, str, int, bytes | None]]) -> bytes
     raw = BytesIO()
     with gzip.GzipFile(fileobj=raw, mode="wb", mtime=EPOCH, filename="") as zipped:
         with tarfile.open(fileobj=zipped, mode="w") as archive:
+            directories = {str(parent) for _, destination, _, _ in entries
+                           for parent in PurePosixPath(destination).parents if str(parent) != '.'}
+            for directory in sorted(directories, key=lambda name: (name.count('/'), name)):
+                info = tarfile.TarInfo(directory)
+                info.type = tarfile.DIRTYPE
+                info.mode = 0o750 if directory == 'etc/cmnd' else 0o755
+                info.mtime = EPOCH
+                info.uid = info.gid = 0
+                info.uname = info.gname = 'root'
+                archive.addfile(info)
             for source, destination, mode, literal in sorted(entries, key=lambda item: item[1]):
                 data = literal if literal is not None else source.read_bytes()
+                if source and (source.suffix == '.sh' or 'packaging/debian' in source.as_posix()):
+                    data = data.replace(b'\r\n', b'\n')
                 info = tarfile.TarInfo(destination)
                 info.size = len(data); info.mode = mode; info.mtime = EPOCH; info.uid = 0; info.gid = 0
                 info.uname = "root"; info.gname = "root"
@@ -34,7 +46,7 @@ def tree_entries(source: Path, destination: str) -> list[tuple[Path, str, int, N
         if not path.is_file() or "__pycache__" in path.parts or path.suffix == ".pyc":
             continue
         relative = path.relative_to(source).as_posix()
-        mode = 0o755 if os.access(path, os.X_OK) else 0o644
+        mode = 0o755 if path.suffix == '.sh' else 0o644
         result.append((path, f"{destination}/{relative}", mode, None))
     return result
 

@@ -3,6 +3,7 @@
 # customer data cannot be committed accidentally.
 /*
 !/.gitignore
+!/.gitattributes
 !/README.md
 !/AGENTS.md
 !/CHANGELOG.md
