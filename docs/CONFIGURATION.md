@@ -24,11 +24,11 @@ apache_https = 8444
 database = 3306
 ```
 
-## CMS resource settings (development 0.6.0)
+## CMS resource settings (0.6 series)
 
 The fresh Linux renderer now derives PHP upload limits from the inspected Windows
-7.5.9 configuration. These changes are not yet in published v0.5.0 and require
-fresh-runtime qualification; a tooling-only update does not rebuild the PHP image
+7.5.9 configuration. These changes are absent from v0.5.0; a tooling-only update
+does not rebuild the PHP image
 or overwrite an existing site's native configuration.
 
 ```toml

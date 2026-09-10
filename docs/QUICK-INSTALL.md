@@ -1,9 +1,13 @@
 # Guided installation from public GitHub
 
 Use a fresh, dedicated Ubuntu 24.04 amd64 server or VM with at least 6 GiB RAM
-and 10 GiB free deployment space (40 GiB disk recommended). Do not run on a
-production host or an existing CMND installation. Installed systems use GUI
-updates; the fresh installer deliberately refuses to overwrite them.
+and a 40 GiB disk. The 0.6.0 preflight requires approximately 26 GiB free after
+dependency preparation at the default CMS upload limit (10 GiB plus twice
+8096 MiB); allow additional space for your content and backups. Do not run on a
+production host or an existing CMND installation. Installed 0.6.0 systems use
+`sudo cmndctl --updates` for confirmed tooling updates; the fresh installer
+deliberately refuses to overwrite them. See [UPDATES.md](UPDATES.md) for the
+older 0.5.0 update entry point and runtime-migration limitations.
 
 ## Two commands
 
@@ -81,7 +85,7 @@ Linux is unnecessary. Extra files in a prepared ZIP are rejected.
 ```sh
 sudo python3 bootstrap.py --execute --accept-legacy-runtime \
   --payload /srv/private/cmnd-vendor-7.5.9.zip --server-ip 192.0.2.10 \
-  --release v0.5.0
+  --release v0.6.1
 ```
 
 Replace the example IP with an address actually assigned to your server. Omit
@@ -95,7 +99,9 @@ contain `bootstrap.py`. To pin the bootstrap itself, replace the raw URL's `main
 with its reviewed full Git commit ID. Future releases will include the bootstrap
 and its SHA-256 in the release assets. A raw `main` download intentionally follows
 the latest reviewed source and should not be treated as immutable. The next
-tooling version, 0.6.0, is still unreleased pending its Linux qualification.
+tooling version is 0.6.1; check GitHub releases for its publication status. A
+draft is never installable through the public bootstrap. See TEST-RESULTS.md for
+the exact qualification checkpoint rather than assuming a version proves parity.
 
 For custom ports, use `--config /private/reviewed.toml` instead of `--server-ip`.
 The config must use isolated/lab mode, an empty allowlist, and a callback address

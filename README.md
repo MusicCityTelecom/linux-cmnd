@@ -2,7 +2,7 @@
 
 Original Music City Telecom tooling for qualifying and deploying operator-supplied Philips CMND applications on Ubuntu 24.04 x86_64. Vendor software is imported locally and is **not** distributed by this repository. This project is not affiliated with or endorsed by Philips.
 
-Development tooling version: `0.6.0` (unreleased). Latest published evaluation release: `0.5.0`; the bootstrap installs that published release until a newer one is qualified and published. Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
+Tooling version: `0.6.1` (evaluation). Check [GitHub releases](https://github.com/MusicCityTelecom/linux-cmnd/releases) for publication status; the bootstrap installs only published releases, never a development checkout or draft. The unpublished `0.6.0` build is the clean-install and upgrade-test baseline. Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
 
 ## Quick installation
 
@@ -34,7 +34,7 @@ bootstrap prints a plan and makes no downloads or changes.
 
 ## Qualification status
 
-Development 0.6.0 adds a terminal update switch, without changing Philips GUI
+The 0.6 series adds a terminal update switch, without changing Philips GUI
 pages: `sudo cmndctl --updates`. It checks the fixed GitHub repository and asks
 for an exact version confirmation before handing off to the verified update
 worker. Published v0.5.0 has `cmndctl update-check`; the new switch is not in that

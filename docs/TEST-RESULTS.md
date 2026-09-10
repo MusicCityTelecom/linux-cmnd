@@ -4,17 +4,34 @@
 
 - Commit `048660b`: all 172 tests passed on Ubuntu 24.04.4 in the dedicated
   QEMU/KVM guest. Windows ran 172 tests: 163 passed and 9 POSIX-only skips.
-- Subsequent Java-adapter regression suite: Windows ran 180 tests, 171 passed
-  and 9 POSIX-only skips. Linux rerun and native helper execution are pending.
+- Commit `46d4c5c` Java-adapter regression suite: all 180 tests passed on Ubuntu
+  24.04.4 (25.312 seconds). Windows ran 180 tests, 171 passed and 9 POSIX-only
+  skips. Native helper execution is still pending.
 - Two actual original helper classes passed their pinned SHA-256 and exact
   literal adaptation checks locally. This is static evidence, not a running
   archive-creation or Android packaging acceptance result.
 - Server4's preexisting Apache, MariaDB, PHP and signer processes were unchanged
   by initial VM provisioning. The host rebooted during a work pause; subsequent
   guest restart checks used a new baseline and left those host services unchanged.
-- Candidate clean installation, new-image browser checks, listener verification,
-  reboot and real GitHub CLI upgrade are still pending. No v0.6.0 release has been
-  published. Physical TVs were not contacted.
+- Candidate `46d4c5c` clean installation: PASS in the dedicated Ubuntu guest,
+  including actual APT preparation, rebuilt PHP/FFmpeg image, all five schemas,
+  seven CA-verified HTTPS contexts and both expected migration histories.
+- Actual listeners: Java 8080/8443 and Apache 8082/8444 on the configured guest
+  address; MySQL 3306, PHP-FPM 9000 and management 9078 on loopback only. All
+  seven CMND services/path units and the identity egress guard were active.
+- Native Java helper execution: PASS. The deployed classes matched the adapted
+  hashes; the vendor keytool resolver selected and executed Java 17 keytool.
+  The vendor archive method produced a real 7-Zip archive whose integrity check
+  passed. This does not qualify complete Android bundle signing or legacy packers.
+- PHP private upload directory: mode 0700, owned by the CMS service account.
+- Installed CLI actual public GitHub check: PASS, no token and no newer published
+  release; no package installed. Real newer-release upgrade is still pending.
+- Browser management login, native CAS/TV login and CMS SSO: PASS. The synthetic
+  editor URL loaded its document but the first test timed out waiting for the
+  full page load; editor/export recheck and reboot are pending. No physical TVs
+  were contacted. The unpublished 0.6.0 checkpoint is the 0.6.1 upgrade baseline.
+- 0.6.1 version/documentation checkpoint: Windows ran 180 tests, 171 passed and
+  9 POSIX-only skips (84.224 seconds).
 
 ## Public bootstrap source update (2026-09-10)
 

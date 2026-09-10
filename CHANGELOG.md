@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.6.0 - unreleased
+## 0.6.1 - 2026-09-10 (evaluation candidate)
+
+The unpublished 0.6.0 checkpoint is retained as the real installation/upgrade
+baseline; 0.6.1 packages the same runtime adaptations with corrected deployment
+documentation. See TEST-RESULTS.md for separately recorded release gates.
 
 - Added fail-closed, exact-hash Java literal adaptations for Linux archive
   creation and Java keytool discovery. The distribution `7zip` package and
@@ -15,7 +19,8 @@
   PHP profile, Windows-derived upload limits, private disk upload storage,
   resource-bounded PHP workers and the observed Tomcat HTTP swallow setting.
   These fresh-runtime changes are not automatically applied by tooling-only
-  updates; rebuilt runtime qualification remains required.
+  updates. The rebuilt image and adapted Java helpers passed isolated Ubuntu
+  installation and execution checks; full feature parity remains unqualified.
 
 - Added a guided, standalone public-GitHub bootstrap: release selection including
   prereleases, bounded HTTPS downloads, GitHub SHA-256/size checks, Debian package

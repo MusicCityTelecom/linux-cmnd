@@ -7,7 +7,7 @@ if [ "${1:-}" = --full ]; then
   exec sh "$(dirname -- "$0")/install-native.sh" "$@"
 fi
 
-TOOL_VERSION="0.6.0"
+TOOL_VERSION="0.6.1"
 TOMCAT_VERSION="9.0.121"
 TOMCAT_URL="https://downloads.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
 TOMCAT_SHA512="16494dd4745f808d3c506807b5275521fd71044d976f441d18eeeab0f5a38bc1b5344ca395292f6f26eb7612cd8c8e746d01ccdfb29893d394052d9f4b1f4c11"

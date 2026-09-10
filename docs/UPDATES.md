@@ -1,6 +1,6 @@
 # Command-line GitHub updates
 
-Development 0.6.0 adds this entry point to the installed Linux executable:
+The 0.6 series provides this entry point in the installed Linux executable:
 
 ```sh
 sudo cmndctl --updates

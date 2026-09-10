@@ -49,7 +49,7 @@ sudo editor /srv/private/cmnd.toml
 ```
 
 ```sh
-sudo sh ./install.sh --package ./linux-cmnd_0.5.0_amd64.deb \
+sudo sh ./install.sh --package ./linux-cmnd_0.6.1_amd64.deb \
   --payload /srv/private/cmnd-vendor --config /srv/private/cmnd.toml \
   --install-dependencies --accept-legacy-runtime --execute
 ```
@@ -89,7 +89,15 @@ uses the same generated administrator password as CAS, but is a separate account
 changing the Philips account does not automatically change Linux administration.
 Do not paste credentials into tickets, logs, or GitHub.
 
-## Startup update checks
+## Updates
+
+Use `sudo cmndctl --updates` to check public GitHub releases and review an
+explicit version-scoped installation prompt. Press Enter to cancel. This is a
+tooling-only update: it does not retrofit new WAR adaptations, regenerate native
+configuration or rebuild the PHP image on an older installation. See
+[UPDATES.md](UPDATES.md) before upgrading an existing site.
+
+### Existing management update checks
 
 The management service checks GitHub at startup and offers an explicit **Install
 update** confirmation for a newer allowed release. Manual checks are rate-limited.
