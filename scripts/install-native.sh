@@ -69,7 +69,7 @@ if [ "$dependencies" -eq 1 ]; then
   apt-get update
   # Only the Apache binary/modules are needed for our standalone configuration.
   # Installing the apache2 metapackage would start an unrelated default port-80 site.
-  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3 adduser docker.io apache2-bin media-types openssl iptables iproute2 ca-certificates curl
+  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3 adduser docker.io apache2-bin media-types openssl iptables iproute2 ca-certificates curl 7zip
   if [ ! -x "$java_home/bin/java" ]; then apt-get install -y --no-install-recommends openjdk-17-jre-headless; fi
 fi
 [ -x "$java_home/bin/java" ] || { echo 'Java 17 missing; install dependencies or supply --java-home' >&2; exit 2; }

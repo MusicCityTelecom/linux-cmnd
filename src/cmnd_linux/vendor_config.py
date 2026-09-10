@@ -57,7 +57,7 @@ class VendorRenderConfig:
             raise ValueError("secrets must not contain line breaks")
 
 
-def render_vendor_wars(source_dir: Path, stage_dir: Path, config: VendorRenderConfig) -> list[Path]:
+def render_vendor_wars(source_dir: Path, stage_dir: Path, config: VendorRenderConfig, *, linux_helpers: bool = False) -> list[Path]:
     """Copy and configure the five CMND WARs into a new, empty stage directory."""
     config.validate()
     source_dir = Path(source_dir)
@@ -74,6 +74,9 @@ def render_vendor_wars(source_dir: Path, stage_dir: Path, config: VendorRenderCo
         source = source_dir / name
         destination = stage_dir / name
         replacements = _replacements(name, source, config)
+        if linux_helpers and name == 'SmartInstall.war':
+            from .java_portability import linux_class_replacements
+            replacements.update(linux_class_replacements(source))
         _rewrite_zip(source, destination, replacements)
         rendered.append(destination)
     return rendered

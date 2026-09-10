@@ -155,7 +155,7 @@ def stage_application(inputs: ApplicationInputs, config: Config, secrets: dict[s
                     with archive.extractfile(member) as source, target.open('xb') as destination:
                         shutil.copyfileobj(source, destination)
                     target.chmod(0o700 if relative[0] == 'bin' and target.suffix == '.sh' else 0o600)
-        rendered = render_vendor_wars(vendor, output / 'rendered-wars', render)
+        rendered = render_vendor_wars(vendor, output / 'rendered-wars', render, linux_helpers=True)
         webapps = tomcat / 'webapps'
         webapps.mkdir()
         for war in rendered:

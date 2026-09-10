@@ -62,7 +62,8 @@ class ApplicationStageTests(unittest.TestCase):
         self.addCleanup(self.vendor_pin.stop)
 
     @staticmethod
-    def render_wars(source, stage, config):
+    def render_wars(source, stage, config, *, linux_helpers=False):
+        assert linux_helpers is True
         stage.mkdir()
         return [Path(shutil.copyfile(source / name, stage / name)) for name in WAR_NAMES]
 

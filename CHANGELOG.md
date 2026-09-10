@@ -2,6 +2,11 @@
 
 ## 0.6.0 - unreleased
 
+- Added fail-closed, exact-hash Java literal adaptations for Linux archive
+  creation and Java keytool discovery. The distribution `7zip` package and
+  keytool are checked before deployment; no vendor classes are redistributed.
+  Legacy proprietary packers and vendor certificate regeneration remain
+  unqualified and are documented in the Windows/Linux conversion map.
 - Added `cmndctl --updates`: fixed-repository release checks, exact-version
   interactive confirmation and synchronous verified worker execution, without
   additional Philips GUI changes. No installation on empty/noninteractive input.

@@ -129,6 +129,10 @@ def preflight(inputs: DeploymentInputs, config: Config) -> dict:
     java = subprocess.run([str(inputs.java_home / 'bin/java'), '-version'], capture_output=True)
     if java.returncode or not re.search(rb'version "17\.', java.stdout + java.stderr):
         raise ConfigError('the supplied runtime must be Java17')
+    if not os.access(inputs.java_home / 'bin/keytool', os.X_OK):
+        raise ConfigError('Java 17 keytool is required for Android application packaging')
+    if not os.access('/usr/bin/cmnd-7zip', os.X_OK) or not any(os.access(p, os.X_OK) for p in ('/usr/bin/7zz', '/usr/bin/7z')):
+        raise ConfigError('native Linux 7-Zip helper required; install the tooling package and distribution 7zip package')
     for target in (STATE, MANAGEMENT, Path('/var/lib/cmnd-updates'), Path('/var/lib/cmnd-update-requests'),
                    Path(LAYOUT.tomcat), Path(LAYOUT.cms), Path(LAYOUT.php_uploads), Path('/opt/Philips'), ETC / 'deployment.json',
                    ETC / 'tls', ETC / 'apache.conf', ETC / 'php-fpm.conf', ETC / 'native-tomcat.env',

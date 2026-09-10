@@ -1,0 +1,7 @@
+#!/bin/sh
+# Distribution-owned Linux 7-Zip, never a PATH-selected or vendor Windows binary.
+set -eu
+if [ -x /usr/bin/7zz ]; then exec /usr/bin/7zz "$@"; fi
+if [ -x /usr/bin/7z ]; then exec /usr/bin/7z "$@"; fi
+echo 'Linux 7-Zip missing; install the distribution 7zip package.' >&2
+exit 127

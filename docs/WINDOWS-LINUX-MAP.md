@@ -38,9 +38,15 @@ credentials, binaries, vendor code and screenshots remain private.
 
 ## Java and web code handling
 
-The five WARs are used as original private inputs. Our renderer changes only
-reviewed configuration entries and preserves the other Java classes, libraries,
-templates and static resources. Existing Linux branches are used where supplied.
+The five WARs are used as original private inputs. The native staging renderer
+changes reviewed configuration entries and two hash-pinned helper classes.
+`ZipCommonUtils` invokes the distribution's Linux 7-Zip through `cmnd-7zip`, and
+`AndroidAppHelper` looks for Java's `bin/keytool` rather than `keytool.exe`.
+Only the exact reviewed constant-pool literals change; method bytecode and
+constant indices are preserved. Unknown class hashes, missing literals or
+duplicate literals fail staging. No vendor class bytes are in the repository.
+All other classes, libraries, templates and static resources are retained.
+Existing Linux branches are used where supplied.
 Compiled Java code that launches native executables, regenerates certificates,
 or invokes Windows service commands needs targeted behavioral review; changing
 every string mentioning Windows would break otherwise portable libraries.
@@ -51,6 +57,15 @@ confirmed actual calls to `ffmpeg` and `ffprobe`, exposing the missing image
 dependency. External process argument quoting, legacy packaging/signing helpers,
 vendor certificate regeneration, complete backup restoration and MGate-dependent
 IP playout still need qualification. RF/DekTec/modulator operation is out of scope.
+
+A method-level follow-up inspected nine selected classes after a constant-pool
+scan of 697 TP Vision/Philips classes. It confirmed additional Windows-only
+legacy packaging calls (`HTV_DWPack_1401.exe`, `buh13_pack_rel.exe`), Windows batch
+handling in captured process output, and Windows certificate-regeneration paths.
+These are not solved by the two helper adaptations. Initial installation uses
+our independently provisioned Linux certificates, not vendor regeneration.
+Complete legacy settings/signing, Android AAB packaging and certificate rotation
+are still separate acceptance gates; do not infer parity from the UI loading.
 
 ## Windows GUI baseline supplied by the operator
 

@@ -1,5 +1,21 @@
 # Test results
 
+## Development 0.6.0 Linux/CLI checkpoint (2026-09-10)
+
+- Commit `048660b`: all 172 tests passed on Ubuntu 24.04.4 in the dedicated
+  QEMU/KVM guest. Windows ran 172 tests: 163 passed and 9 POSIX-only skips.
+- Subsequent Java-adapter regression suite: Windows ran 180 tests, 171 passed
+  and 9 POSIX-only skips. Linux rerun and native helper execution are pending.
+- Two actual original helper classes passed their pinned SHA-256 and exact
+  literal adaptation checks locally. This is static evidence, not a running
+  archive-creation or Android packaging acceptance result.
+- Server4's preexisting Apache, MariaDB, PHP and signer processes were unchanged
+  by initial VM provisioning. The host rebooted during a work pause; subsequent
+  guest restart checks used a new baseline and left those host services unchanged.
+- Candidate clean installation, new-image browser checks, listener verification,
+  reboot and real GitHub CLI upgrade are still pending. No v0.6.0 release has been
+  published. Physical TVs were not contacted.
+
 ## Public bootstrap source update (2026-09-10)
 
 - Windows source regression suite: 158 tests run, 152 passed, 6 expected
