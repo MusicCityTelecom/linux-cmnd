@@ -10,8 +10,19 @@ install -d -o root -g cmnd -m 0750 /etc/cmnd
 chown root:cmnd /etc/cmnd/cmnd.toml
 chmod 0640 /etc/cmnd/cmnd.toml
 ln -sfn "releases/$VERSION" /opt/linux-cmnd/current
-CMND_CONFIG=/etc/cmnd/cmnd.toml PYTHONPATH="/opt/linux-cmnd/releases/$VERSION/src" \
-  python3 -m cmnd_linux render-runtime-config --output /etc/cmnd --execute
+if [ -e /etc/cmnd/deployment.json ] || [ -L /etc/cmnd/deployment.json ]; then
+  # A tooling update must not regenerate an active site's native/auxiliary
+  # configuration. Validate the root-owned marker rather than trusting its name.
+  python3 -c '
+import json, pathlib, sys
+p=pathlib.Path("/etc/cmnd/deployment.json")
+safe=p.is_file() and not p.is_symlink() and p.stat().st_uid==0 and not p.stat().st_mode & 0o022 and p.stat().st_size<65536
+sys.exit(0 if safe and json.loads(p.read_text()).get("managed_by")=="linux-cmnd-native" else 1)
+'
+else
+  CMND_CONFIG=/etc/cmnd/cmnd.toml PYTHONPATH="/opt/linux-cmnd/releases/$VERSION/src" \
+    python3 -m cmnd_linux render-runtime-config --output /etc/cmnd --execute
+fi
 for rendered in tomcat.env apache.env compose.env; do
   chown root:cmnd "/etc/cmnd/$rendered"
   chmod 0640 "/etc/cmnd/$rendered"

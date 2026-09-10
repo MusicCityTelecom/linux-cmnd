@@ -54,6 +54,9 @@ if [ "$(readlink -f "$config")" != /etc/cmnd/cmnd.toml ]; then
   install -m 0640 -o root -g cmnd "$config" /etc/cmnd/cmnd.toml
   config=/etc/cmnd/cmnd.toml
 fi
+# Package setup initially used the example configuration. Synchronize auxiliary
+# environments once with the reviewed fresh-install address, before activation.
+cmndctl --config "$config" render-runtime-config --output /etc/cmnd --execute
 PYTHONPATH=/opt/linux-cmnd/current/src python3 -c '
 import sys
 from pathlib import Path

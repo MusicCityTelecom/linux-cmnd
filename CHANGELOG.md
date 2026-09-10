@@ -6,6 +6,11 @@ The unpublished 0.6.0 checkpoint is retained as the real installation/upgrade
 baseline; 0.6.1 packages the same runtime adaptations with corrected deployment
 documentation. See TEST-RESULTS.md for separately recorded release gates.
 
+- Preserve an existing native deployment's environment configuration during
+  package setup. Fresh installations synchronize auxiliary environments after
+  applying the selected bind address. This fixes a preservation-test failure
+  found during actual package rollback qualification.
+
 - Added fail-closed, exact-hash Java literal adaptations for Linux archive
   creation and Java keytool discovery. The distribution `7zip` package and
   keytool are checked before deployment; no vendor classes are redistributed.
