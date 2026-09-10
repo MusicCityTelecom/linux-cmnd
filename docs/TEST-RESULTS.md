@@ -25,6 +25,19 @@ This is separate from the earlier manually assembled simulator lab below.
 | Debian native runtime | NOT_RUN | Detection is tested; no Debian full-runtime result claimed |
 | Physical TVs | NOT_RUN | No current individual target supplied; first test remains clone download from TV |
 
+The release-candidate installer was subsequently run from its checksum-verified
+standalone shell/`.deb` assets after restoring the pre-database Ubuntu snapshot.
+Its configured address was on a new internal-only VM bridge, not loopback.
+All seven HTTPS contexts and migrations passed, and the retained `.deb` matched
+the installed candidate. Native browser authentication, CMS editor creation and
+local export passed on this address. Native Add/Detect imported the exact
+synthetic identity into Philips inventory; room-clone ZIP download/CRC/callback,
+independent room readback, fresh-page room persistence and Standby also passed.
+These remain simulator results, not physical-TV evidence. Auto-import emitted
+settings/enabler/PMS commands, so FIRST-TV-TEST.md explicitly excludes it from the
+initial receive-only hardware test. Final prompt wording warns that a vendor
+restart can resume existing jobs; tooling-only does not mean no background activity.
+
 The first broad Linux run had a five-second login-test timeout; an unchanged
 focused rerun and the refreshed full 135-test suite passed. Cold native Java
 startup took 652 seconds. A missing Tomcat context directory was corrected before

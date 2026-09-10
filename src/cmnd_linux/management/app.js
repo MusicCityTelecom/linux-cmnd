@@ -46,7 +46,7 @@ element('login-form').addEventListener('submit', async event => {
 });
 element('check').addEventListener('click', async () => { try { await api('check', {}); await refresh(); } catch(error) { element('error').textContent = error.message; } });
 element('install').addEventListener('click', async () => {
-  if (!release || !confirm('Install Linux CMND ' + release.version + '? CMND will stop and restart; Java startup can take several minutes. No TV settings or Philips payload upgrades will be pushed.')) return;
+  if (!release || !confirm('Install Linux CMND ' + release.version + '? CMND will stop and restart; Java startup can take several minutes. This updates tooling only. Review and pause pending TV jobs first: vendor services can resume them after restart.')) return;
   element('install').disabled = true;
   try { await api('install', {version:release.version, release_id:release.release_id, execute:true}); await refresh(); }
   catch(error) { element('error').textContent = error.message; }

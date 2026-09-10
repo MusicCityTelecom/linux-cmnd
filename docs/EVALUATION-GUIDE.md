@@ -113,6 +113,12 @@ This updater does not change the Philips payload, perform database migrations,
 upgrade firmware, or push TV settings. Vendor-version and major-version changes
 are deliberately routed to an explicit migration process.
 
+The updater itself sends no TV commands, but restarting vendor services can
+resume previously queued or scheduled TV jobs. Review and pause those jobs before
+updating an operational installation; do not interpret a tooling-only update as
+a guarantee of no background vendor activity. The initial installation's empty
+TV egress policy remains the safe evaluation default.
+
 The real GUI startup offer, explicit confirmation, systemd worker, package upgrade,
 readiness and success display have been exercised with synthetic release transport.
 Real package rollback after an injected failure also passed. Authenticated access

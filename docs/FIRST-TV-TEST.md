@@ -4,6 +4,11 @@ The current operator instruction is export first, before any TV configuration,
 power, firmware, or content changes. Do not scan a VPN subnet or use historical
 customer addresses. Obtain one current IP and verify its stable serial/MAC identity.
 
+Do not use native **Add/Detect with auto-import** before the first receive-only
+test. In isolated simulator qualification, that workflow automatically sent
+enabler, settings-clone and PMS commands. It is not a read-only discovery action.
+Use the separate bounded discovery/clone-export CLI for the first physical TV.
+
 The original Philips Java implementation uses an IPCloneService Request to inspect
 CloneToServerParameters, requires CloneToServerStatus=Ready and session fields,
 then sends a Change containing only CloneToServerParameters/CloneToServerDetails.
@@ -19,6 +24,11 @@ Its bind and callback HTTP origin must use the same explicit TV-reachable local
 IPv4 address (not0.0.0.0). Do not change host firewall/VPN routing without scoped
 approval. The disposable VM's existing loopback NAT forwards are not reachable
 from remote TVs.
+
+On an already running CMND host, native HTTP port 8080 is occupied. Choose a
+separate unused receiver port (for example 18080) in the private export config's
+`callback_base_url`, and verify that exact return route. Do not stop native CMND
+or reuse its listener accidentally. No listener starts without `--execute`.
 
 After the one-target identity probe and private allowlist preparation:
 
