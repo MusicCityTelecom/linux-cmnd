@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0 - unreleased
+
+- Added a guided, standalone public-GitHub bootstrap: release selection including
+  prereleases, bounded HTTPS downloads, GitHub SHA-256/size checks, Debian package
+  identity checks, automatic configuration and dependency installation.
+- Added private local payload ZIP preparation with exact original input hashes;
+  the bootstrap accepts that ZIP without manual extraction. Vendor binaries and
+  customer data remain excluded from all public assets.
+- Added bootstrap safety/regression tests and a two-command installation guide.
+- Added explicit iproute2 installation for minimal supported Linux images.
+- No new physical-TV, complete Windows restore, Debian runtime, or MGate parity
+  qualification is implied by this installer convenience release.
+
 ## 0.5.0 - 2026-09-09 (evaluation candidate)
 
 - Added a full fresh-host installer, shared shell/`.deb` entry point, pinned

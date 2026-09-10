@@ -47,7 +47,9 @@ def main():
     shutil.copyfile(ROOT / 'docs/EVALUATION-GUIDE.md', guide)
     configuration = destination / 'cmnd.example.toml'
     shutil.copyfile(ROOT / 'config/cmnd.install.toml', configuration)
-    artifacts = [package, installer, manifest, source, guide, configuration]
+    bootstrap = destination / 'bootstrap.py'
+    bootstrap.write_bytes((ROOT / 'scripts/bootstrap.py').read_bytes().replace(b'\r\n', b'\n'))
+    artifacts = [package, installer, manifest, source, guide, configuration, bootstrap]
     checksums = destination / 'SHA256SUMS'
     checksums.write_text(''.join(f'{sha256(path.read_bytes()).hexdigest()}  {path.name}\n' for path in artifacts), encoding='ascii')
     print(json.dumps({'version': version, 'assets': [str(path) for path in artifacts + [checksums]],

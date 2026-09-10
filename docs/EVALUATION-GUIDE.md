@@ -32,6 +32,10 @@ backups, clone files, firmware, and credentials are not installer payloads.
 
 ## Install
 
+For the guided GitHub download-and-install flow, start with
+[QUICK-INSTALL.md](QUICK-INSTALL.md). It replaces the manual release-asset download
+and configuration steps below. The repository is public; no token is required.
+
 Download the evaluation `.deb`, `install.sh`, `cmnd.example.toml`, and `SHA256SUMS` from the same GitHub
 release, and verify their checksums. Keep the `.deb` for verified update rollback.
 Before executing the installer, prepare a private configuration. Leave the
@@ -121,9 +125,9 @@ TV egress policy remains the safe evaluation default.
 
 The real GUI startup offer, explicit confirmation, systemd worker, package upgrade,
 readiness and success display have been exercised with synthetic release transport.
-Real package rollback after an injected failure also passed. Authenticated access
-from the VM to the still-private GitHub repository is a separate pending check;
-these results do not claim that transport was tested with a GitHub credential.
+Real package rollback after an injected failure also passed. The repository is
+now public and needs no GitHub credential. Public transport evidence is recorded
+separately in TEST-RESULTS.md; the earlier fixture results do not establish it.
 
 ## Qualification and recovery
 

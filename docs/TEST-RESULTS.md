@@ -1,5 +1,19 @@
 # Test results
 
+## Public bootstrap source update (2026-09-10)
+
+- Windows source regression suite: 158 tests run, 152 passed, 6 expected
+  POSIX-only skips. Includes 14 new bootstrap/private-payload tests.
+- Actual unauthenticated public GitHub release selection: PASS, selected v0.5.0.
+- Actual public download of v0.5.0 `.deb` and `install.sh`: PASS; exact sizes and
+  SHA-256 values verified against GitHub metadata, with no token supplied.
+- Private payload helper: PASS with all 26 pinned original inputs; generated ZIP
+  read back and hashed successfully. No customer database or credentials included.
+- This new bootstrap has not yet completed a fresh Linux activation. The
+  published v0.5.0 native installer's earlier runtime evidence remains below;
+  bootstrap source testing does not replace it. Development v0.6.0 is unreleased.
+- No new physical-TV, Windows restore, or Debian runtime evidence is claimed.
+
 ## New full-installer evaluation (2026-09-09)
 
 The new installer was exercised as a private `0.4.0` development baseline for

@@ -2,11 +2,41 @@
 
 Original Music City Telecom tooling for qualifying and deploying operator-supplied Philips CMND applications on Ubuntu 24.04 x86_64. Vendor software is imported locally and is **not** distributed by this repository. This project is not affiliated with or endorsed by Philips.
 
-Current tooling version: `0.5.0` (evaluation candidate). Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
+Development tooling version: `0.6.0` (unreleased). Latest published evaluation release: `0.5.0`; the bootstrap installs that published release until a newer one is qualified and published. Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
+
+## Quick installation
+
+On a fresh Ubuntu 24.04 amd64 server/VM (6 GiB RAM, 40 GiB disk recommended),
+download one script and run its guided installer. Python 3.11+ and trusted HTTPS
+certificates are required; Ubuntu Server normally already supplies them.
+
+```sh
+curl --fail --location --proto '=https' --proto-redir '=https' \
+  -o bootstrap.py https://raw.githubusercontent.com/MusicCityTelecom/linux-cmnd/main/scripts/bootstrap.py
+sudo python3 bootstrap.py --execute
+```
+
+The script asks for the local Philips payload directory/ZIP and this server's
+stable IPv4 address, then asks you to accept the legacy evaluation runtime. It
+downloads the newest compatible GitHub evaluation release, checks the package
+and installer against GitHub's SHA-256 digests, installs dependencies, generates
+configuration with the original default ports, and starts CMND. No git checkout,
+manual `.deb` download, GitHub login, or hand-written config is needed.
+
+Philips binaries are **not in the public GitHub repository**. Supply the original
+licensed inputs directly, or prepare one private ZIP using
+[the payload preparation instructions](docs/QUICK-INSTALL.md). This is not a
+customer backup import. No physical TVs are authorized by installation.
+
+See [quick-install options](docs/QUICK-INSTALL.md) for unattended installs,
+release pinning, Debian requirements, and custom ports. Without `--execute`, the
+bootstrap prints a plan and makes no downloads or changes.
+
+## Qualification status
 
 The full installer and `.deb` accept Ubuntu 24.04 or Debian 12/13 amd64; Debian 13 needs an operator-supplied Java 17 runtime. The new installer has completed a fresh Ubuntu VM deployment of the five Java applications and SmartCMS, with HTTPS/migration readiness, automatic startup after reboot, real browser login, and native CMS local export. Debian runtime qualification remains pending. Start with the [evaluation installation guide](docs/EVALUATION-GUIDE.md), [configuration](docs/CONFIGURATION.md), and [test results](docs/TEST-RESULTS.md).
 
-This is **not full Windows-feature parity or production certification**. RF/DekTec/modulator workflows are explicitly out of scope. The supplied MGate archive is Windows-only; additional MGate-dependent IP transport-stream playout is not qualified. Physical-TV qualification and production Windows-backup restore remain incomplete. GUI updates are implemented, but their end-to-end private-GitHub installation gate is still pending. No licensed vendor files or customer reference archives are distributed in our assets.
+This is **not full Windows-feature parity or production certification**. RF/DekTec/modulator workflows are explicitly out of scope. The supplied MGate archive is Windows-only; additional MGate-dependent IP transport-stream playout is not qualified. Physical-TV qualification and production Windows-backup restore remain incomplete. GUI updates have passed end-to-end installation and rollback with synthetic release transport; real GitHub transport qualification is recorded separately. No licensed vendor files or customer reference archives are distributed in our assets.
 
 ## What works now
 
