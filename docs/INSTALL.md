@@ -1,6 +1,16 @@
 # Installation
 
-This currently installs development tooling and stages payloads, not a complete production CMND service. Use only an isolated lab first. The installer accepts Ubuntu 24.04 and Debian 12/13 on amd64; only Ubuntu has actual package-install evidence. Keep the operator-owned installer and extracted payload private.
+For the new full-service installer, use [EVALUATION-GUIDE.md](EVALUATION-GUIDE.md).
+Fresh Ubuntu installation, HTTPS/migration readiness, browser login, automatic
+startup after reboot, and native CMS export have passed. This remains an
+evaluation: native MGate playout, Debian runtime, production restore, physical TVs,
+and end-to-end GitHub update qualification are not completed.
+
+## Earlier development-only staging workflow
+
+The commands below document the earlier tooling/staging workflow, not the new
+`cmnd-install` full-service entry point. Keep operator-owned installers and
+extracted payloads private.
 
 Source installer:
 

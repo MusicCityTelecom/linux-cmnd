@@ -30,6 +30,8 @@ class DebianPackageTests(unittest.TestCase):
             self.assertTrue(archive.getmember('etc/cmnd').isdir())
             self.assertTrue(archive.getmember('usr/bin').isdir())
         self.assertIn("usr/bin/cmndctl", names)
+        self.assertIn("usr/bin/cmnd-install", names)
+        self.assertIn("usr/share/doc/linux-cmnd/docs/EVALUATION-GUIDE.md", names)
         self.assertIn("etc/cmnd/cmnd.toml", names)
         self.assertFalse(any(name.lower().endswith((".war", ".exe", ".p12", ".pcapng")) for name in names))
 

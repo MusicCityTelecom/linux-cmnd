@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.5.0 - 2026-09-09 (evaluation candidate)
+
+- Added a full fresh-host installer, shared shell/`.deb` entry point, pinned
+  PHP/MySQL dependency preparation, native certificates, five-schema bootstrap,
+  managed isolation, and boot-enabled service/readiness checks.
+- Qualified a fresh Ubuntu deployment and actual reboot, native browser login,
+  CMS single sign-on/editor creation, and post-reboot local export validation.
+- Added authenticated management GUI startup release checks, explicit installation
+  confirmation, verified tooling-only packages, private backups, and recovery.
+  End-to-end private-GitHub installation is not yet qualified.
+- Added release-source/asset safety checks, management request limits, explicit
+  file-mode regression coverage, and failure-path recovery tests.
+- RF/DekTec/modulator workflows remain explicitly out of scope. Additional
+  MGate-dependent IP playout is unqualified; the supplied MGate archive contains
+  only a Windows executable. This is not full
+  Windows-feature parity, Debian runtime certification, or physical-TV evidence.
+
 ## 0.4.0 - 2026-09-08 (development)
 
 - Added identity-gated TV-to-server clone export, a separate export-only permission,

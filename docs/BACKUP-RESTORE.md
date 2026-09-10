@@ -1,5 +1,13 @@
 # Backup and restore
 
+The native GUI tooling updater separately retains a configuration archive,
+consistent dumps of all five databases, and the previous `.deb` before upgrading.
+Real package rollback after an injected failure has passed in the Ubuntu VM using
+local release fixtures. Those update backups are not a complete portable CMND
+disaster-recovery backup: vendor content directories and a restored second
+instance still require separate qualification. Never use package rollback as a
+substitute for a tested customer-data restore plan.
+
 `cmndctl backup --root <runtime> --output <new.tgz>` creates a non-overwriting filesystem release backup. `cmndctl restore --backup <tgz> --root <clean-root>` validates paths/symlinks and previews; add `--execute` only for an empty destination. It does not back up or restore CMND databases and is not a complete CMND recovery mechanism.
 
 An isolated five-schema import and migration experiment has now run, as described

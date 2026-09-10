@@ -1,6 +1,18 @@
 #!/bin/sh
 set -eu
-# This tooling package does not install/own a live vendor service. Do not stop
-# an operator-managed service merely because it has the same suggested name.
-# Configuration, imported vendor releases, databases, logs, and backups are preserved.
+# Stop only a deployment explicitly owned by the full installer. Upgrades are
+# coordinated by the update worker; never stop unrelated same-named services.
+case "${1:-}" in
+  remove|deconfigure)
+    if python3 -c '
+import json, pathlib, sys
+p=pathlib.Path("/etc/cmnd/deployment.json")
+safe=p.is_file() and not p.is_symlink() and p.stat().st_uid==0 and not p.stat().st_mode & 0o022 and p.stat().st_size<65536
+sys.exit(0 if safe and json.loads(p.read_text()).get("managed_by")=="linux-cmnd-native" else 1)
+'; then
+      systemctl disable --now cmnd-update.path cmnd-admin cmnd-tomcat cmnd-apache cmnd-php cmnd-mysql
+    fi
+    ;;
+esac
+# Configuration, vendor payloads, databases, egress guard, and backups survive removal.
 exit 0

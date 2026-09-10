@@ -225,7 +225,18 @@ class CloneExportTests(unittest.TestCase):
                 state.target = peer
                 client = HTTPConnection('127.0.0.1', server.server_port, timeout=5)
                 body = multipart(archive_bytes())
-                client.request('POST', path, body, {'Content-Type': 'multipart/form-data; boundary=cmnd-boundary'})
+                if expected == 403:
+                    # A rejected upload must not send a body after the server's
+                    # close. On Windows unread request bytes can reset the socket
+                    # before the client receives 403. Exercise the real pre-body
+                    # authorization gate instead of racing TCP teardown.
+                    client.putrequest('POST', path)
+                    client.putheader('Content-Type', 'multipart/form-data; boundary=cmnd-boundary')
+                    client.putheader('Content-Length', str(len(body)))
+                    client.putheader('Expect', '100-continue')
+                    client.endheaders()
+                else:
+                    client.request('POST', path, body, {'Content-Type': 'multipart/form-data; boundary=cmnd-boundary'})
                 response = client.getresponse()
                 self.assertEqual(response.status, expected)
                 response.read()

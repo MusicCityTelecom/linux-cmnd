@@ -1,0 +1,9 @@
+# Incremental qualification build; the standalone Dockerfile.lab includes these.
+FROM sha256:ab1537bf1305c30c0701e4b938b33aa475d022d6dbbc73aaab022cff23a1c27f
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends cutycapt=0.0~svn10-0.1 \
+       xvfb=2:1.19.2-1+deb9u9 xauth=1:1.0.9-1+b2 \
+       imagemagick=8:6.9.7.4+dfsg-11+deb9u14 \
+    && rm -rf /var/lib/apt/lists/*
+COPY cutycapt.sh /usr/local/bin/cutycapt.sh
+RUN chmod 0755 /usr/local/bin/cutycapt.sh

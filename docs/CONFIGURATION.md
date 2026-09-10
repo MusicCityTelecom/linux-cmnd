@@ -2,6 +2,12 @@
 
 The installed configuration is `/etc/cmnd/cmnd.toml`. Validate every change before restarting anything:
 
+For `cmnd-install`, choose ports, bind address and callback origin **before fresh
+installation**; the installer applies them together to the native applications.
+Editing the TOML on an already running deployment is not sufficient. Automated
+in-place port/hostname reconfiguration and certificate rotation are not yet
+qualified; do not restart with a partially updated configuration.
+
 ```bash
 sudo cmndctl --config /etc/cmnd/cmnd.toml validate-config
 sudo cmndctl --config /etc/cmnd/cmnd.toml doctor --source /private/cmnd/'{app}'
@@ -60,8 +66,8 @@ PHP uploads under `sites/default/files` are denied.
 Actual Apache and PHP 5.6 FPM syntax checks passed in the Ubuntu qualification VM.
 Staging does **not** install certificates, initialize databases, update WARs,
 start services, or apply a firewall. Do not copy this stage over a running system
-as a partial port change. Coordinated activation remains an installer acceptance
-gate. The CLI identity allowlist does not automatically constrain the unmodified
+as a partial port change. Fresh installer activation has Ubuntu runtime evidence;
+in-place reconfiguration remains an acceptance gate. The CLI identity allowlist does not automatically constrain the unmodified
 Philips GUI or background schedulers; enforce separately reviewed runtime egress
 isolation before starting vendor applications against restored data.
 

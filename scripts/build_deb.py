@@ -43,8 +43,12 @@ def tar_blob(entries: list[tuple[Path | None, str, int, bytes | None]]) -> bytes
 def tree_entries(source: Path, destination: str) -> list[tuple[Path, str, int, None]]:
     result = []
     for path in source.rglob("*"):
+        if path.is_symlink():
+            raise ValueError('release source must not contain symlinks: ' + str(path))
         if not path.is_file() or "__pycache__" in path.parts or path.suffix == ".pyc":
             continue
+        if path.suffix.lower() in {'.war', '.jar', '.exe', '.zip', '.sql', '.key', '.crt', '.pem', '.p12', '.pfx', '.pcap', '.pcapng', '.log'}:
+            raise ValueError('private/vendor/generated input cannot enter the release: ' + str(path))
         relative = path.relative_to(source).as_posix()
         mode = 0o755 if path.suffix == '.sh' else 0o644
         result.append((path, f"{destination}/{relative}", mode, None))
@@ -75,7 +79,9 @@ def build() -> Path:
     for name in ("LICENSE", "VERSION"):
         data_entries.append((ROOT / name, f"{release}/{name}", 0o644, None))
     data_entries += tree_entries(ROOT / "deploy", "usr/share/linux-cmnd")
+    data_entries += tree_entries(ROOT / "docs", "usr/share/doc/linux-cmnd/docs")
     data_entries += [
+        (ROOT / "scripts/install-native.sh", "usr/bin/cmnd-install", 0o755, None),
         (ROOT / "packaging/debian/cmndctl", "usr/bin/cmndctl", 0o755, None),
         (ROOT / "config/cmnd.example.toml", "etc/cmnd/cmnd.toml", 0o640, None),
         (ROOT / "README.md", "usr/share/doc/linux-cmnd/README.md", 0o644, None),

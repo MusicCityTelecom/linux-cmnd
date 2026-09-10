@@ -28,6 +28,7 @@ class NativeConfigTests(unittest.TestCase):
         self.assertIn('/SmartInstall/webservices.jsp', files['ROOT/WEB-INF/rewrite.config'])
         self.assertIn('Listen 127.0.0.1:8082', files['apache.conf'])
         self.assertIn('Listen 127.0.0.1:8444', files['apache.conf'])
+        self.assertIn('ServerRoot /etc/cmnd', files['apache.conf'])
         self.assertNotIn('sites-enabled', files['apache.conf'])
         self.assertNotIn('ports.conf', files['apache.conf'])
 

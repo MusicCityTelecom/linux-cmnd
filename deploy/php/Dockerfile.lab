@@ -19,6 +19,12 @@ RUN rm -f /etc/apt/trusted.gpg.d/debian-archive-stretch-*.gpg \
         libpng-dev=1.6.28-1+deb9u1 \
         libxml2-dev=2.9.4+dfsg1-2.2+deb9u7 \
         zlib1g-dev=1:1.2.8.dfsg-5+deb9u1 \
+        cutycapt=0.0~svn10-0.1 \
+        xvfb=2:1.19.2-1+deb9u9 \
+        xauth=1:1.0.9-1+b2 \
+        imagemagick=8:6.9.7.4+dfsg-11+deb9u14 \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include \
-    && docker-php-ext-install -j2 pdo_mysql mysqli opcache gd zip xmlrpc \
+    && docker-php-ext-install -j2 pdo_mysql mysqli opcache gd zip xmlrpc pcntl \
     && rm -rf /var/lib/apt/lists/*
+COPY cutycapt.sh /usr/local/bin/cutycapt.sh
+RUN chmod 0755 /usr/local/bin/cutycapt.sh

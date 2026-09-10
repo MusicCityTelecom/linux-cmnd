@@ -117,6 +117,15 @@ def parser() -> argparse.ArgumentParser:
     q.add_argument('--item', action='append', required=True); q.add_argument('--output', type=Path, required=True)
     q.add_argument('--service-version', choices=('1.0', '3.0', '5.0'), default='3.0')
     q.add_argument('--wait-seconds', type=int, default=600); q.add_argument('--execute', action='store_true')
+    q = sub.add_parser('deploy-native', help='Fresh private application deployment; never adopts existing data')
+    q.add_argument('--vendor', type=Path, required=True); q.add_argument('--tomcat-archive', type=Path, required=True)
+    q.add_argument('--php-image', required=True); q.add_argument('--java-home', type=Path, required=True)
+    q.add_argument('--execute', action='store_true'); q.add_argument('--accept-legacy-runtime', action='store_true')
+    sub.add_parser('native-wait-database', help='Internal fixed-target systemd database readiness gate')
+    q = sub.add_parser('native-health'); q.add_argument('--seconds', type=int, default=60)
+    q = sub.add_parser('update-gui'); q.add_argument('--settings', type=Path, default=Path('/etc/linux-cmnd-management/admin.json'))
+    q = sub.add_parser('update-apply'); q.add_argument('--execute', action='store_true')
+    sub.add_parser('update-check')
     return p
 
 
@@ -197,6 +206,29 @@ def main(argv=None) -> int:
             verify_identity(cfg, args.target, args.identity, port=args.port)
             response = WIXPClient(cfg.timeout_seconds).send(args.target, clone_request(args.identity, args.item, args.version, args.url), args.port)
             emit({"response": response, "initial_clone_state": clone_session_state(response, args.item), "final_state_verified": False})
+        elif args.command == 'update-gui':
+            from .update_gui import serve as serve_gui
+            serve_gui(args.settings)
+        elif args.command == 'update-check':
+            from .updates import check_release, settings
+            from . import __version__
+            emit(check_release(settings(), __version__))
+        elif args.command == 'update-apply':
+            from .updates import install_pending
+            install_pending(execute=args.execute)
+        elif args.command == 'deploy-native':
+            from .native_deploy import DeploymentInputs, deploy
+            emit(deploy(DeploymentInputs(Path(args.config), args.vendor, args.tomcat_archive,
+                args.php_image, args.java_home), execute=args.execute, accept_legacy=args.accept_legacy_runtime))
+        elif args.command == 'native-wait-database':
+            from .native_deploy import wait_database
+            wait_database()
+        elif args.command == 'native-health':
+            from .native_deploy import wait_ready
+            result = wait_ready(load_config(args.config), args.seconds)
+            emit(result)
+            if not result['readiness_verified']:
+                return 1
         elif args.command == 'clone-info':
             cfg = load_config(args.config)
             scan_targets(cfg, [args.target], 1)

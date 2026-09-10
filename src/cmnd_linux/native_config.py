@@ -97,17 +97,17 @@ def render_native_files(config: Config, secrets: dict[str, str], layout: NativeL
     ET.indent(root)
     server_xml = ET.tostring(root, encoding='unicode', xml_declaration=True) + '\n'
     context = '<Context swallowOutput="true"><Valve className="org.apache.catalina.valves.rewrite.RewriteValve"/></Context>\n'
-    rewrite = ('RewriteCond %{REQUEST_URI} ^/$\nRewriteRule ^(.*)$ /SmartInstall/$1 [L]\n'
+    rewrite = (f'RewriteRule ^/$ https://{host}:{config.apache_https}/linux-cmnd/ [R=302,L]\n'
                'RewriteRule ^/webservices.jsp /SmartInstall/webservices.jsp [L]\n'
                'RewriteRule ^/(.*).jsp /SmartInstall/$1.jsp [L]\n')
     # Standalone Apache configuration: never include another application's
     # sites-enabled or change the distribution-wide ports.conf.
     modules = ('mpm_event', 'authz_core', 'authz_host', 'access_compat', 'dir', 'mime',
                'alias', 'rewrite', 'headers', 'expires', 'filter', 'deflate', 'proxy',
-               'proxy_fcgi', 'ssl', 'socache_shmcb', 'unixd')
+               'proxy_fcgi', 'proxy_http', 'ssl', 'socache_shmcb', 'unixd')
     apache = '\n'.join(f'LoadModule {name}_module /usr/lib/apache2/modules/mod_{name}.so'
                        for name in modules if name != 'unixd') + '\n'
-    apache += f'''ServerRoot /etc/apache2
+    apache += f'''ServerRoot /etc/cmnd
 ServerName {host}
 DefaultRuntimeDir {layout.run}
 PidFile {layout.run}/apache.pid
@@ -154,6 +154,10 @@ Alias /SmartCMS {layout.cms}
 '''
         if port == config.apache_https:
             apache += f'SSLEngine on\nSSLCertificateFile {layout.certificate}\nSSLCertificateKeyFile {layout.key}\n'
+            apache += ('ProxyRequests Off\nProxyPass /linux-cmnd/ http://127.0.0.1:9078/ connectiontimeout=5 timeout=30\n'
+                       'ProxyPassReverse /linux-cmnd/ http://127.0.0.1:9078/\n<Location /linux-cmnd/>\nRequire all granted\n</Location>\n')
+        else:
+            apache += f'Redirect /linux-cmnd/ https://{host}:{config.apache_https}/linux-cmnd/\n'
         apache += '</VirtualHost>\n'
     fpm = f'''[global]
 daemonize = no

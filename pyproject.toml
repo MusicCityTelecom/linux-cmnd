@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "linux-cmnd"
-version = "0.4.0"
+version = "0.5.0"
 description = "Safe Linux deployment and Philips Professional TV protocol qualification tooling"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }
@@ -16,6 +16,9 @@ cmndctl = "cmnd_linux.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+cmnd_linux = ["management/*.html", "management/*.css", "management/*.js"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

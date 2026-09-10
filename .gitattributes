@@ -6,3 +6,4 @@ packaging/debian/* text eol=lf
 *.service text eol=lf
 *.toml text eol=lf
 Dockerfile* text eol=lf
+HANDOFF.md export-ignore
