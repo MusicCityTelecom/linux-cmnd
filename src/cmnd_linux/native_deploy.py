@@ -130,7 +130,7 @@ def preflight(inputs: DeploymentInputs, config: Config) -> dict:
     if java.returncode or not re.search(rb'version "17\.', java.stdout + java.stderr):
         raise ConfigError('the supplied runtime must be Java17')
     for target in (STATE, MANAGEMENT, Path('/var/lib/cmnd-updates'), Path('/var/lib/cmnd-update-requests'),
-                   Path(LAYOUT.tomcat), Path(LAYOUT.cms), Path('/opt/Philips'), ETC / 'deployment.json',
+                   Path(LAYOUT.tomcat), Path(LAYOUT.cms), Path(LAYOUT.php_uploads), Path('/opt/Philips'), ETC / 'deployment.json',
                    ETC / 'tls', ETC / 'apache.conf', ETC / 'php-fpm.conf', ETC / 'native-tomcat.env',
                    ETC / 'java-cacerts', ETC / 'configure-cms.php', ETC / 'egress.json', ETC / 'egress.py',
                    Path('/usr/local/share/ca-certificates/linux-cmnd.crt')):
@@ -153,6 +153,9 @@ def preflight(inputs: DeploymentInputs, config: Config) -> dict:
                 raise ConfigError('configured port is already occupied: ' + str(port)) from error
     if shutil.disk_usage('/var/lib').free < 10 * 1024**3:
         raise ConfigError('at least10GiB free deployment space is required')
+    upload_reserve = 10 * 1024**3 + 2 * config.cms_upload_limit_mb * 1024**2
+    if shutil.disk_usage('/var/lib').free < upload_reserve:
+        raise ConfigError('insufficient disk for deployment plus two configured CMS uploads; reduce cms.upload_limit_mb or add disk')
     memory = re.search(r'^MemTotal:\s+(\d+)', Path('/proc/meminfo').read_text(), re.M)
     if not memory or int(memory.group(1)) < 5_500_000:
         raise ConfigError('at least 6GiB installed RAM is required for the evaluation runtime')
@@ -162,7 +165,7 @@ def preflight(inputs: DeploymentInputs, config: Config) -> dict:
     probe = ('if(PHP_VERSION!=="5.6.40"){exit(2);} '
              'foreach(array("pdo_mysql","mysqli","gd","zip","xmlrpc","pcntl","curl") as $m)'
              '{if(!extension_loaded($m)){exit(3);}} '
-             'foreach(array("/usr/local/bin/cutycapt.sh","/usr/bin/cutycapt","/usr/bin/xvfb-run") as $p)'
+             'foreach(array("/usr/local/bin/cutycapt.sh","/usr/bin/cutycapt","/usr/bin/xvfb-run","/usr/bin/ffmpeg","/usr/bin/ffprobe","/usr/bin/convert") as $p)'
              '{if(!is_executable($p)){exit(4);}}')
     run('docker', 'run', '--rm', '--network', 'none', '--read-only', '--cap-drop', 'ALL',
         '--security-opt', 'no-new-privileges', '--user', '65534:65534', '--memory', '256m',
@@ -393,10 +396,11 @@ def deploy(inputs: DeploymentInputs, *, execute: bool = False, accept_legacy: bo
         for directory, uid, gid in ((Path('/var/lib/cmnd'), java_user.pw_uid, java_user.pw_gid),
                                      (Path('/var/lib/cmnd/smartcontrol'), java_user.pw_uid, java_user.pw_gid),
                                      (Path('/var/log/cmnd'), java_user.pw_uid, java_user.pw_gid),
+                                     (Path(LAYOUT.php_uploads), cms_user.pw_uid, cms_user.pw_gid),
                                      (Path(LAYOUT.pgt), cms_user.pw_uid, cms_user.pw_gid)):
             directory.mkdir(parents=True, exist_ok=True)
             os.chown(directory, uid, gid)
-            directory.chmod(0o700 if str(directory) == LAYOUT.pgt else 0o750)
+            directory.chmod(0o700 if str(directory) in (LAYOUT.pgt, LAYOUT.php_uploads) else 0o750)
         ETC.mkdir(parents=True, exist_ok=True)
         shutil.copytree(payload / 'tls', ETC / 'tls')
         for name in ('apache.conf', 'php-fpm.conf', 'configure-cms.php'):
@@ -480,6 +484,7 @@ def deploy(inputs: DeploymentInputs, *, execute: bool = False, accept_legacy: bo
             '--mount', f'type=bind,src={LAYOUT.cms},dst={LAYOUT.cms},readonly',
             '--mount', f'type=bind,src={LAYOUT.cms}/sites/default/files,dst={LAYOUT.cms}/sites/default/files',
             '--mount', f'type=bind,src={LAYOUT.pgt},dst={LAYOUT.pgt}',
+            '--mount', f'type=bind,src={LAYOUT.php_uploads},dst={LAYOUT.php_uploads}',
             '--mount', 'type=bind,src=/etc/cmnd/php-fpm.conf,dst=/usr/local/etc/php-fpm.conf,readonly',
             '--mount', 'type=bind,src=/etc/ssl/certs,dst=/etc/ssl/certs,readonly', inputs.php_image)
         run('systemctl', 'start', 'cmnd-php')

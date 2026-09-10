@@ -39,6 +39,9 @@ class Config:
     apache_http: int = 8082
     apache_https: int = 8444
     database_port: int = 3306
+    cms_upload_limit_mb: int = 8096
+    cms_memory_limit_mb: int = 256
+    cms_execution_timeout_seconds: int = 0
 
     def authorize(self, target: str, identity: str, operation: str, execute: bool) -> None:
         if operation not in WRITE_OPERATIONS:
@@ -80,6 +83,7 @@ def load_config(path: str | Path) -> Config:
     safety = raw.get("safety", {})
     network = raw.get("network", {})
     ports = raw.get("ports", {})
+    cms = raw.get("cms", {})
     mode = safety.get("mode", "")
     if mode not in {"isolated", "lab", "production-candidate"}:
         raise ConfigError("safety.mode must be isolated, lab, or production-candidate")
@@ -120,6 +124,16 @@ def load_config(path: str | Path) -> Config:
         raise ConfigError("all configured ports must be in 1..65535")
     if len(set(port_values.values())) != len(port_values):
         raise ConfigError("CMND listener ports must be distinct")
+    cms_values = {
+        'cms_upload_limit_mb': cms.get('upload_limit_mb', 8096),
+        'cms_memory_limit_mb': cms.get('memory_limit_mb', 256),
+        'cms_execution_timeout_seconds': cms.get('execution_timeout_seconds', 0),
+    }
+    for key, lower, upper in (('cms_upload_limit_mb', 1, 8096), ('cms_memory_limit_mb', 64, 256),
+                               ('cms_execution_timeout_seconds', 0, 86400)):
+        value = cms_values[key]
+        if type(value) is not int or not lower <= value <= upper:
+            raise ConfigError(f'{key} must be an integer in {lower}..{upper}')
     return Config(
         mode=mode,
         bind=bind,
@@ -130,4 +144,5 @@ def load_config(path: str | Path) -> Config:
         tomcat_http=port_values["tomcat_http"], tomcat_https=port_values["tomcat_https"],
         apache_http=port_values["apache_http"], apache_https=port_values["apache_https"],
         database_port=port_values["database"],
+        **cms_values,
     )

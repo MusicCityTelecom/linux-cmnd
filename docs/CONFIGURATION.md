@@ -24,6 +24,39 @@ apache_https = 8444
 database = 3306
 ```
 
+## CMS resource settings (development 0.6.0)
+
+The fresh Linux renderer now derives PHP upload limits from the inspected Windows
+7.5.9 configuration. These changes are not yet in published v0.5.0 and require
+fresh-runtime qualification; a tooling-only update does not rebuild the PHP image
+or overwrite an existing site's native configuration.
+
+```toml
+[cms]
+upload_limit_mb = 8096
+memory_limit_mb = 256
+execution_timeout_seconds = 0
+```
+
+The upload/post limit matches the Windows setting (8096 MiB). Temporary uploads
+are stored privately on disk at `/var/lib/cmnd/php-uploads`, not in the CMS web
+root or the PHP container's 256 MiB `/tmp` memory filesystem. Preflight reserves
+deployment space plus room for two configured uploads. This is a configured
+ceiling, not proof that an 8 GiB end-to-end upload has passed qualification.
+
+The Windows PHP memory setting is also 8096 MiB, but it cannot safely be copied
+into a 1 GiB Linux PHP container on a 6 GiB evaluation host. Linux instead uses
+two workers at up to 256 MiB each, leaving room for media helpers. Configured
+memory may be 64..256 MiB; upload limits may be 1..8096 MiB; execution timeout may
+be 0..86400 seconds (0 retains Windows' unlimited PHP script execution setting).
+Larger per-request memory needs a separately qualified container/host resource
+profile, not merely a larger PHP setting. Apache's CMS request-body cap is
+delegated to PHP and its backend response timeout is 900 seconds; the separate
+management proxy retains its shorter timeout.
+
+Default listener ports remain unchanged. TOML changes are applied during fresh
+deployment, not automatically to running services.
+
 Change a value only if `doctor` reports a conflict or the approved network design requires it. Update the corresponding Tomcat, Apache, JDBC, CAS service URL, and TV-reachable callback settings as one change. On the historical server4 layout, the compatibility MySQL container used host port 3307 because MariaDB occupied 3306; set `database = 3307` for that verified layout.
 
 Render service environment files atomically after validation:

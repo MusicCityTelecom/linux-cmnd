@@ -72,7 +72,8 @@ def extract_installer(installer: Path, output: Path, tool: str | None) -> dict:
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="cmndctl")
     p.add_argument("--config", default=os.environ.get("CMND_CONFIG", "config/cmnd.example.toml"))
-    sub = p.add_subparsers(dest="command", required=True)
+    p.add_argument('--updates', action='store_true', help='Check GitHub and interactively confirm a verified tooling update')
+    sub = p.add_subparsers(dest="command")
     for name in ("preflight", "doctor"):
         q = sub.add_parser(name); q.add_argument("--source", type=Path)
     q = sub.add_parser("inventory"); q.add_argument("root", type=Path); q.add_argument("--output", type=Path)
@@ -130,9 +131,17 @@ def parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> int:
-    args = parser().parse_args(argv)
+    command_parser = parser()
+    args = command_parser.parse_args(argv)
+    if args.updates and args.command:
+        command_parser.error('--updates cannot be combined with another command')
+    if not args.updates and not args.command:
+        command_parser.error('a command or --updates is required')
     try:
-        if args.command in {"preflight", "doctor"}:
+        if args.updates:
+            from .update_cli import interactive_update
+            return interactive_update()
+        elif args.command in {"preflight", "doctor"}:
             cfg = load_config(args.config)
             checked_ports = (cfg.database_port, cfg.tomcat_http, cfg.tomcat_https, cfg.apache_http, cfg.apache_https)
             result = preflight(args.source, checked_ports); result["configuration"] = {"valid": True, "mode": cfg.mode}; emit(result)

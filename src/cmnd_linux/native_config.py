@@ -32,16 +32,19 @@ class NativeLayout:
     key: str = '/etc/cmnd/tls/server.key'
     ca_bundle: str = '/etc/ssl/certs/ca-certificates.crt'
     pgt: str = '/var/lib/cmnd/cas-pgt'
+    php_uploads: str = '/var/lib/cmnd/php-uploads'
     php_user: str = 'cmnd-cms'
     fpm_port: int = 9000
 
     def validate(self) -> None:
-        for name in ('tomcat', 'cms', 'configuration', 'log', 'run', 'certificate', 'key', 'ca_bundle', 'pgt'):
+        for name in ('tomcat', 'cms', 'configuration', 'log', 'run', 'certificate', 'key', 'ca_bundle', 'pgt', 'php_uploads'):
             value = getattr(self, name)
             if (not re.fullmatch(r'/[A-Za-z0-9_./-]+', value)
                     or value != str(PurePosixPath(value))
                     or '..' in PurePosixPath(value).parts or value == '/'):
                 raise ConfigError(f'{name} must be a normalized absolute Linux path without shell syntax')
+        if PurePosixPath(self.php_uploads) == PurePosixPath(self.cms) or PurePosixPath(self.cms) in PurePosixPath(self.php_uploads).parents:
+            raise ConfigError('PHP temporary uploads must be outside the public CMS root')
         if not re.fullmatch(r'[a-z_][a-z0-9_-]{0,31}', self.php_user):
             raise ConfigError('invalid PHP service account')
         if type(self.fpm_port) is not int or not 1024 <= self.fpm_port <= 65535:
@@ -78,6 +81,10 @@ def native_endpoint(config: Config) -> tuple[str, dict[str, int]]:
 
 def render_native_files(config: Config, secrets: dict[str, str], layout: NativeLayout = NativeLayout()) -> dict[str, str]:
     layout.validate()
+    for value, lower, upper in ((config.cms_upload_limit_mb, 1, 8096), (config.cms_memory_limit_mb, 64, 256),
+                                (config.cms_execution_timeout_seconds, 0, 86400)):
+        if type(value) is not int or not lower <= value <= upper:
+            raise ConfigError('invalid CMS upload/memory/timeout limit')
     host, ports = native_endpoint(config)
     VendorRenderConfig(host, ports, secrets).validate()
     if layout.fpm_port in ports.values():
@@ -85,7 +92,7 @@ def render_native_files(config: Config, secrets: dict[str, str], layout: NativeL
     root = ET.Element('Server', port='-1')
     service = ET.SubElement(root, 'Service', name='Catalina')
     ET.SubElement(service, 'Connector', address=config.bind, port=str(config.tomcat_http),
-                  protocol='HTTP/1.1', connectionTimeout='20000', redirectPort=str(config.tomcat_https))
+                  protocol='HTTP/1.1', connectionTimeout='20000', redirectPort=str(config.tomcat_https), maxSwallowSize='-1')
     connector = ET.SubElement(service, 'Connector', address=config.bind, port=str(config.tomcat_https),
                               protocol='com.tpv.smartinstall.util.ReloadProtocol', SSLEnabled='true', maxThreads='150')
     ssl = ET.SubElement(connector, 'SSLHostConfig', protocols='TLSv1.2,TLSv1.3')
@@ -108,6 +115,7 @@ def render_native_files(config: Config, secrets: dict[str, str], layout: NativeL
     apache = '\n'.join(f'LoadModule {name}_module /usr/lib/apache2/modules/mod_{name}.so'
                        for name in modules if name != 'unixd') + '\n'
     apache += f'''ServerRoot /etc/cmnd
+ProxyTimeout 900
 ServerName {host}
 DefaultRuntimeDir {layout.run}
 PidFile {layout.run}/apache.pid
@@ -133,6 +141,8 @@ ServerName {host}
 DocumentRoot {layout.cms}
 Alias /SmartCMS {layout.cms}
 <Directory {layout.cms}>
+    # PHP enforces the configured upload/post ceiling; avoid Apache's lower default.
+    LimitRequestBody 0
     Require all granted
     AllowOverride All
     Options FollowSymLinks
@@ -168,16 +178,25 @@ listen.allowed_clients = 127.0.0.1
 user = {layout.php_user}
 group = {layout.php_user}
 pm = dynamic
-pm.max_children = 8
+pm.max_children = 2
 pm.start_servers = 2
 pm.min_spare_servers = 1
-pm.max_spare_servers = 3
+pm.max_spare_servers = 2
 catch_workers_output = yes
 clear_env = yes
 security.limit_extensions = .php
 php_admin_flag[display_errors] = off
 php_admin_flag[log_errors] = on
 php_admin_value[error_log] = /proc/self/fd/2
+; Original Windows upload ceiling, with disk-backed temporary storage.
+php_admin_value[upload_max_filesize] = {config.cms_upload_limit_mb}M
+php_admin_value[post_max_size] = {config.cms_upload_limit_mb}M
+php_admin_value[upload_tmp_dir] = {layout.php_uploads}
+php_admin_value[sys_temp_dir] = {layout.php_uploads}
+; Two bounded workers leave room for media helpers inside the 1 GiB container.
+php_admin_value[memory_limit] = {config.cms_memory_limit_mb}M
+php_admin_value[max_execution_time] = {config.cms_execution_timeout_seconds}
+env[PATH] = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 '''
     return {'server.xml': server_xml, 'context.xml': context, 'ROOT/WEB-INF/rewrite.config': rewrite,
             'apache.conf': apache, 'php-fpm.conf': fpm,

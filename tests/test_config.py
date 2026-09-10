@@ -33,6 +33,21 @@ class ConfigSafetyTests(unittest.TestCase):
                 config.authorize("127.0.0.1", "SIMULATOR00000001", "power", False)
         finally: temp.cleanup()
 
+    def test_cms_settings_defaults_and_validation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'config.toml'
+            path.write_text(CONFIG)
+            config = load_config(path)
+            self.assertEqual(config.cms_upload_limit_mb, 8096)
+            self.assertEqual(config.cms_memory_limit_mb, 256)
+            path.write_text(CONFIG + '\n[cms]\nupload_limit_mb = 512\nmemory_limit_mb = 128\nexecution_timeout_seconds = 300\n')
+            config = load_config(path)
+            self.assertEqual((config.cms_upload_limit_mb, config.cms_memory_limit_mb, config.cms_execution_timeout_seconds), (512, 128, 300))
+            for value in ('true', '0', '8097', '"512"'):
+                path.write_text(CONFIG + '\n[cms]\nupload_limit_mb = ' + value + '\n')
+                with self.assertRaises(ConfigError):
+                    load_config(path)
+
     def test_identity_and_operation_are_jointly_checked(self):
         temp, config = self.load()
         try:

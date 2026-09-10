@@ -43,6 +43,33 @@ class NativeConfigTests(unittest.TestCase):
                 self.assertIn(value, files[name])
         self.assertIn('cmnd.example.test', files['apache.conf'])
 
+    def test_cms_upload_limits_helpers_and_private_disk_storage(self):
+        files = render_native_files(self.config, self.secrets)
+        fpm = files['php-fpm.conf']
+        self.assertIn('php_admin_value[upload_max_filesize] = 8096M', fpm)
+        self.assertIn('php_admin_value[post_max_size] = 8096M', fpm)
+        self.assertIn('php_admin_value[upload_tmp_dir] = /var/lib/cmnd/php-uploads', fpm)
+        self.assertIn('php_admin_value[memory_limit] = 256M', fpm)
+        self.assertIn('php_admin_value[max_execution_time] = 0', fpm)
+        self.assertIn('env[PATH] = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', fpm)
+        self.assertIn('pm.max_children = 2', fpm)
+        self.assertIn('LimitRequestBody 0', files['apache.conf'])
+        self.assertIn('ProxyTimeout 900', files['apache.conf'])
+        self.assertEqual(ET.fromstring(files['server.xml']).find('./Service/Connector').attrib['maxSwallowSize'], '-1')
+
+    def test_cms_limits_are_configurable_and_bounded(self):
+        config = replace(self.config, cms_upload_limit_mb=512, cms_memory_limit_mb=128, cms_execution_timeout_seconds=300)
+        fpm = render_native_files(config, self.secrets)['php-fpm.conf']
+        for value in ('upload_max_filesize] = 512M', 'memory_limit] = 128M', 'max_execution_time] = 300'):
+            self.assertIn(value, fpm)
+        for field, value in (('cms_upload_limit_mb', 0), ('cms_upload_limit_mb', 8097),
+                             ('cms_memory_limit_mb', 8096), ('cms_memory_limit_mb', True),
+                             ('cms_execution_timeout_seconds', -1)):
+            with self.assertRaises(ConfigError):
+                render_native_files(replace(self.config, **{field: value}), self.secrets)
+        with self.assertRaises(ConfigError):
+            render_native_files(self.config, self.secrets, replace(NativeLayout(), php_uploads='/opt/cmnd/SmartCMS/uploads'))
+
     def test_rejects_inconsistent_or_unsafe_endpoints_before_output(self):
         invalid = [replace(self.config, callback_base_url=value) for value in (
             'http://127.0.0.1:8081', 'http://user:secret@127.0.0.1:8080',

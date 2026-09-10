@@ -200,10 +200,12 @@ def write_status(value: dict):
         temporary.unlink(missing_ok=True)
 
 
-def install_pending(*, execute: bool = False):
-    """Root-only fixed operation, activated by the GUI's version-scoped queue."""
+def install_pending(*, execute: bool = False, confirmed_job: dict | None = None):
+    """Root-only fixed operation, using a queued or directly confirmed CLI job."""
     if not execute or os.name != 'posix' or os.geteuid() != 0:
         raise UpdateError('update worker requires Linux root and --execute')
+    if confirmed_job is not None:
+        validate_job(confirmed_job)
     import fcntl
     import gzip
     import tarfile
@@ -211,16 +213,31 @@ def install_pending(*, execute: bool = False):
     from .config import load_config
     from .native_deploy import wait_ready
     lock = (STATE / 'worker.lock').open('a')
-    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     try:
-        with os.fdopen(os.open(QUEUE, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'r') as handle:
-            import stat
-            if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
-                raise UpdateError('queued job must be a regular file')
-            job = json.loads(handle.read(4097))
-        validate_job(job)
-        QUEUE.unlink()
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        lock.close()
+        raise UpdateError('another update worker is running; inspect its status before retrying') from None
     except Exception:
+        lock.close()
+        raise
+    try:
+        if confirmed_job is not None:
+            if QUEUE.exists() or QUEUE.is_symlink():
+                raise UpdateError('another update is queued; inspect its status before retrying')
+            job = dict(confirmed_job)
+        else:
+            with os.fdopen(os.open(QUEUE, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'r') as handle:
+                import stat
+                if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
+                    raise UpdateError('queued job must be a regular file')
+                job = json.loads(handle.read(4097))
+            validate_job(job)
+            QUEUE.unlink()
+    except Exception:
+        if confirmed_job is not None:
+            lock.close()
+            raise
         # Reject malformed/truncated legacy jobs without wedging PathExists or
         # retaining an actionable confirmation. Never follow a queue symlink.
         try:
@@ -232,7 +249,11 @@ def install_pending(*, execute: bool = False):
             lock.close()
         raise UpdateError('invalid queued job rejected; runtime unchanged') from None
     attempt = STATE / ('attempt-' + str(time.time_ns()))
-    attempt.mkdir(mode=0o700)
+    try:
+        attempt.mkdir(mode=0o700)
+    except Exception:
+        lock.close()
+        raise
     stopped, upgraded, database_backup_complete = False, False, False
 
     def command(*args, timeout=300):
@@ -260,7 +281,7 @@ def install_pending(*, execute: bool = False):
             raise UpdateError('downloaded package identity differs from selected release')
         baseline = STATE / 'current.deb'
         if not baseline.is_file() or baseline.is_symlink():
-            raise UpdateError('retained current installer .deb required before GUI updates can be installed')
+            raise UpdateError('retained current installer .deb required before updates can be installed')
         if command('dpkg-deb', '-f', str(baseline), 'Version').decode().strip() != __version__:
             raise UpdateError('rollback package does not match the installed version')
         command('cp', '--preserve=mode', str(baseline), str(attempt / 'previous.deb'))

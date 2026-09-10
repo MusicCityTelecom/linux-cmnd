@@ -23,6 +23,7 @@ RUN rm -f /etc/apt/trusted.gpg.d/debian-archive-stretch-*.gpg \
         xvfb=2:1.19.2-1+deb9u9 \
         xauth=1:1.0.9-1+b2 \
         imagemagick=8:6.9.7.4+dfsg-11+deb9u14 \
+        ffmpeg=7:3.2.18-0+deb9u1 \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include \
     && docker-php-ext-install -j2 pdo_mysql mysqli opcache gd zip xmlrpc pcntl \
     && rm -rf /var/lib/apt/lists/*

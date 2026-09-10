@@ -13,6 +13,46 @@ from cmnd_linux import updates
 
 @unittest.skipUnless(os.name == 'posix', 'Linux worker locking and permissions')
 class UpdateWorkerRecoveryTests(unittest.TestCase):
+    def test_busy_worker_rejects_direct_job_without_touching_queue(self):
+        import fcntl
+        with tempfile.TemporaryDirectory() as root:
+            state = Path(root)
+            queue = state / 'request.json'
+            with (state / 'worker.lock').open('a') as held:
+                fcntl.flock(held, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                with patch.object(updates, 'STATE', state), patch.object(updates, 'QUEUE', queue), \
+                        patch.object(updates.os, 'geteuid', return_value=0), \
+                        patch.object(updates, 'check_release') as check:
+                    with self.assertRaisesRegex(updates.UpdateError, 'another update worker is running'):
+                        updates.install_pending(execute=True, confirmed_job={
+                            'version': '0.7.0', 'release_id': 321, 'execute': True})
+                    check.assert_not_called()
+            self.assertFalse(queue.exists())
+            self.assertEqual([p.name for p in state.iterdir()], ['worker.lock'])
+
+    def test_cli_confirmation_does_not_consume_existing_queue(self):
+        with tempfile.TemporaryDirectory() as root:
+            state = Path(root)
+            queue = state / 'request.json'
+            original = '{"preserve":"existing GUI request"}'
+            queue.write_text(original)
+            job = {'version': '0.7.0', 'release_id': 321, 'execute': True}
+            with patch.object(updates, 'STATE', state), patch.object(updates, 'QUEUE', queue), \
+                    patch.object(updates.os, 'geteuid', return_value=0), \
+                    patch.object(updates, 'check_release') as check:
+                with self.assertRaisesRegex(updates.UpdateError, 'another update is queued'):
+                    updates.install_pending(execute=True, confirmed_job=job)
+                check.assert_not_called()
+            self.assertEqual(queue.read_text(), original)
+            self.assertFalse((state / 'status.json').exists())
+
+    def test_invalid_direct_confirmation_fails_before_files_or_network(self):
+        with patch.object(updates.os, 'geteuid', return_value=0), \
+                patch.object(updates, 'check_release') as check:
+            with self.assertRaisesRegex(updates.UpdateError, 'explicit'):
+                updates.install_pending(execute=True, confirmed_job={'version': '0.7.0'})
+            check.assert_not_called()
+
     def test_status_preserves_gui_read_access_under_private_umask(self):
         with tempfile.TemporaryDirectory() as root:
             state = Path(root)

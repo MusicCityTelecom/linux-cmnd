@@ -2,6 +2,16 @@
 
 ## 0.6.0 - unreleased
 
+- Added `cmndctl --updates`: fixed-repository release checks, exact-version
+  interactive confirmation and synchronous verified worker execution, without
+  additional Philips GUI changes. No installation on empty/noninteractive input.
+- Audited the installed Windows service/layout/configuration footprint. Added
+  missing FFmpeg/ffprobe dependencies and helper PATH checks to the development
+  PHP profile, Windows-derived upload limits, private disk upload storage,
+  resource-bounded PHP workers and the observed Tomcat HTTP swallow setting.
+  These fresh-runtime changes are not automatically applied by tooling-only
+  updates; rebuilt runtime qualification remains required.
+
 - Added a guided, standalone public-GitHub bootstrap: release selection including
   prereleases, bounded HTTPS downloads, GitHub SHA-256/size checks, Debian package
   identity checks, automatic configuration and dependency installation.

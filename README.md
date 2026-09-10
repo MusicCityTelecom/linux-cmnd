@@ -34,6 +34,13 @@ bootstrap prints a plan and makes no downloads or changes.
 
 ## Qualification status
 
+Development 0.6.0 adds a terminal update switch, without changing Philips GUI
+pages: `sudo cmndctl --updates`. It checks the fixed GitHub repository and asks
+for an exact version confirmation before handing off to the verified update
+worker. Published v0.5.0 has `cmndctl update-check`; the new switch is not in that
+older release. See [update instructions](docs/UPDATES.md) and the
+[Windows-to-Linux conversion map](docs/WINDOWS-LINUX-MAP.md).
+
 The full installer and `.deb` accept Ubuntu 24.04 or Debian 12/13 amd64; Debian 13 needs an operator-supplied Java 17 runtime. The new installer has completed a fresh Ubuntu VM deployment of the five Java applications and SmartCMS, with HTTPS/migration readiness, automatic startup after reboot, real browser login, and native CMS local export. Debian runtime qualification remains pending. Start with the [evaluation installation guide](docs/EVALUATION-GUIDE.md), [configuration](docs/CONFIGURATION.md), and [test results](docs/TEST-RESULTS.md).
 
 This is **not full Windows-feature parity or production certification**. RF/DekTec/modulator workflows are explicitly out of scope. The supplied MGate archive is Windows-only; additional MGate-dependent IP transport-stream playout is not qualified. Physical-TV qualification and production Windows-backup restore remain incomplete. GUI updates have passed end-to-end installation and rollback with synthetic release transport; real GitHub transport qualification is recorded separately. No licensed vendor files or customer reference archives are distributed in our assets.
