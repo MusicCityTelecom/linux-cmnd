@@ -45,7 +45,7 @@ fi
 [ -n "$package" ] || { echo 'Supply --package DEB even when tooling is already installed; the matching package is required for update rollback.' >&2; exit 2; }
 if [ -n "$package" ]; then
   [ "$(dpkg-deb -f "$package" Package)" = linux-cmnd ] && [ "$(dpkg-deb -f "$package" Architecture)" = amd64 ] || { echo 'Unexpected tooling package' >&2; exit 2; }
-  dpkg -i "$package"
+  dpkg --force-confold --install "$package"
 fi
 command -v cmndctl >/dev/null || { echo 'Install the supplied linux-cmnd .deb first, or use --package FILE' >&2; exit 2; }
 # Safety and immutable vendor verification precede dependency networking and DB initialization.

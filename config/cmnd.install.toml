@@ -1,0 +1,19 @@
+# Fresh installation starts with no TV control permissions.
+[safety]
+mode = "isolated"
+permitted_ranges = ["127.0.0.0/8"]
+
+[network]
+bind = "127.0.0.1"
+callback_base_url = "http://127.0.0.1:8080"
+timeout_seconds = 5
+
+[ports]
+tomcat_http = 8080
+tomcat_https = 8443
+apache_http = 8082
+apache_https = 8444
+database = 3306
+
+[tv]
+allowlist = []

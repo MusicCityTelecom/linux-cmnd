@@ -1,5 +1,6 @@
 import tarfile
 import unittest
+import tomllib
 from io import BytesIO
 
 from scripts.build_deb import build
@@ -29,6 +30,8 @@ class DebianPackageTests(unittest.TestCase):
             names = set(archive.getnames())
             self.assertTrue(archive.getmember('etc/cmnd').isdir())
             self.assertTrue(archive.getmember('usr/bin').isdir())
+            configuration = tomllib.loads(archive.extractfile('etc/cmnd/cmnd.toml').read().decode())
+            self.assertEqual(configuration['tv']['allowlist'], [])
         self.assertIn("usr/bin/cmndctl", names)
         self.assertIn("usr/bin/cmnd-install", names)
         self.assertIn("usr/share/doc/linux-cmnd/docs/EVALUATION-GUIDE.md", names)

@@ -46,7 +46,7 @@ def main():
     guide = destination / 'EVALUATION-GUIDE.md'
     shutil.copyfile(ROOT / 'docs/EVALUATION-GUIDE.md', guide)
     configuration = destination / 'cmnd.example.toml'
-    shutil.copyfile(ROOT / 'config/cmnd.example.toml', configuration)
+    shutil.copyfile(ROOT / 'config/cmnd.install.toml', configuration)
     artifacts = [package, installer, manifest, source, guide, configuration]
     checksums = destination / 'SHA256SUMS'
     checksums.write_text(''.join(f'{sha256(path.read_bytes()).hexdigest()}  {path.name}\n' for path in artifacts), encoding='ascii')

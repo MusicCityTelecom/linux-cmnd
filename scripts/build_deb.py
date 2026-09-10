@@ -83,7 +83,7 @@ def build() -> Path:
     data_entries += [
         (ROOT / "scripts/install-native.sh", "usr/bin/cmnd-install", 0o755, None),
         (ROOT / "packaging/debian/cmndctl", "usr/bin/cmndctl", 0o755, None),
-        (ROOT / "config/cmnd.example.toml", "etc/cmnd/cmnd.toml", 0o640, None),
+        (ROOT / "config/cmnd.install.toml", "etc/cmnd/cmnd.toml", 0o640, None),
         (ROOT / "README.md", "usr/share/doc/linux-cmnd/README.md", 0o644, None),
     ]
     deb = b"!<arch>\n" + ar_member("debian-binary", b"2.0\n")
