@@ -32,10 +32,17 @@ backups, clone files, firmware, and credentials are not installer payloads.
 
 ## Install
 
-Download the evaluation `.deb`, `install.sh`, and `SHA256SUMS` from the same GitHub
+Download the evaluation `.deb`, `install.sh`, `cmnd.example.toml`, and `SHA256SUMS` from the same GitHub
 release, and verify their checksums. Keep the `.deb` for verified update rollback.
-Before executing the following command, prepare a private CMND configuration from
-`config/cmnd.example.toml`. Leave the allowlist empty for initial installation.
+Before executing the installer, prepare a private configuration. Leave the
+allowlist empty for initial installation. For access from another machine, edit
+the bind/callback settings as described below before running the installer.
+
+```sh
+sudo install -d -m 0700 /srv/private
+sudo install -m 0600 ./cmnd.example.toml /srv/private/cmnd.toml
+sudo editor /srv/private/cmnd.toml
+```
 
 ```sh
 sudo sh ./install.sh --package ./linux-cmnd_0.5.0_amd64.deb \
@@ -105,6 +112,12 @@ the existence of a backup. Root-private attempt directories are under
 This updater does not change the Philips payload, perform database migrations,
 upgrade firmware, or push TV settings. Vendor-version and major-version changes
 are deliberately routed to an explicit migration process.
+
+The real GUI startup offer, explicit confirmation, systemd worker, package upgrade,
+readiness and success display have been exercised with synthetic release transport.
+Real package rollback after an injected failure also passed. Authenticated access
+from the VM to the still-private GitHub repository is a separate pending check;
+these results do not claim that transport was tested with a GitHub credential.
 
 ## Qualification and recovery
 

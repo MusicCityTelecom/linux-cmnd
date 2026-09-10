@@ -18,6 +18,7 @@ This is separate from the earlier manually assembled simulator lab below.
 | Native local CMS export | PASS | Native Export event; 2,863,861-byte ZIP, 125 entries, safe paths/CRC/generated HTML/vendor XML fragment validated |
 | Source tests at checkpoint | PASS | Linux 144 passed; Windows 144 run/138 passed/6 Linux-only skips |
 | Real package rollback after injected failure | PASS | Actual 0.4→0.5 dpkg install, forced readiness failure, 0.4 reinstall, restored application readiness, five-DB backup, unchanged configuration/site/baseline; local release transport fixture, not GitHub |
+| Real GUI-triggered package update | PASS | Startup offer, explicit browser confirmation, atomic queue, systemd worker, actual dpkg 0.4→0.5, readiness/success display and preserved configuration/site/baseline; synthetic release transport; temporary service overrides removed afterward |
 | Actual GitHub GUI upgrade/recovery | NOT_RUN | Private-repository credential transfer requires explicit approval; no token transferred |
 | RF/DekTec/modulator workflows | OUT_OF_SCOPE | Explicit assignment exclusion; missing Windows-only MGate is not used to block core IP management |
 | Additional MGate-dependent IP playout | NOT_RUN | No Linux MGate supplied; not claimed functional |

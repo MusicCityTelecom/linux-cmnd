@@ -45,7 +45,9 @@ def main():
                     '-o', str(source), 'HEAD', '--', *RELEASE_PATHS], cwd=ROOT, check=True)
     guide = destination / 'EVALUATION-GUIDE.md'
     shutil.copyfile(ROOT / 'docs/EVALUATION-GUIDE.md', guide)
-    artifacts = [package, installer, manifest, source, guide]
+    configuration = destination / 'cmnd.example.toml'
+    shutil.copyfile(ROOT / 'config/cmnd.example.toml', configuration)
+    artifacts = [package, installer, manifest, source, guide, configuration]
     checksums = destination / 'SHA256SUMS'
     checksums.write_text(''.join(f'{sha256(path.read_bytes()).hexdigest()}  {path.name}\n' for path in artifacts), encoding='ascii')
     print(json.dumps({'version': version, 'assets': [str(path) for path in artifacts + [checksums]],
