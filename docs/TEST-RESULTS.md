@@ -1,6 +1,15 @@
 # Test results
 
-## Physical-TV clone readback (2026-09-10, unreleased fixes)
+## 0.6.2 evaluation release
+
+Version 0.6.2 packages the two corrections described below: the WIXP cookie
+range and physical channel archive recognition. Version 0.6.1 assets remain
+unchanged. Release-specific package and upgrade evidence is recorded after
+validation; historical evidence below is not a claim of a new clean install.
+Native GUI Add/Detect, fleet scanning, and TV configuration writes are not
+qualified by the receive-only test. See FIRST-TV-TEST.md for safe scan scope.
+
+## Physical-TV clone readback (2026-09-10, before 0.6.2 packaging)
 
 The first approved TV-to-server export delivered all eight advertised item ZIPs
 over the isolated VM's OpenVPN connection: TVSettings, TVChannelList,
@@ -20,7 +29,7 @@ rules were removed afterward and the subnet block restored.
 Qualification distinction: transport/receipt of all eight items passed, but the
 original receiver's completion result was **false** because it did not recognize
 `ChannelList/` as the requested `TVChannelList`. It waited out its bounded window
-with no receive failures. The unreleased validator correction recognizes the
+with no receive failures. The validator correction included in 0.6.2 recognizes the
 observed nonempty database/identifier pair. Offline revalidation of the original
 files then passed all eight; the failed original report was preserved, not edited.
 Automatic live completion with this second correction has not been retested.
@@ -31,12 +40,12 @@ helper now checks VPN-status freshness and retains credentials in OpenVPN memory
 for reconnects, without a password file. A later connection delivered the files.
 
 Windows regression suite after both source fixes: 187 tests run, 175 passed,
-12 POSIX/root-only skipped (58.298 seconds). These changes are not included in
-the unchanged v0.6.1 release assets or the VM's installed tooling package. No
+12 POSIX/root-only skipped (58.298 seconds). At that checkpoint these changes
+were source-only, not in v0.6.1 assets or the VM's installed package. No
 claim of full Windows parity, native GUI import, or TV push qualification follows
 from this receive-only test.
 
-## First physical-TV read-only check (2026-09-10, unreleased fix)
+## First physical-TV read-only check (2026-09-10, historical checkpoint)
 
 An individually authorized 50HFL5214U/27 answered over the test VM's OpenVPN
 tunnel. No subnet scan, native inventory import, power/settings change or clone
@@ -53,9 +62,10 @@ clone-export capability request, with matching response cookies. The TV reported
 Standby and export Ready, advertising eight recognized export items.
 
 This is real-hardware evidence for those two read operations only. The source
-cookie-generation fix remains unreleased; published v0.6.1 has not been replaced.
-Actual clone receipt, return-path reachability and all TV-changing operations
-remain unqualified. Successful simulator tests did not catch this wire mismatch.
+cookie-generation fix was then unreleased; published v0.6.1 has not been replaced.
+At that checkpoint actual clone receipt and return-path reachability were still
+pending; subsequent readback evidence is above. TV-changing operations remain
+unqualified. Successful simulator tests did not catch this wire mismatch.
 After the fix, the Windows suite ran 185 tests: 173 passed and 12 POSIX/root
 checks skipped (54.169 seconds). Added regressions cover the vendor random range
 and continued rejection of a mismatched response cookie. These are source tests,

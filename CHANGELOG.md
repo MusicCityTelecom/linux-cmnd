@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.6.2 - 2026-09-10 (evaluation)
 
 - Recognize the physical TV's `ChannelList/` archive as `TVChannelList` when
   both its nonempty channel database and identifier are present. All eight

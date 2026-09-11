@@ -49,7 +49,7 @@ sudo editor /srv/private/cmnd.toml
 ```
 
 ```sh
-sudo sh ./install.sh --package ./linux-cmnd_0.6.1_amd64.deb \
+sudo sh ./install.sh --package ./linux-cmnd_0.6.2_amd64.deb \
   --payload /srv/private/cmnd-vendor --config /srv/private/cmnd.toml \
   --install-dependencies --accept-legacy-runtime --execute
 ```

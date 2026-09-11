@@ -85,7 +85,7 @@ Linux is unnecessary. Extra files in a prepared ZIP are rejected.
 ```sh
 sudo python3 bootstrap.py --execute --accept-legacy-runtime \
   --payload /srv/private/cmnd-vendor-7.5.9.zip --server-ip 192.0.2.10 \
-  --release v0.6.1
+--release v0.6.1
 ```
 
 Replace the example IP with an address actually assigned to your server. Omit
@@ -99,7 +99,7 @@ contain `bootstrap.py`. To pin the bootstrap itself, replace the raw URL's `main
 with its reviewed full Git commit ID. Future releases will include the bootstrap
 and its SHA-256 in the release assets. A raw `main` download intentionally follows
 the latest reviewed source and should not be treated as immutable. The next
-tooling version is 0.6.1; check GitHub releases for its publication status. A
+tooling version is 0.6.2; check GitHub releases for its publication status. A
 draft is never installable through the public bootstrap. See TEST-RESULTS.md for
 the exact qualification checkpoint rather than assuming a version proves parity.
 

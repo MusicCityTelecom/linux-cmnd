@@ -9,6 +9,20 @@ test. In isolated simulator qualification, that workflow automatically sent
 enabler, settings-clone and PMS commands. It is not a read-only discovery action.
 Use the separate bounded discovery/clone-export CLI for the first physical TV.
 
+Version 0.6.2 includes the physical-TV correlation-cookie and channel archive
+recognition corrections. Successful clone readback does not qualify native
+Add/Detect or grant permission for its automatic configuration writes. For
+read-only discovery, use a private config restricted to the approved target:
+
+```sh
+cmndctl --config /private/first-tv.toml scan TV_IP --max-targets 1 --concurrency 1 --rate 1
+```
+
+This returns discovery information only; it does not add a TV to Philips CMND.
+It still requires an authorized route and scoped firewall access. Do not disable
+the native service egress guard or the lab subnet hold to make scanning work.
+Broader subnet scans and native import require separately reviewed scope.
+
 The original Philips Java implementation uses an IPCloneService Request to inspect
 CloneToServerParameters, requires CloneToServerStatus=Ready and session fields,
 then sends a Change containing only CloneToServerParameters/CloneToServerDetails.
