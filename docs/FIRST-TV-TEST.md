@@ -9,6 +9,14 @@ test. In isolated simulator qualification, that workflow automatically sent
 enabler, settings-clone and PMS commands. It is not a read-only discovery action.
 Use the separate bounded discovery/clone-export CLI for the first physical TV.
 
+Preserve the original vendor enrollment behavior: the Linux release does not
+remove these automatic commands or replace them with a different onboarding
+workflow. The warning separates discovery from enrollment; it is not evidence
+that normal Philips enrollment is defective. The lab firewall constrains reach,
+not the contents of vendor commands. Exact enrollment settings and restoration
+to the previous server must be reviewed before a physical enrollment test;
+re-adding a TV to its old server is not proof every setting was restored.
+
 Version 0.6.2 includes the physical-TV correlation-cookie and channel archive
 recognition corrections. Successful clone readback does not qualify native
 Add/Detect or grant permission for its automatic configuration writes. For

@@ -3,9 +3,26 @@
 ## 0.6.2 evaluation release
 
 Version 0.6.2 packages the two corrections described below: the WIXP cookie
-range and physical channel archive recognition. Version 0.6.1 assets remain
-unchanged. Release-specific package and upgrade evidence is recorded after
-validation; historical evidence below is not a claim of a new clean install.
+range and physical channel archive recognition. Assets were built from source
+commit `5bf5606`; version 0.6.1 assets remain unchanged. The release is an
+evaluation prerelease, not a new full clean-install or production certification.
+
+- Ubuntu 24.04: all 187 tests passed (24.769 seconds), from the release source archive.
+- Windows: 187 tests run, 175 passed and 12 POSIX/root-only skips (43.761 seconds).
+- Public-safe source/package audit passed. All eight GitHub assets downloaded
+  byte-for-byte and matched GitHub size/SHA-256 metadata; updater manifest passed.
+- Actual public GitHub CLI upgrade 0.6.1 -> 0.6.2 passed without a token. Cancel
+  was non-mutating. Confirmation preserved configuration and synthetic CMS site,
+  retained all five database backups plus configuration/prior-package backups,
+  and passed all seven CA-verified HTTPS contexts and both migration histories.
+- Installed/retained package SHA-256:
+  `8c3a6135db590b9deca5ea2f66903bdf94fd211fa2dc2ee9fc5258a8c8a24a3d`.
+- Public bootstrap selected v0.6.2 and verified package/installer downloads.
+- Expected listeners remained present: Java 8080/8443 and Apache 8082/8444 at
+  the configured guest address, database 3306, FPM 9000 and management 9078 on
+  loopback. Native egress and subnet blocks stayed in force. No physical TV
+  was contacted during release or upgrade testing.
+
 Native GUI Add/Detect, fleet scanning, and TV configuration writes are not
 qualified by the receive-only test. See FIRST-TV-TEST.md for safe scan scope.
 
