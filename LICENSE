@@ -2,6 +2,12 @@ Apache License 2.0
 
 Copyright 2026 Music City Telecom
 
+Scope: this license covers original Music City Telecom Linux adaptation and
+tooling code only. Philips/TPVision/CMND applications, trademarks, and other
+third-party components remain owned by their respective owners and governed by
+their own licenses. They are not relicensed under this license. See README.md,
+"Ownership, license and disclaimer," for the project's attribution and notice.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

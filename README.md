@@ -107,3 +107,41 @@ Never reuse the example allowlist for real hardware. Follow [INSTALL.md](docs/IN
 ## Versioning
 
 Our source and release wrapper use Semantic Versioning. Before `1.0.0`, interfaces may change. Philips CMND compatibility is recorded independently in `docs/ARTIFACTS-AND-VERSIONS.md`; a wrapper version never asserts that a vendor release is qualified.
+
+## Ownership, license and disclaimer
+
+Philips, TP Vision/TPVision, CMND, their logos, and the original CMND software
+are the property of their respective owners and licensors. They are **not owned
+by Tommy Heggie, TechFinity Communications, or Music City Telecom**. The PHILIPS
+name and shield are trademarks of Koninklijke Philips N.V.; see the
+[official Philips trademark information](https://www.philips.com/a-w/about/innovation/ips/philips-general-trademark-use-guidelines.html).
+All original vendor copyright, trademark and license notices remain applicable.
+
+Tommy Heggie, TechFinity Communications and Music City Telecom provide this
+Linux adaptation and its deployment tooling **free of charge**. No fee is
+charged by this project for downloading or using this release. This does not
+waive vendor licensing or activation requirements, or third-party service costs.
+The [Apache 2.0 tooling license](LICENSE) applies only to original project code,
+not to bundled Philips/TPVision software or other third-party components. Those
+components retain their own licenses; inclusion does not transfer ownership,
+relicense them, or grant rights beyond their applicable terms.
+
+Names and logos identify compatibility and original products. This project does
+not claim vendor certification, endorsement, sponsorship, or official support.
+Only unmodified, hash-verified inputs from the original vendor archive are
+included in the vendor bundle. Hardware-generated identities, activation state,
+customer backups, site credentials and locally generated private keys are not
+distributed.
+
+The Linux adaptation and tooling are provided **AS IS**, without warranties of
+merchantability, fitness for a particular purpose, non-infringement, uninterrupted
+operation, or compatibility with every device. To the maximum extent permitted
+by applicable law, Tommy Heggie, TechFinity Communications, Music City Telecom
+and project contributors accept no liability for losses resulting from its use,
+including data loss, service interruption or device misconfiguration. Nothing
+here excludes rights or liability that applicable law does not permit excluding,
+or changes the original vendors' separate terms.
+
+Use the release-specific [test results](docs/TEST-RESULTS.md), keep backups, and
+qualify an isolated test installation before production use. Free availability
+is not a guarantee of complete Windows parity or production readiness.
