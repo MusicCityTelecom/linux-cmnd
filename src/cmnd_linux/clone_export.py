@@ -68,6 +68,7 @@ def inspect_received_zip(path: Path) -> dict:
         if len(entries) > 20000 or sum(e.file_size for e in entries) > 4 * 1024**3:
             raise ValueError('received ZIP exceeds safe inspection limits')
         seen, item_names = set(), set()
+        channel_markers = set()
         for entry in entries:
             member = _safe_member(entry.filename)
             folded = member.as_posix().casefold()
@@ -79,6 +80,13 @@ def inspect_received_zip(path: Path) -> dict:
             for part in member.parts:
                 if part in EXPORT_ITEMS:
                     item_names.add(part)
+            # Physical TVs label the request TVChannelList but export ChannelList/.
+            # Require the observed database and identifier, not just a folder name.
+            if entry.file_size > 0 and member.as_posix() in {
+                    'ChannelList/htvchlist.db', 'ChannelList/ChannelList_Identifier.txt'}:
+                channel_markers.add(member.as_posix())
+        if len(channel_markers) == 2:
+            item_names.add('TVChannelList')
         encrypted = any(e.flag_bits & 1 for e in entries)
         if not encrypted and archive.testzip() is not None:
             raise ValueError('received ZIP CRC validation failed')

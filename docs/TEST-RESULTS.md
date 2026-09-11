@@ -1,5 +1,41 @@
 # Test results
 
+## Physical-TV clone readback (2026-09-10, unreleased fixes)
+
+The first approved TV-to-server export delivered all eight advertised item ZIPs
+over the isolated VM's OpenVPN connection: TVSettings, TVChannelList,
+RoomSpecificSettings, AndroidApps, ProfessionalAppsData, HTVCfg.xml, MyChoice
+and DataDump. Firmware was not requested. The archives totaled 1,552,548 bytes.
+All eight were unencrypted and passed CRC and safe-path checks. Original HTTP
+bodies, command/reply evidence, files and a separate postvalidation report are
+retained privately; no device identifiers, captures or customer files are public.
+
+The source checkout with the cookie fix performed identity checks before the
+single clone-export Change command. That command contained only TV-to-server
+export parameters. No TV power/settings/firmware/content push, native import,
+or fleet scan was performed. Temporary rules admitted only the selected TV to
+the private receiver and the dedicated probe UID to its TCP9079 endpoint; those
+rules were removed afterward and the subnet block restored.
+
+Qualification distinction: transport/receipt of all eight items passed, but the
+original receiver's completion result was **false** because it did not recognize
+`ChannelList/` as the requested `TVChannelList`. It waited out its bounded window
+with no receive failures. The unreleased validator correction recognizes the
+observed nonempty database/identifier pair. Offline revalidation of the original
+files then passed all eight; the failed original report was preserved, not edited.
+Automatic live completion with this second correction has not been retested.
+
+An earlier attempt stopped at a discovery timeout before sending any export:
+the VPN had restarted and was waiting for reauthentication. The private test
+helper now checks VPN-status freshness and retains credentials in OpenVPN memory
+for reconnects, without a password file. A later connection delivered the files.
+
+Windows regression suite after both source fixes: 187 tests run, 175 passed,
+12 POSIX/root-only skipped (58.298 seconds). These changes are not included in
+the unchanged v0.6.1 release assets or the VM's installed tooling package. No
+claim of full Windows parity, native GUI import, or TV push qualification follows
+from this receive-only test.
+
 ## First physical-TV read-only check (2026-09-10, unreleased fix)
 
 An individually authorized 50HFL5214U/27 answered over the test VM's OpenVPN

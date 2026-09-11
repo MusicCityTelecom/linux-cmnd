@@ -31,6 +31,33 @@ def multipart(content, filename='TVSettings.zip', boundary='cmnd-boundary'):
 
 
 class CloneExportTests(unittest.TestCase):
+    def test_physical_channel_list_alias_is_recognized_in_multipart_upload(self):
+        raw = BytesIO()
+        with ZipFile(raw, 'w') as archive:
+            archive.writestr('ChannelList/htvchlist.db', b'synthetic channel database')
+            archive.writestr('ChannelList/ChannelList_Identifier.txt', b'synthetic identifier')
+        body = self.root / 'channels.http-body'
+        body.write_bytes(multipart(raw.getvalue(), filename='ChannelList.zip'))
+        results = extract_multipart_files(body, 'multipart/form-data; boundary=cmnd-boundary', self.root)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['identified_items'], ['TVChannelList'])
+        self.assertTrue(results[0]['zip_crc_valid'])
+
+    def test_channel_alias_requires_both_nonempty_root_markers(self):
+        cases = [
+            {'ChannelList/htvchlist.db': b'database'},
+            {'ChannelList/htvchlist.db': b'', 'ChannelList/ChannelList_Identifier.txt': b'id'},
+            {'nested/ChannelList/htvchlist.db': b'database',
+             'nested/ChannelList/ChannelList_Identifier.txt': b'id'},
+        ]
+        for entries in cases:
+            with self.subTest(entries=list(entries)):
+                path = self.root / 'incomplete-channel-markers.zip'
+                with ZipFile(path, 'w') as archive:
+                    for name, data in entries.items():
+                        archive.writestr(name, data)
+                self.assertNotIn('TVChannelList', inspect_received_zip(path)['identified_items'])
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

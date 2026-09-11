@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Recognize the physical TV's `ChannelList/` archive as `TVChannelList` when
+  both its nonempty channel database and identifier are present. All eight
+  advertised clone items were received from one approved TV and passed offline
+  validation; the original receive run timed out solely on this naming alias.
+  No second export was needed, and no received content was imported or pushed.
+
 - Match the original vendor's correlation-cookie generation range, 0 through
   99998, in the independent WIXP client. A physical-TV read-only check rejected
   the previous large values; a vendor-range value returned matching identity
