@@ -246,6 +246,7 @@ Group=cmnd
 Environment=JAVA_HOME={java_home}
 EnvironmentFile=/etc/cmnd/native-tomcat.env
 WorkingDirectory=/opt/cmnd/tomcat
+ExecStartPre=+/usr/bin/cmndctl native-hardware-access --execute
 ExecStartPre=+/usr/bin/cmndctl native-wait-database
 ExecStartPre=+/usr/bin/python3 /etc/cmnd/egress.py --policy /etc/cmnd/egress.json --execute
 ExecStart=/opt/cmnd/tomcat/bin/catalina.sh run

@@ -16,6 +16,15 @@ library. It is not a random number copied into our release or a serial taken
 from the reference Windows installation. We preserve that vendor calculation.
 The screenshot supplied by the operator is from 7.5.1; qualification uses 7.5.9.
 
+Fresh Linux services run a narrowly scoped root startup step that gives only
+the CMND group read permission on the real kernel DMI motherboard serial. The
+Java application still runs unprivileged and computes the serial itself. No
+serial is synthesized, stored as a replacement, or copied from Windows. Missing
+or placeholder hardware data produces a warning requiring VM/hardware review.
+This fresh-service change is not automatically retrofitted by tooling-only
+updates, because changing hardware visibility can change an existing licensed
+installation's fingerprint; review existing activation before such migration.
+
 Keep VM CPU and motherboard/SMBIOS identifiers stable across reboots/upgrades.
 Give separately installed VMs distinct motherboard serial identifiers: a UUID
 alone is not sufficient if the hypervisor does not expose it as the motherboard

@@ -72,6 +72,7 @@ class NativeDeploymentTests(unittest.TestCase):
             self.assertIn('cmnd-egress.service', units[name])
             self.assertIn('/etc/cmnd/egress.json --execute', units[name])
         self.assertIn('User=cmnd', units['cmnd-tomcat.service'])
+        self.assertIn('ExecStartPre=+/usr/bin/cmndctl native-hardware-access --execute', units['cmnd-tomcat.service'])
         self.assertNotIn('apache2.service', ''.join(units.values()))
 
     def test_database_gate_checks_query_result_and_retries(self):
