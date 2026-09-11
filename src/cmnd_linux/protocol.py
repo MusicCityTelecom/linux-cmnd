@@ -17,7 +17,9 @@ class ProtocolError(RuntimeError):
 
 
 def cookie() -> int:
-    return random.SystemRandom().randint(1, 2_147_483_647)
+    # Match the vendor JAPITUtils generator: lower bound inclusive, upper exclusive.
+    # A physical TV rejected our former 31-bit values with Cookie=-1/Fun=Error.
+    return random.SystemRandom().randrange(0, 99_999)
 
 
 def discovery_request(*, correlation: int | None = None) -> dict:

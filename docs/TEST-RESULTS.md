@@ -1,5 +1,30 @@
 # Test results
 
+## First physical-TV read-only check (2026-09-10, unreleased fix)
+
+An individually authorized 50HFL5214U/27 answered over the test VM's OpenVPN
+tunnel. No subnet scan, native inventory import, power/settings change or clone
+transfer was performed. The native application's TV egress remained blocked;
+temporary access was limited to a dedicated probe UID and one TV's TCP9079.
+The permission was removed after each bounded check. Device/customer details
+and raw replies are retained privately, not in this repository.
+
+Two discovery attempts using the tooling's former large correlation-cookie range
+returned a vendor error response with Cookie=-1. Inspection of the original
+vendor generator established its half-open range [0,99999). A subsequent check
+using values in that range passed exact identity/model verification and the
+clone-export capability request, with matching response cookies. The TV reported
+Standby and export Ready, advertising eight recognized export items.
+
+This is real-hardware evidence for those two read operations only. The source
+cookie-generation fix remains unreleased; published v0.6.1 has not been replaced.
+Actual clone receipt, return-path reachability and all TV-changing operations
+remain unqualified. Successful simulator tests did not catch this wire mismatch.
+After the fix, the Windows suite ran 185 tests: 173 passed and 12 POSIX/root
+checks skipped (54.169 seconds). Added regressions cover the vendor random range
+and continued rejection of a mismatched response cookie. These are source tests,
+not qualification of a newly built installer or a new published release.
+
 ## 0.6.1 release qualification (2026-09-10)
 
 Release assets are built from `c5b0ac27e456826a4b0f6dd149c77ac6329edab7`.

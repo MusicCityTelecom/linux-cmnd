@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Match the original vendor's correlation-cookie generation range, 0 through
+  99998, in the independent WIXP client. A physical-TV read-only check rejected
+  the previous large values; a vendor-range value returned matching identity
+  and ready clone-export capabilities. Strict response correlation remains
+  enforced. This fix is not included in the existing v0.6.1 release assets.
+
 ## 0.6.1 - 2026-09-10 (evaluation candidate)
 
 The unpublished 0.6.0 checkpoint is retained as the real installation/upgrade
