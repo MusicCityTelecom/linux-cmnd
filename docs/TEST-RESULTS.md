@@ -1,5 +1,39 @@
 # Test results
 
+## 0.6.1 release qualification (2026-09-10)
+
+Release assets are built from `c5b0ac27e456826a4b0f6dd149c77ac6329edab7`.
+The fresh native runtime is the unpublished 0.6.0 checkpoint; 0.6.1 adds the
+package-configuration preservation fix and documentation. Evidence is scoped
+below; no physical TVs were contacted.
+
+- Source suite: all 183 tests passed on Ubuntu 24.04 (25.469 seconds). Windows
+  ran 183 tests: 171 passed and 12 POSIX/root-only skips (41.400 seconds).
+- Actual fresh installation, seven CA-verified HTTPS contexts, five schemas,
+  expected migration histories and native Java archive/keytool execution: PASS.
+- Browser recheck: management login, native CAS/TV login, CMS SSO and the original
+  editor rendered successfully. The first run timed out waiting for full page
+  load after the editor document loaded; the rerun inspected the existing site
+  with DOM-content-loaded readiness rather than creating another site.
+- Native local CMS export: PASS, 2,863,862 bytes, 125 entries, valid CRCs, safe
+  paths and generated HTML. No content was published to TVs.
+- FFmpeg generated an MPEG4 test video; ffprobe verified 160x120 dimensions.
+  ImageMagick generated and identified a 32x24 test image. These are synthetic
+  media-helper execution tests, not complete media-upload workflow coverage.
+- Actual guest reboot: PASS. Services and the isolation guard started
+  automatically; HTTPS/migrations and the synthetic CMS site persisted.
+  Java 8080/8443 and Apache 8082/8444 bound to the configured guest address;
+  MySQL 3306, PHP-FPM 9000 and management 9078 remained loopback-only.
+- Actual CLI worker package rollback: PASS after an injected readiness failure.
+  The prior 0.6.0 runtime recovered, backups were retained, and configuration,
+  the synthetic site and baseline package were unchanged. Release transport and
+  terminal confirmation were fixtures; dpkg, database backups and recovery were
+  real. The initial run caught auxiliary `tomcat.env` regeneration; `c5b0ac2`
+  fixes native package-setup preservation and fresh environment synchronization.
+- All eight draft GitHub assets were downloaded and compared byte-for-byte with
+  local artifacts; GitHub sizes/digests and updater manifest validated. Actual
+  newer-release installation through public GitHub remains pending publication.
+
 ## Development 0.6.0 Linux/CLI checkpoint (2026-09-10)
 
 - Commit `048660b`: all 172 tests passed on Ubuntu 24.04.4 in the dedicated
