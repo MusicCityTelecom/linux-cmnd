@@ -127,6 +127,8 @@ def parser() -> argparse.ArgumentParser:
     q = sub.add_parser('update-gui'); q.add_argument('--settings', type=Path, default=Path('/etc/linux-cmnd-management/admin.json'))
     q = sub.add_parser('update-apply'); q.add_argument('--execute', action='store_true')
     sub.add_parser('update-check')
+    q = sub.add_parser('license-network', help='Allow only the original vendor license HTTPS service; does not request a license')
+    q.add_argument('--execute', action='store_true')
     return p
 
 
@@ -141,6 +143,10 @@ def main(argv=None) -> int:
         if args.updates:
             from .update_cli import interactive_update
             return interactive_update()
+        elif args.command == 'license-network':
+            load_config(args.config)
+            from .license_network import enable
+            emit(enable(execute=args.execute))
         elif args.command in {"preflight", "doctor"}:
             cfg = load_config(args.config)
             checked_ports = (cfg.database_port, cfg.tomcat_http, cfg.tomcat_https, cfg.apache_http, cfg.apache_https)

@@ -51,7 +51,7 @@ def main():
     args = parser.parse_args()
     result = prepare(args.source, args.output, args.execute)
     print(result)
-    print('Private licensed payload only. Transfer directly to the evaluator; never commit or upload to public GitHub.')
+    print('Original-input bundle verified. Keep binaries out of Git history; only an authorized audited bundle may be published as a release asset.')
 
 
 if __name__ == '__main__':

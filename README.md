@@ -1,10 +1,13 @@
 # Linux CMND
 
-Original Music City Telecom tooling for qualifying and deploying operator-supplied Philips CMND applications on Ubuntu 24.04 x86_64. Vendor software is imported locally and is **not** distributed by this repository. This project is not affiliated with or endorsed by Philips.
+Philips CMND applications running on Ubuntu 24.04 x86_64, with Music City Telecom Linux deployment/update tooling. Releases include the original vendor applications; no separately obtained payload is required. Vendor ownership and notices are preserved; no Philips endorsement is implied.
 
-Tooling version: `0.6.2` (evaluation). Check [GitHub releases](https://github.com/MusicCityTelecom/linux-cmnd/releases) for publication status; the bootstrap installs only published releases, never a development checkout or draft. The unpublished `0.6.0` build is the clean-install and upgrade-test baseline. Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
+Tooling version: `0.7.0` (evaluation). Check [GitHub releases](https://github.com/MusicCityTelecom/linux-cmnd/releases) for publication status; the bootstrap installs only published releases, never a development checkout or draft. The unpublished `0.6.0` build is the clean-install and upgrade-test baseline. Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
 
 ## Quick installation
+
+Start with the [complete Ubuntu 24.04 walkthrough](docs/UBUNTU-24.04.md), including
+prerequisites, optional SSH, first login, licensing, updates and troubleshooting.
 
 On a fresh Ubuntu 24.04 amd64 server/VM (6 GiB RAM, 40 GiB disk recommended),
 download one script and run its guided installer. Python 3.11+ and trusted HTTPS
@@ -16,17 +19,18 @@ curl --fail --location --proto '=https' --proto-redir '=https' \
 sudo python3 bootstrap.py --execute
 ```
 
-The script asks for the local Philips payload directory/ZIP and this server's
+The script automatically downloads the Philips applications and asks for this server's
 stable IPv4 address, then asks you to accept the legacy evaluation runtime. It
 downloads the newest compatible GitHub evaluation release, checks the package
 and installer against GitHub's SHA-256 digests, installs dependencies, generates
 configuration with the original default ports, and starts CMND. No git checkout,
 manual `.deb` download, GitHub login, or hand-written config is needed.
 
-Philips binaries are **not in the public GitHub repository**. Supply the original
-licensed inputs directly, or prepare one private ZIP using
-[the payload preparation instructions](docs/QUICK-INSTALL.md). This is not a
-customer backup import. No physical TVs are authorized by installation.
+Philips applications are included as a release asset, outside Git source history.
+`--payload` remains an optional local override. Customer backups, site credentials
+and existing activation state are never installer inputs. See
+[licensing and installation identity](docs/LICENSING.md).
+No physical TVs are authorized by installation.
 
 See [quick-install options](docs/QUICK-INSTALL.md) for unattended installs,
 release pinning, Debian requirements, and custom ports. Without `--execute`, the
@@ -43,7 +47,7 @@ older release. See [update instructions](docs/UPDATES.md) and the
 
 The full installer and `.deb` accept Ubuntu 24.04 or Debian 12/13 amd64; Debian 13 needs an operator-supplied Java 17 runtime. The new installer has completed a fresh Ubuntu VM deployment of the five Java applications and SmartCMS, with HTTPS/migration readiness, automatic startup after reboot, real browser login, and native CMS local export. Debian runtime qualification remains pending. Start with the [evaluation installation guide](docs/EVALUATION-GUIDE.md), [configuration](docs/CONFIGURATION.md), and [test results](docs/TEST-RESULTS.md).
 
-This is **not full Windows-feature parity or production certification**. RF/DekTec/modulator workflows are explicitly out of scope. The supplied MGate archive is Windows-only; additional MGate-dependent IP transport-stream playout is not qualified. Physical-TV qualification and production Windows-backup restore remain incomplete. GUI updates have passed end-to-end installation and rollback with synthetic release transport; real GitHub transport qualification is recorded separately. No licensed vendor files or customer reference archives are distributed in our assets.
+This is **not full Windows-feature parity or production certification**. RF/DekTec/modulator workflows are explicitly out of scope. The supplied MGate archive is Windows-only; additional MGate-dependent IP transport-stream playout is not qualified. Physical-TV qualification and production Windows-backup restore remain incomplete. GUI updates have passed end-to-end installation and rollback with synthetic release transport; real GitHub transport qualification is recorded separately. Vendor applications are included; customer reference archives are not.
 
 ## What works now
 

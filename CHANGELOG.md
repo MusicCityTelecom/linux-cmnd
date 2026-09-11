@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.0 - evaluation candidate
+
+- Complete installation download now includes the original Philips 7.5.9
+  application bundle. Bootstrap downloads and validates it automatically;
+  --payload is an optional local/offline override. No existing site databases,
+  customer backups or activation state are packaged. Original vendor-distributed
+  defaults are retained, separately from the open-source tooling license.
+- Release building requires an exact, hash-verified original-input bundle and
+  emits a bundle manifest and checksums. Vendor binaries remain outside Git history.
+- Document the preserved hardware-derived serial/activation behavior and VM
+  identity requirements. Add an explicit, fixed-vendor license-network command
+  without disabling TV isolation, granting entitlements or submitting a license.
+
 ## 0.6.2 - 2026-09-10 (evaluation)
 
 - Recognize the physical TV's `ChannelList/` archive as `TVChannelList` when

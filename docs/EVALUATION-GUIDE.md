@@ -25,10 +25,11 @@ used for vendor compatibility: this evaluation must not be exposed to the public
 Internet. The installer does not change distribution-wide Apache sites, host
 routes, or unrelated firewall rules. It creates named CMND service-UID egress rules.
 
-Philips applications are **not redistributed in our GitHub assets**. Supply the
-licensed extracted application directory from the inspected 7.5.9 installer
-(`buildnr.txt` reports 7.5.10.3168). All required inputs are hash-checked. Customer
-backups, clone files, firmware, and credentials are not installer payloads.
+The release includes the original Philips 7.5.9 application bundle, downloaded
+automatically by the bootstrap. All required inputs are hash-checked. Customer
+backups, clone files, firmware, site credentials and existing activation state
+are not installer payloads. See LICENSING.md for original installation identity
+and activation behavior. The manual command below is an optional local path.
 
 ## Install
 
@@ -49,7 +50,7 @@ sudo editor /srv/private/cmnd.toml
 ```
 
 ```sh
-sudo sh ./install.sh --package ./linux-cmnd_0.6.2_amd64.deb \
+sudo sh ./install.sh --package ./linux-cmnd_0.7.0_amd64.deb \
   --payload /srv/private/cmnd-vendor --config /srv/private/cmnd.toml \
   --install-dependencies --accept-legacy-runtime --execute
 ```

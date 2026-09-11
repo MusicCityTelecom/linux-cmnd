@@ -126,10 +126,48 @@ class BootstrapTests(unittest.TestCase):
         with patch.object(bootstrap.os, 'geteuid', return_value=0, create=True), \
                 patch.object(bootstrap, 'check_host'), patch('sys.stdin.isatty', return_value=False), \
                 patch.object(bootstrap, 'fetch') as fetch, patch.object(bootstrap.subprocess, 'run') as run:
-            with self.assertRaisesRegex(ValueError, 'Supply --payload'):
+            with self.assertRaisesRegex(ValueError, 'Supply --server-ip'):
                 bootstrap.main(['--execute'])
             fetch.assert_not_called()
             run.assert_not_called()
+
+    def test_bundle_download_uses_fixed_release_url_and_streaming_hash(self):
+        selected = release()
+        selected['assets'].append({'name': bootstrap.VENDOR_ASSET, 'size': 4,
+                                  'digest': 'sha256:' + hashlib.sha256(b'data').hexdigest()})
+        urls = []
+        def fetch(url, size, destination):
+            urls.append(url)
+            destination.write(b'data')
+        with tempfile.TemporaryDirectory() as temp, patch.object(bootstrap, 'fetch', side_effect=fetch):
+            result = bootstrap.download_assets(selected, Path(temp), include_vendor=True)
+            self.assertEqual(set(result), {'linux-cmnd_0.6.0_amd64.deb', 'install.sh', bootstrap.VENDOR_ASSET})
+            self.assertEqual(urls[-1], 'https://github.com/MusicCityTelecom/linux-cmnd/releases/download/v0.6.0/' + bootstrap.VENDOR_ASSET)
+
+    def test_bundle_missing_duplicate_oversize_and_corrupt_fail(self):
+        for mode in ('missing', 'duplicate', 'size', 'corrupt'):
+            selected = release()
+            asset = {'name': bootstrap.VENDOR_ASSET, 'size': 4,
+                     'digest': 'sha256:' + hashlib.sha256(b'data').hexdigest()}
+            if mode != 'missing':
+                selected['assets'].append(asset)
+            if mode == 'duplicate':
+                selected['assets'].append(dict(asset))
+            if mode == 'size':
+                asset['size'] = bootstrap.MAX_VENDOR_ASSET + 1
+            def fetch(url, size, destination):
+                destination.write(b'evil' if mode == 'corrupt' and url.endswith('.zip') else b'data')
+            with tempfile.TemporaryDirectory() as temp, patch.object(bootstrap, 'fetch', side_effect=fetch):
+                with self.assertRaises(ValueError, msg=mode):
+                    bootstrap.download_assets(selected, Path(temp), include_vendor=True)
+
+    def test_explicit_missing_payload_never_falls_back_to_download(self):
+        with tempfile.TemporaryDirectory() as temp, \
+                patch.object(bootstrap.os, 'geteuid', return_value=0, create=True), \
+                patch.object(bootstrap, 'check_host'), patch.object(bootstrap, 'fetch') as fetch:
+            with self.assertRaisesRegex(ValueError, 'Explicit --payload'):
+                bootstrap.main(['--execute', '--payload', str(Path(temp) / 'missing.zip')])
+            fetch.assert_not_called()
 
 
 class PrepareVendorTests(unittest.TestCase):

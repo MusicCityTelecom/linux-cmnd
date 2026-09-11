@@ -30,11 +30,11 @@ sudo apt-get install -y python3 curl ca-certificates
 
 The script prompts for:
 
-1. The **local path** to the original licensed Philips 7.5.9 extracted payload,
-   or a private vendor ZIP prepared below. This is not the Windows EXE itself.
-2. A stable IPv4 address already assigned to this Linux host. No address or
+The Philips application bundle downloads automatically; --payload is optional.
+
+1. A stable IPv4 address already assigned to this Linux host. No address or
    route is added. Choose `127.0.0.1` only for access from the server itself.
-3. Explicit acceptance of PHP 5.6/MySQL 5.7 legacy evaluation dependencies.
+2. Explicit acceptance of PHP 5.6/MySQL 5.7 legacy evaluation dependencies.
 
 It then selects the highest compatible published `0.x` release (including
 evaluation prereleases), verifies SHA-256 and size for the `.deb` and full
@@ -45,7 +45,8 @@ MySQL, builds the PHP image, generates private credentials/certificates,
 initializes the five CMND schemas, and starts the native services. Download
 failures and integrity mismatches stop installation; no arbitrary mirror is used.
 
-GitHub serves our original tooling only, not Philips binaries or customer data.
+GitHub serves the tooling and original Philips application bundle, not customer
+data, site credentials, or existing activation state.
 No GitHub account/token is needed now that the repository is public. Release
 checksums establish integrity relative to GitHub metadata, not an independent
 offline code-signing identity. Downloads require working DNS/HTTPS access to
@@ -56,7 +57,7 @@ Configuration is saved to `/etc/cmnd/cmnd.toml`. Default ports remain 8080/8443
 internal listeners. Services start at boot. Initial installation grants no TV
 egress and has an empty device allowlist. It never scans or contacts a TV.
 
-## Prepare one private payload ZIP on Windows or Linux
+## Optional local/offline payload override
 
 From the source checkout beside your original **extracted** installer payload:
 
@@ -69,11 +70,13 @@ On Windows, use `py -3` instead of `python3` if appropriate, and quote paths wit
 spaces. Use an ACL-protected output directory. The script verifies the pinned
 original files and copies only those 26 inputs, then verifies the ZIP contents.
 It refuses to overwrite an existing output and never collects databases,
-certificates, credentials, reference backups, room content, or firmware. The
+locally generated certificates, site credentials, reference backups, room content,
+or firmware. Original vendor-distributed defaults are retained unchanged. The
 output parent directory must already exist. Omit `--execute` for validation only.
 
 Transfer that ZIP directly to the evaluator's Linux host, for example using SCP.
-**Never commit it or upload it to the public GitHub repository/releases.** An
+Never commit binaries to Git history. Only the approved original-input bundle
+may be published as a vendor release asset; never upload a live installation. An
 installed Windows application's WARs may have been rewritten by setup; if hashes
 differ, use the original installer extraction, not modified runtime files. The
 helper fails closed on any missing/changed input rather than accepting a version
@@ -84,8 +87,7 @@ Linux is unnecessary. Extra files in a prepared ZIP are rejected.
 
 ```sh
 sudo python3 bootstrap.py --execute --accept-legacy-runtime \
-  --payload /srv/private/cmnd-vendor-7.5.9.zip --server-ip 192.0.2.10 \
---release v0.6.1
+  --server-ip 192.0.2.10 --release v0.7.0
 ```
 
 Replace the example IP with an address actually assigned to your server. Omit
@@ -99,7 +101,7 @@ contain `bootstrap.py`. To pin the bootstrap itself, replace the raw URL's `main
 with its reviewed full Git commit ID. Future releases will include the bootstrap
 and its SHA-256 in the release assets. A raw `main` download intentionally follows
 the latest reviewed source and should not be treated as immutable. The next
-tooling version is 0.6.2; check GitHub releases for its publication status. A
+tooling version is 0.7.0; check GitHub releases for its publication status. A
 draft is never installable through the public bootstrap. See TEST-RESULTS.md for
 the exact qualification checkpoint rather than assuming a version proves parity.
 

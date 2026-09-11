@@ -1,11 +1,13 @@
-"""Build only original public-safe release assets from a clean committed tree."""
-from hashlib import sha256
+"""Build tooling plus the explicitly authorized, pinned original vendor bundle."""
+import argparse
+import hashlib
 import json
 from pathlib import Path
 import shutil
 import subprocess
 
 from build_deb import build, ROOT
+from vendor_bundle import verify as verify_vendor_bundle, NAME as VENDOR_BUNDLE_NAME
 
 RELEASE_PATHS = ['src', 'scripts', 'deploy', 'config', 'packaging', 'tests', 'docs',
                  'VERSION', 'pyproject.toml', 'README.md', 'LICENSE', 'CHANGELOG.md',
@@ -30,6 +32,11 @@ def validate_sources():
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--vendor-bundle', type=Path, required=True,
+                        help='authorized, exact original-input ZIP; never a live installation backup')
+    args = parser.parse_args()
+    vendor_metadata = verify_vendor_bundle(args.vendor_bundle)
     validate_sources()
     package = build()
     version = (ROOT / 'VERSION').read_text().strip()
@@ -50,10 +57,25 @@ def main():
     bootstrap = destination / 'bootstrap.py'
     bootstrap.write_bytes((ROOT / 'scripts/bootstrap.py').read_bytes().replace(b'\r\n', b'\n'))
     artifacts = [package, installer, manifest, source, guide, configuration, bootstrap]
+    bundled = destination / VENDOR_BUNDLE_NAME
+    if bundled.exists():
+        if verify_vendor_bundle(bundled) != vendor_metadata:
+            raise SystemExit('Existing release vendor bundle differs; refusing overwrite')
+    else:
+        shutil.copyfile(args.vendor_bundle, bundled)
+    if verify_vendor_bundle(bundled) != vendor_metadata:
+        raise SystemExit('Vendor bundle changed while copying')
+    vendor_manifest = destination / 'vendor-bundle.json'
+    vendor_manifest.write_text(json.dumps(vendor_metadata, indent=2) + '\n', encoding='utf-8')
+    artifacts += [bundled, vendor_manifest]
     checksums = destination / 'SHA256SUMS'
-    checksums.write_text(''.join(f'{sha256(path.read_bytes()).hexdigest()}  {path.name}\n' for path in artifacts), encoding='ascii')
+    lines = []
+    for path in artifacts:
+        with path.open('rb') as stream:
+            lines.append(f'{hashlib.file_digest(stream, "sha256").hexdigest()}  {path.name}\n')
+    checksums.write_text(''.join(lines), encoding='ascii')
     print(json.dumps({'version': version, 'assets': [str(path) for path in artifacts + [checksums]],
-                      'vendor_payload_included': False}, indent=2))
+                      'vendor_payload_included': True, 'vendor_bundle': vendor_metadata}, indent=2))
 
 
 if __name__ == '__main__':

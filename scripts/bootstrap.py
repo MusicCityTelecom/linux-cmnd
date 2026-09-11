@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Public GitHub bootstrap; Python 3.11+ stdlib, no checkout or pip required.
 
-Downloads original tooling only. Philips input is supplied locally. All release
+Downloads tooling and the bundled Philips applications, or uses --payload for
+an explicitly supplied local bundle. All release
 assets are checked against the size and SHA-256 returned by GitHub over TLS.
 """
 from __future__ import annotations
@@ -26,6 +27,8 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 REPO = 'MusicCityTelecom/linux-cmnd'
 API = 'https://api.github.com/repos/' + REPO
 MAX_ASSET = 32 * 1024**2
+VENDOR_ASSET = 'cmnd-vendor-7.5.9.zip'
+MAX_VENDOR_ASSET = 1024**3
 STATE_PATHS = ('/var/lib/cmnd-deployment', '/opt/cmnd/tomcat', '/opt/cmnd/SmartCMS',
                '/opt/Philips', '/etc/linux-cmnd-management', '/var/lib/cmnd-updates',
                '/var/lib/cmnd-update-requests', '/etc/cmnd/deployment.json',
@@ -95,9 +98,11 @@ def choose_release(releases, requested=None, channel='preview'):
     return max(candidates, key=lambda item: item[0])[1]
 
 
-def download_assets(release, destination):
+def download_assets(release, destination, *, include_vendor=False):
     version = release['tag_name'].removeprefix('v')
     names = (f'linux-cmnd_{version}_amd64.deb', 'install.sh')
+    if include_vendor:
+        names += (VENDOR_ASSET,)
     result = {}
     for name in names:
         matches = [a for a in release.get('assets', []) if a.get('name') == name]
@@ -105,14 +110,17 @@ def download_assets(release, destination):
             raise ValueError('Missing or duplicate release asset: ' + name)
         asset = matches[0]
         size, digest = asset.get('size'), asset.get('digest', '')
-        if type(size) is not int or not 0 < size <= MAX_ASSET or not re.fullmatch(r'sha256:[0-9a-f]{64}', digest or ''):
+        limit = MAX_VENDOR_ASSET if name == VENDOR_ASSET else MAX_ASSET
+        if type(size) is not int or not 0 < size <= limit or not re.fullmatch(r'sha256:[0-9a-f]{64}', digest or ''):
             raise ValueError('Release asset lacks a valid size/SHA-256: ' + name)
         url = f'https://github.com/{REPO}/releases/download/{release["tag_name"]}/{name}'
         # Never execute a URL supplied by release notes or arbitrary asset metadata.
         path = destination / name
         with path.open('xb') as stream:
             fetch(url, size, stream)
-        if path.stat().st_size != size or hashlib.sha256(path.read_bytes()).hexdigest() != digest[7:]:
+        with path.open('rb') as stream:
+            actual_digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+        if path.stat().st_size != size or actual_digest != digest[7:]:
             raise ValueError('GitHub asset integrity mismatch: ' + name)
         result[name] = path
     return result
@@ -202,7 +210,7 @@ def check_host(java_home):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--payload', type=Path, help='local licensed extracted directory or prepared vendor ZIP')
+    parser.add_argument('--payload', type=Path, help='optional local vendor directory/ZIP; otherwise download the release application bundle')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--server-ip', help='stable IPv4 address on this server')
     group.add_argument('--config', type=Path, help='reviewed TOML; kept unchanged')
@@ -218,20 +226,20 @@ def main(argv=None):
         version_number(args.release)
     if not args.execute or args.dry_run:
         print('PLAN: validate a fresh Linux host and empty TV allowlist; download and verify GitHub tooling;')
-        print('verify the local Philips payload; install dependencies; initialize and start CMND.')
+        print('download and verify bundled Philips applications (or use --payload); install dependencies; initialize and start CMND.')
         print('No downloads or changes made. Run with --execute for guided installation.')
         return
     if not hasattr(os, 'geteuid') or os.geteuid() != 0:
         raise ValueError('Run using sudo python3 bootstrap.py --execute')
     check_host(args.java_home)
     interactive = sys.stdin.isatty()
-    if args.payload is None and interactive:
-        args.payload = Path(input('Local Philips payload directory or prepared ZIP: ').strip())
-    if args.payload is None or not args.payload.exists() or args.payload.is_symlink():
-        raise ValueError('Supply --payload: Philips binaries are local inputs, not in the public repository')
-    payload = args.payload.resolve()
-    if not payload.is_dir() and not (payload.is_file() and payload.suffix.lower() == '.zip'):
-        raise ValueError('Payload must be an extracted directory or prepared vendor ZIP')
+    payload = None
+    if args.payload is not None:
+        if not args.payload.exists() or any(p.is_symlink() for p in (args.payload, *args.payload.parents)):
+            raise ValueError('Explicit --payload must exist and must not traverse symlinks')
+        payload = args.payload.resolve()
+        if not payload.is_dir() and not (payload.is_file() and payload.suffix.lower() == '.zip'):
+            raise ValueError('Payload must be an extracted directory or prepared vendor ZIP')
     if args.config:
         content = args.config.read_text(encoding='utf-8')
     else:
@@ -254,8 +262,10 @@ def main(argv=None):
         metadata = json.loads(fetch(endpoint, 8 * 1024**2))
         selected = choose_release([metadata] if args.release else metadata, args.release, args.channel)
         version = selected['tag_name'].removeprefix('v')
-        print('Downloading verified Linux CMND ' + version + ' tooling from public GitHub...', flush=True)
-        assets = download_assets(selected, work)
+        print('Downloading verified Linux CMND ' + version + ' from public GitHub...', flush=True)
+        assets = download_assets(selected, work, include_vendor=payload is None)
+        if payload is None:
+            payload = assets[VENDOR_ASSET]
         package = assets[f'linux-cmnd_{version}_amd64.deb']
         for field, expected in (('Package', 'linux-cmnd'), ('Architecture', 'amd64'), ('Version', version)):
             if subprocess.check_output(['dpkg-deb', '-f', str(package), field], text=True).strip() != expected:
