@@ -32,6 +32,7 @@ from .native_config import NativeLayout, native_endpoint, render_native_files
 from .vendor_config import REQUIRED_SECRETS
 
 MYSQL_IMAGE = 'mysql@sha256:4bc6bc963e6d8443453676cae56536f4b8156d78bae03c0145cbe47c2aad73bb'
+MYSQL_CASE_OPTION = '--lower-case-table-names=1'
 STATE = Path('/var/lib/cmnd-deployment')
 ETC = Path('/etc/cmnd')
 LAYOUT = NativeLayout()
@@ -40,6 +41,11 @@ BASELINE = Path('/var/cache/linux-cmnd/bootstrap/initial-installer.deb')
 SCHEMAS = (('smartinstall', 'siuser', 'smartinstall', (2, 3)), ('cas', 'cas', 'cas', (2,)),
            ('tpvision', 'tpvision', 'tpvision', tuple(range(2, 14))),
            ('smartcontroldb', 'smartcontrol', 'smartcontrol', (2,)), ('smartcms', 'smartcms', 'smartcms', (2, 3)))
+
+
+def mysql_server_options(port: int) -> tuple[str, ...]:
+    return ('--bind-address=127.0.0.1', f'--port={port}', '--event-scheduler=ON',
+            '--local-infile=0', '--sql-mode=NO_ENGINE_SUBSTITUTION', MYSQL_CASE_OPTION)
 
 
 @dataclass(frozen=True)
@@ -446,8 +452,7 @@ def deploy(inputs: DeploymentInputs, *, execute: bool = False, accept_legacy: bo
             '--mount', f'type=bind,src={STATE}/mysql-root-password,dst=/run/secrets/root-password,readonly',
             '--mount', f'type=bind,src={STATE}/mysql-client.cnf,dst=/run/secrets/client.cnf,readonly',
             '-e', 'MYSQL_ROOT_PASSWORD_FILE=/run/secrets/root-password', MYSQL_IMAGE,
-            '--bind-address=127.0.0.1', f'--port={config.database_port}', '--event-scheduler=ON',
-            '--local-infile=0', '--sql-mode=NO_ENGINE_SUBSTITUTION')
+            *mysql_server_options(config.database_port))
         run('systemctl', 'start', 'cmnd-mysql')
         wait_database()
         for schema, user, folder, numbers in SCHEMAS:

@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.1 - 2026-09-11 (evaluation)
+
+- Fresh MySQL initialization uses `lower_case_table_names=1`, matching Windows
+  table-name lookup. Fixes the native Settings/Channels list errors after imports.
+- Add `cmndctl native-database-case` audit and explicit `--execute` repair for
+  existing pinned MySQL 5.7 deployments whose stored identifiers are all lowercase.
+  Stops application writers, retains a cold database backup, verifies package
+  counts and mixed-case queries, and restarts previously active services.
+- Mixed-case stored identifiers and unexpected containers/configurations are
+  rejected rather than silently renamed or merged. Text collations, uploaded
+  archives, vendor Java code, credentials and TV settings are unchanged.
+- Existing installs must run the documented repair after the tooling update;
+  updating the .deb alone does not change the running database configuration.
+
+
 ## 0.7.0 - evaluation candidate
 
 - Complete installation download now includes the original Philips 7.5.9

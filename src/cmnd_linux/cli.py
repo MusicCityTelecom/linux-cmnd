@@ -124,6 +124,8 @@ def parser() -> argparse.ArgumentParser:
     q.add_argument('--execute', action='store_true'); q.add_argument('--accept-legacy-runtime', action='store_true')
     sub.add_parser('native-wait-database', help='Internal fixed-target systemd database readiness gate')
     q = sub.add_parser('native-health'); q.add_argument('--seconds', type=int, default=60)
+    q = sub.add_parser('native-database-case', help='Audit or repair Windows-compatible MySQL table-name lookup')
+    q.add_argument('--execute', action='store_true')
     q = sub.add_parser('update-gui'); q.add_argument('--settings', type=Path, default=Path('/etc/linux-cmnd-management/admin.json'))
     q = sub.add_parser('update-apply'); q.add_argument('--execute', action='store_true')
     sub.add_parser('update-check')
@@ -145,6 +147,9 @@ def main(argv=None) -> int:
         if args.updates:
             from .update_cli import interactive_update
             return interactive_update()
+        elif args.command == 'native-database-case':
+            from .database_case import repair
+            emit(repair(args.config, execute=args.execute))
         elif args.command == 'license-network':
             load_config(args.config)
             from .license_network import enable

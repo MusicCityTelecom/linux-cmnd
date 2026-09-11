@@ -2,7 +2,12 @@
 
 Philips CMND applications running on Ubuntu 24.04 x86_64, with Music City Telecom Linux deployment/update tooling. Releases include the original vendor applications; no separately obtained payload is required. Vendor ownership and notices are preserved; no Philips endorsement is implied.
 
-Tooling version: `0.7.0` (evaluation). Check [GitHub releases](https://github.com/MusicCityTelecom/linux-cmnd/releases) for publication status; the bootstrap installs only published releases, never a development checkout or draft. The unpublished `0.6.0` build is the clean-install and upgrade-test baseline. Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
+Tooling version: `0.7.1` (evaluation). Check [GitHub releases](https://github.com/MusicCityTelecom/linux-cmnd/releases) for publication status; the bootstrap installs only published releases, never a development checkout or draft. Target vendor bundle: CMND installer labeled `7.5.9`; its extracted `buildnr.txt` says `7.5.10.3168`. Vendor components have their own internal versions; these are not the tooling version.
+
+**Settings or Channels stuck on “Loading…” after upload?** Version 0.7.1 fixes
+Windows/Linux database table-name case compatibility for fresh installs. Existing
+installs need the explicit, backed-up [database case repair](docs/DATABASE-CASE.md)
+after updating the tooling. Do not delete or re-upload your packages to fix this.
 
 ## Quick installation
 

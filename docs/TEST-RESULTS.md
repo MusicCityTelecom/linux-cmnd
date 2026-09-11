@@ -1,5 +1,33 @@
 # Test results
 
+## 0.7.1 database-case patch (2026-09-11)
+
+- Ubuntu 24.04: 204 tests passed (29.417 seconds), including the opt-in
+  network-isolated, pinned-MySQL fresh-initialization test. It creates mixed-case
+  schema/table/view names, queries alternate case and verifies stored text is
+  unchanged. The disposable test container was removed afterward.
+- Existing runtime: guarded repair applied to the public-0.7.0 Ubuntu test VM;
+  all 9 schema names and 620 non-information-schema table/view names checked.
+  Cold database backup retained privately; package row counts preserved.
+- Authenticated HTTP: native Settings and Channels list endpoints returned 200
+  and their existing records. Operator independently confirmed both lists now
+  display in the browser. All seven HTTPS contexts and both migration histories
+  passed native readiness after repair.
+- Static audit: 3,811 Java classes and 2,672 static Java/PHP/CSS web references
+  examined; no static path-case mismatch or case-colliding file found. Additional
+  mixed-case SQL/entity references were flagged for review, not declared bugs
+  solely from string matching (Hibernate entity names can intentionally differ).
+- Customer archives stayed private. Five ZIP integrity checks passed; standalone
+  Settings and Channels members matched their full-clone counterparts byte for
+  byte. No TV contact, enrollment, power, settings or content push in this work.
+
+Scope: this verifies the repair and fresh MySQL initialization, not a complete
+fresh 0.7.1 installer run or full Windows feature parity. Published 0.7.0 previously
+passed a full fresh install using public GitHub assets on Ubuntu 24.04, but its
+health checks did not exercise these authenticated package-list endpoints.
+Existing installations must explicitly run the [repair](DATABASE-CASE.md) after
+updating tooling; the updater does not silently change database configuration.
+
 ## 0.6.2 evaluation release
 
 Version 0.6.2 packages the two corrections described below: the WIXP cookie
