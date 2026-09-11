@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Reject Python versions older than 3.11 before importing installer dependencies,
+  so Ubuntu 21.04/Python 3.9 receives a clear requirements message instead of a
+  `tomllib` traceback. Unsupported-OS errors now include the detected release.
+  Supported distributions are unchanged; this does not add Ubuntu 21.04 support.
+
 ## 0.7.1 - 2026-09-11 (evaluation)
 
 - Fresh MySQL initialization uses `lower_case_table_names=1`, matching Windows

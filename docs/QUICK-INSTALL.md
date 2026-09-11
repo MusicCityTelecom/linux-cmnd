@@ -28,6 +28,14 @@ sudo apt-get update
 sudo apt-get install -y python3 curl ca-certificates
 ```
 
+Ubuntu **21.04 is not supported**. Its default Python 3.9 cannot run the
+bootstrap, which requires Python 3.11 or newer. The current repository bootstrap
+checks this before importing dependencies and exits without installation changes.
+Older release copies may instead report `ModuleNotFoundError: No module named
+'tomllib'`. Use a fresh Ubuntu 24.04 system; installing a Python backport does not
+make an unsupported Ubuntu release supported. Do not replace the host's system
+Python or install a similarly named package from pip to bypass this check.
+
 The script prompts for:
 
 The Philips application bundle downloads automatically; --payload is optional.

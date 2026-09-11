@@ -7,6 +7,17 @@ assets are checked against the size and SHA-256 returned by GitHub over TLS.
 """
 from __future__ import annotations
 
+import sys
+
+# Keep this ahead of tomllib and every installer/dependency import. In
+# particular, Ubuntu 21.04's Python 3.9 must fail clearly before initialization.
+if sys.version_info < (3, 11):
+    print('Installation stopped: Python 3.11 or newer is required; detected Python '
+          + '.'.join(map(str, sys.version_info[:3])) + '. '
+          'Use Ubuntu 24.04 or Debian 12/13 amd64 with Python 3.11+. '
+          'No installation changes were made.', file=sys.stderr)
+    raise SystemExit(2)
+
 import argparse
 import hashlib
 import ipaddress
@@ -17,7 +28,6 @@ import re
 import shutil
 import socket
 import subprocess
-import sys
 import tempfile
 import time
 import tomllib
@@ -190,7 +200,8 @@ def check_host(java_home):
             values[key] = value.strip('"\'')
     distro = values.get('ID'), values.get('VERSION_ID')
     if distro not in {('ubuntu', '24.04'), ('debian', '12'), ('debian', '13')}:
-        raise ValueError('Supported systems: Ubuntu 24.04 or Debian 12/13')
+        raise ValueError('Unsupported operating system: ' + ' '.join(value or 'unknown' for value in distro)
+                         + '. Supported systems: Ubuntu 24.04 or Debian 12/13 amd64')
     if subprocess.check_output(['dpkg', '--print-architecture'], text=True).strip() != 'amd64':
         raise ValueError('amd64 architecture required')
     if distro == ('debian', '13') and not (Path(java_home) / 'bin/java').is_file():

@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 import zipfile
+import builtins
 
 
 SCRIPTS = Path(__file__).resolve().parents[1] / 'scripts'
@@ -30,6 +31,34 @@ def release(version='0.6.0', **changes):
 
 
 class BootstrapTests(unittest.TestCase):
+    def test_old_python_stops_before_dependency_imports_or_installer_actions(self):
+        code = compile((SCRIPTS / 'bootstrap.py').read_text(), str(SCRIPTS / 'bootstrap.py'), 'exec')
+        original_import = builtins.__import__
+        def guarded_import(name, *args, **kwargs):
+            if name not in ('sys', '__future__'):
+                self.fail('Unsupported Python attempted dependency import: ' + name)
+            return original_import(name, *args, **kwargs)
+        for version in ((3, 9, 4), (3, 10, 12)):
+            stderr = io.StringIO()
+            with patch('sys.version_info', version), patch('sys.stderr', stderr), \
+                    patch('builtins.__import__', side_effect=guarded_import):
+                with self.assertRaises(SystemExit) as stopped:
+                    exec(code, {'__name__': '__main__'})
+            self.assertEqual(stopped.exception.code, 2)
+            self.assertIn('Python 3.11 or newer is required', stderr.getvalue())
+            self.assertIn('.'.join(map(str, version)), stderr.getvalue())
+            self.assertIn('Ubuntu 24.04', stderr.getvalue())
+            self.assertIn('No installation changes were made', stderr.getvalue())
+            self.assertNotIn('Traceback', stderr.getvalue())
+
+    def test_unsupported_os_reports_detected_release_before_commands(self):
+        with patch.object(bootstrap.sys, 'platform', 'linux'), \
+                patch.object(bootstrap.Path, 'read_text', return_value='ID=ubuntu\nVERSION_ID="21.04"\n'), \
+                patch.object(bootstrap.subprocess, 'check_output') as command:
+            with self.assertRaisesRegex(ValueError, 'Unsupported operating system: ubuntu 21.04'):
+                bootstrap.check_host('/unused/java')
+            command.assert_not_called()
+
     def test_newest_preview_numeric_not_api_order(self):
         result = bootstrap.choose_release([release('0.6.0'), release('0.10.0'), release('0.9.0')])
         self.assertEqual(result['tag_name'], 'v0.10.0')
