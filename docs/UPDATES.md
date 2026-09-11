@@ -41,9 +41,13 @@ fixes require a separately qualified migration or fresh installation; changing
 the displayed tooling version is not proof those runtime fixes were applied.
 
 The switch is not present in v0.5.0. That older version supports the read-only
-`cmndctl update-check` command and its existing management updater. Publication
-of the next release is gated on the recorded Linux qualification; source code
-presence alone is not a release or successful upgrade.
+`cmndctl update-check` command and its existing management updater. Evaluation
+prerelease v0.6.1 is published. The installed CLI completed an actual public
+GitHub upgrade from the unpublished 0.6.0 test baseline to 0.6.1 without a token:
+cancel preserved the original installation; confirmation downloaded and verified
+the package, retained five-database/configuration backups, preserved settings and
+the synthetic site, and passed application readiness. This is not evidence of an
+in-place vendor-runtime migration from 0.5.0 or of real-hardware compatibility.
 
 For automation/read-only JSON output, use:
 

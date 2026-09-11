@@ -57,7 +57,7 @@ This is **not full Windows-feature parity or production certification**. RF/DekT
 - Actual Ubuntu lab qualification of Philips browser login, TV scan/import, native room delivery/readback/persistence and Standby against a synthetic TV, plus CMS SSO/content-editor navigation. These are not physical-TV or complete deployment certifications.
 - Persistent service-identity isolation and automatic startup passed a real reboot in the fresh installer VM. No physical-TV egress is granted by installation.
 - Native CMS editing and local export work in the fresh installer VM; the retained synthetic site exported a CRC-valid ZIP with generated HTML and metadata after reboot. Meaningful thumbnails and TV publication remain unqualified.
-- A separate authenticated management page checks GitHub at startup and requires explicit confirmation before queuing a release update. The worker verifies package identity/integrity and retains configuration, database, and prior-package backups. End-to-end GitHub upgrade qualification remains pending.
+- A separate authenticated management page checks GitHub at startup and requires explicit confirmation before queuing a release update. The worker verifies package identity/integrity and retains configuration, database, and prior-package backups. The CLI completed an actual public GitHub upgrade from 0.6.0 to 0.6.1, preserving configuration/site data and passing readiness checks; the GUI transport tests remain separately scoped.
 - Identity/IP/operation allowlists and mandatory `--execute` for TV writes.
 - Receive-only TV clone export with a separate permission, identity rechecks,
   private bounded uploads, and ZIP validation. The [first TV test](docs/FIRST-TV-TEST.md)

@@ -30,9 +30,19 @@ below; no physical TVs were contacted.
   terminal confirmation were fixtures; dpkg, database backups and recovery were
   real. The initial run caught auxiliary `tomcat.env` regeneration; `c5b0ac2`
   fixes native package-setup preservation and fresh environment synchronization.
-- All eight draft GitHub assets were downloaded and compared byte-for-byte with
-  local artifacts; GitHub sizes/digests and updater manifest validated. Actual
-  newer-release installation through public GitHub remains pending publication.
+- Published evaluation prerelease v0.6.1: all eight GitHub assets were downloaded
+  and compared byte-for-byte with local artifacts; sizes/digests and the updater
+  manifest validated. Release artifacts remain pinned to the commit above.
+- Actual public GitHub CLI upgrade 0.6.0 -> 0.6.1: PASS, without a token. First,
+  cancelling the real terminal prompt left the installed version, configuration
+  and synthetic site unchanged. Confirming the next prompt installed the released
+  package, retained configuration and all five database backups, preserved the
+  synthetic site, and passed all seven HTTPS contexts and migration checks.
+  The retained package SHA-256 matched the published asset. This test used real
+  GitHub transport and terminal input, not the earlier release fixtures.
+- Actual public bootstrap selection/download: PASS, selected v0.6.1 and verified
+  the released Debian package and installer without authentication. This was a
+  download check, not a second fresh installation over the existing VM.
 
 ## Development 0.6.0 Linux/CLI checkpoint (2026-09-10)
 
