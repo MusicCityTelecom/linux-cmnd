@@ -1,0 +1,27 @@
+#!/bin/sh
+set -eu
+. /usr/share/debconf/confmodule
+
+db_input high cmnd-linux/server-ip || true
+db_input high cmnd-linux/database-mode || true
+db_input medium cmnd-linux/database-admin-user || true
+db_input medium cmnd-linux/apache-mode || true
+db_input high cmnd-linux/accept-legacy-runtime || true
+
+db_get cmnd-linux/database-mode
+case "$RET" in
+  auto|existing)
+    socket_ok=0
+    for client in mariadb mysql; do
+      if command -v "$client" >/dev/null 2>&1 && \
+         "$client" --protocol=socket -uroot --batch --skip-column-names -e 'SELECT 1' >/dev/null 2>&1; then
+        socket_ok=1
+        break
+      fi
+    done
+    [ "$socket_ok" -eq 1 ] || db_input medium cmnd-linux/database-admin-password || true
+    ;;
+esac
+
+db_go
+exit 0
