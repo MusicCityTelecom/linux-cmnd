@@ -1,0 +1,42 @@
+#!/bin/sh
+set -eu
+. /usr/share/debconf/confmodule
+
+[ "${1:-}" = configure ] || exit 0
+
+db_get cmnd-linux/accept-legacy-runtime
+if [ "$RET" != true ]; then
+  echo "cmnd-linux installed but not activated: legacy runtime acceptance was not granted." >&2
+  echo "Run: sudo dpkg-reconfigure cmnd-linux" >&2
+  exit 0
+fi
+
+db_get cmnd-linux/server-ip; server_ip=$RET
+db_get cmnd-linux/database-mode; database_mode=$RET
+db_get cmnd-linux/database-admin-user; database_user=$RET
+db_get cmnd-linux/apache-mode; apache_mode=$RET
+db_get cmnd-linux/database-admin-password; database_password=$RET
+
+password_file=
+cleanup() {
+  if [ -n "$password_file" ]; then rm -f -- "$password_file"; fi
+  db_set cmnd-linux/database-admin-password '' || true
+}
+trap cleanup EXIT HUP INT TERM
+
+if [ -n "$database_password" ]; then
+  old_umask=$(umask)
+  umask 077
+  password_file=$(mktemp /run/cmnd-linux-dbadmin.XXXXXX)
+  printf '%s\n' "$database_password" > "$password_file"
+  chmod 0600 "$password_file"
+  umask "$old_umask"
+fi
+
+set -- apt-activate --database-mode "$database_mode" --apache-mode "$apache_mode" \
+  --database-admin-user "${database_user:-root}" --accept-legacy-runtime --execute
+if [ -n "$server_ip" ] && [ "$server_ip" != auto ]; then set -- "$@" --server-ip "$server_ip"; fi
+if [ -n "$password_file" ]; then set -- "$@" --database-admin-password-file "$password_file"; fi
+
+/usr/bin/cmndctl "$@"
+exit 0
