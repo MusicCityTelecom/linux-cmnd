@@ -1,18 +1,31 @@
 import sys
 
+args = sys.argv[1:]
 
-# Keep the first 0.8.0 coexistence probes isolated from the qualified 0.7.1 CLI
-# dispatcher. The Debian cmndctl wrapper invokes `python3 -m cmnd_linux`, so
-# these read-only commands do not change existing command behavior.
-if sys.argv[1:] == ['environment']:
-    from .environment import main as environment_main
-
-    raise SystemExit(environment_main())
-if sys.argv[1:] == ['plan-install']:
-    from .install_plan import main as plan_main
-
-    raise SystemExit(plan_main())
+if args == ['environment']:
+    from .environment import main as command
+    raise SystemExit(command())
+if args == ['plan-install']:
+    from .install_plan import main as command
+    raise SystemExit(command())
+if args and args[0] == 'apt-activate':
+    from .apt_installer import main as command
+    raise SystemExit(command(args[1:]))
+if args == ['shared-wait-database']:
+    from .shared_database import wait_shared_database
+    wait_shared_database()
+    raise SystemExit(0)
+if args and args[0] == 'apache-detach':
+    from .apache_integration import detach
+    import json
+    execute = args[1:] == ['--execute']
+    if args[1:] not in ([], ['--execute']):
+        raise SystemExit('Usage: cmndctl apache-detach [--execute]')
+    print(json.dumps(detach(execute=execute), indent=2, sort_keys=True))
+    raise SystemExit(0)
+if args and args[0] == 'docker-render':
+    from .docker_bundle import main as command
+    raise SystemExit(command(args[1:]))
 
 from .cli import main
-
 raise SystemExit(main())
