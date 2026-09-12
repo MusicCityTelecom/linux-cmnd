@@ -1,6 +1,9 @@
 import tarfile
 import unittest
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 from io import BytesIO
 
 from scripts.build_deb import build
