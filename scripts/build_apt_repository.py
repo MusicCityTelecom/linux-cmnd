@@ -13,9 +13,11 @@ import shutil
 import subprocess
 
 
-ALLOWED_PACKAGES = {'linux-cmnd', 'cmnd-linux'}
+REQUIRED_PACKAGES = {'linux-cmnd', 'cmnd-linux', 'cmnd-vendor-759'}
+ALLOWED_PACKAGES = set(REQUIRED_PACKAGES)
 ALLOWED_ARCHITECTURES = {'amd64', 'all'}
 SUITES = {'development', 'testing', 'stable'}
+VENDOR_VERSION = '7.5.9-1'
 
 
 def run(args, *, cwd: Path | None = None, input_text: str | None = None) -> str:
@@ -77,12 +79,14 @@ def build_repository(output: Path, debs: list[Path], *, codename: str, suite: st
     if not debs:
         raise ValueError('at least one .deb is required')
     metadata = [validate_deb(path) for path in debs]
-    versions = {str(item['version']) for item in metadata}
-    if len(versions) != 1:
+    by_name = {str(item['package']): item for item in metadata}
+    if set(by_name) != REQUIRED_PACKAGES or len(metadata) != len(REQUIRED_PACKAGES):
+        raise ValueError('repository build requires exactly linux-cmnd, cmnd-linux and cmnd-vendor-759 packages')
+    tooling_version = str(by_name['linux-cmnd']['version'])
+    if str(by_name['cmnd-linux']['version']) != tooling_version:
         raise ValueError('cmnd-linux and linux-cmnd repository packages must use the same version')
-    names = {str(item['package']) for item in metadata}
-    if names != ALLOWED_PACKAGES:
-        raise ValueError('repository build requires both linux-cmnd and cmnd-linux packages')
+    if str(by_name['cmnd-vendor-759']['version']) != VENDOR_VERSION:
+        raise ValueError(f'cmnd-vendor-759 must use the reviewed vendor package version {VENDOR_VERSION}')
     if not signing_key and not (suite == 'development' and allow_unsigned_development):
         raise ValueError('signed repository metadata is required; unsigned output is allowed only for explicit development builds')
     if output.exists() and any(output.iterdir()):
@@ -93,7 +97,8 @@ def build_repository(output: Path, debs: list[Path], *, codename: str, suite: st
         'output': str(output),
         'codename': codename,
         'suite': suite,
-        'version': next(iter(versions)),
+        'tooling_version': tooling_version,
+        'vendor_version': VENDOR_VERSION,
         'packages': metadata,
         'signed': bool(signing_key),
     }
