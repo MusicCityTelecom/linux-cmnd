@@ -62,6 +62,8 @@ def ar_member(name: str, payload: bytes) -> bytes:
 
 
 def build() -> Path:
+    if (ROOT / 'config/java-native-track.json').exists():
+        raise SystemExit('Java-native research track cannot build compatibility packages; define an independent package/update channel first')
     version = (ROOT / "VERSION").read_text().strip()
     control = (ROOT / "packaging/debian/control.in").read_text().replace("@VERSION@", version).encode()
     control_entries = [

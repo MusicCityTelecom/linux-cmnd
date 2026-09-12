@@ -1,0 +1,7 @@
+{
+  "track": "java-native-research",
+  "branch": "codex/java-native-rewrite",
+  "compatibility_baseline": "d33748d",
+  "release_status": "not-released",
+  "use_compatibility_release_channel": false
+}

@@ -15,6 +15,8 @@ RELEASE_PATHS = ['src', 'scripts', 'deploy', 'config', 'packaging', 'tests', 'do
 
 
 def validate_sources():
+    if (ROOT / 'config/java-native-track.json').exists():
+        raise SystemExit('Java-native research track cannot publish compatibility releases')
     # Build inputs must match the exact commit exported as the release source.
     # Include ignored files: a local ignored file must not slip into the package.
     inputs = RELEASE_PATHS

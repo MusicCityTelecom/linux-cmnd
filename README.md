@@ -1,4 +1,18 @@
-# Linux CMND
+# CMND Java-native research track
+
+**Experimental branch: `codex/java-native-rewrite`. Not an installation release.**
+
+This worktree isolates Java recovery, portability and eventual native-backend
+development from the maintained compatibility port on
+[`main`](https://github.com/MusicCityTelecom/linux-cmnd/tree/main). Do not use this
+branch to update an existing installation. The inherited version and installation
+instructions below describe the compatibility baseline, not a Java-native release.
+
+See [track separation and scope](docs/JAVA-NATIVE-REWRITE.md). Compatibility-package
+and release builders are blocked on this track to prevent accidental publication
+into the existing application's GitHub update channel.
+
+## Compatibility baseline (reference only)
 
 Philips CMND applications running on Ubuntu 24.04 x86_64, with Music City Telecom Linux deployment/update tooling. Releases include the original vendor applications; no separately obtained payload is required. Vendor ownership and notices are preserved; no Philips endorsement is implied.
 
