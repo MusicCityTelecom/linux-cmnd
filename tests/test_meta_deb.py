@@ -3,7 +3,19 @@ import unittest
 from io import BytesIO
 
 from scripts.build_meta_deb import build
-from tests.test_deb import ar_members
+
+
+def ar_members(blob):
+    assert blob.startswith(b'!<arch>\n')
+    pos, result = 8, {}
+    while pos < len(blob):
+        header = blob[pos:pos + 60]
+        pos += 60
+        name = header[:16].decode().strip().rstrip('/')
+        size = int(header[48:58].decode().strip())
+        result[name] = blob[pos:pos + size]
+        pos += size + size % 2
+    return result
 
 
 class MetaDebianPackageTests(unittest.TestCase):
