@@ -16,6 +16,13 @@ RELEASE_PATHS = ['src', 'scripts', 'deploy', 'config', 'packaging', 'tests', 'do
                  'AGENTS.md', '.gitattributes', '.gitignore']
 
 
+def stream_digest(stream, algorithm='sha256'):
+    digest = hashlib.new(algorithm)
+    for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+        digest.update(chunk)
+    return digest.hexdigest()
+
+
 def validate_sources():
     # Build inputs must match the exact commit exported as the release source.
     # Include ignored files: a local ignored file must not slip into the package.
@@ -76,7 +83,7 @@ def main():
     lines = []
     for path in artifacts:
         with path.open('rb') as stream:
-            lines.append(f'{hashlib.file_digest(stream, "sha256").hexdigest()}  {path.name}\n')
+            lines.append(f'{stream_digest(stream)}  {path.name}\n')
     checksums.write_text(''.join(lines), encoding='ascii')
     print(json.dumps({'version': version, 'assets': [str(path) for path in artifacts + [checksums]],
                       'apt_packages': [package.name, meta_package.name, vendor_package.name],
