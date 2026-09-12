@@ -6,7 +6,9 @@ from pathlib import Path
 import shutil
 import subprocess
 
-from build_deb import build, ROOT
+from build_deb import build as build_payload_deb, ROOT
+from build_meta_deb import build as build_meta_deb
+from build_vendor_deb import build as build_vendor_deb
 from vendor_bundle import verify as verify_vendor_bundle, NAME as VENDOR_BUNDLE_NAME
 
 RELEASE_PATHS = ['src', 'scripts', 'deploy', 'config', 'packaging', 'tests', 'docs',
@@ -38,7 +40,9 @@ def main():
     args = parser.parse_args()
     vendor_metadata = verify_vendor_bundle(args.vendor_bundle)
     validate_sources()
-    package = build()
+    package = build_payload_deb()
+    meta_package = build_meta_deb()
+    vendor_package = build_vendor_deb(args.vendor_bundle)
     version = (ROOT / 'VERSION').read_text().strip()
     destination = ROOT / 'dist'
     installer = destination / 'install.sh'
@@ -56,7 +60,7 @@ def main():
     shutil.copyfile(ROOT / 'config/cmnd.install.toml', configuration)
     bootstrap = destination / 'bootstrap.py'
     bootstrap.write_bytes((ROOT / 'scripts/bootstrap.py').read_bytes().replace(b'\r\n', b'\n'))
-    artifacts = [package, installer, manifest, source, guide, configuration, bootstrap]
+    artifacts = [package, meta_package, vendor_package, installer, manifest, source, guide, configuration, bootstrap]
     bundled = destination / VENDOR_BUNDLE_NAME
     if bundled.exists():
         if verify_vendor_bundle(bundled) != vendor_metadata:
@@ -75,6 +79,7 @@ def main():
             lines.append(f'{hashlib.file_digest(stream, "sha256").hexdigest()}  {path.name}\n')
     checksums.write_text(''.join(lines), encoding='ascii')
     print(json.dumps({'version': version, 'assets': [str(path) for path in artifacts + [checksums]],
+                      'apt_packages': [package.name, meta_package.name, vendor_package.name],
                       'vendor_payload_included': True, 'vendor_bundle': vendor_metadata}, indent=2))
 
 
