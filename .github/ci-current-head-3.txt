@@ -1,0 +1,1 @@
+Temporary CI trigger for current develop/0.8.0 including Ubuntu 22.04 compatibility test. Do not merge.
