@@ -1,0 +1,1 @@
+Temporary CI trigger for Python 3.10-compatible develop/0.8.0 head. Do not merge.
