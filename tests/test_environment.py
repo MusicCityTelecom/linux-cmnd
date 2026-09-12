@@ -48,7 +48,7 @@ class EnvironmentInventoryTests(unittest.TestCase):
              patch.object(environment, '_socket_candidates', return_value=['/run/mysqld/mysqld.sock']), \
              patch.object(environment, 'service_state', return_value={'active': True}), \
              patch.object(environment, 'package_version', return_value='test'), \
-             patch.object(environment.os, 'geteuid', return_value=0), \
+             patch.object(environment.os, 'geteuid', return_value=0, create=True), \
              patch.object(environment, '_run', side_effect=fake_run):
             result = environment.database_inventory()
         self.assertEqual(result['root_socket_auth'], 'available')
