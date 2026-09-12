@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Public GitHub bootstrap; Python 3.11+ stdlib, no checkout or pip required.
+"""Public GitHub bootstrap; Python 3.10+ with tomli on Python 3.10.
 
 Downloads tooling and the bundled Philips applications, or uses --payload for
 an explicitly supplied local bundle. All release
@@ -20,7 +20,10 @@ import subprocess
 import sys
 import tempfile
 import time
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:  # Ubuntu 22.04 / Python 3.10
+    import tomli as tomllib
 from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -36,6 +39,13 @@ STATE_PATHS = ('/var/lib/cmnd-deployment', '/opt/cmnd/tomcat', '/opt/cmnd/SmartC
                '/etc/cmnd/native-tomcat.env', '/etc/cmnd/java-cacerts',
                '/etc/cmnd/configure-cms.php', '/etc/cmnd/egress.json', '/etc/cmnd/egress.py',
                '/usr/local/share/ca-certificates/linux-cmnd.crt')
+
+
+def stream_digest(stream, algorithm='sha256'):
+    digest = hashlib.new(algorithm)
+    for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+        digest.update(chunk)
+    return digest.hexdigest()
 
 
 def version_number(value):
@@ -119,7 +129,7 @@ def download_assets(release, destination, *, include_vendor=False):
         with path.open('xb') as stream:
             fetch(url, size, stream)
         with path.open('rb') as stream:
-            actual_digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+            actual_digest = stream_digest(stream)
         if path.stat().st_size != size or actual_digest != digest[7:]:
             raise ValueError('GitHub asset integrity mismatch: ' + name)
         result[name] = path
@@ -181,16 +191,16 @@ def check_configuration(content):
 
 
 def check_host(java_home):
-    if sys.platform != 'linux' or sys.version_info < (3, 11):
-        raise ValueError('Run on Ubuntu 24.04 or Debian 12/13 amd64 with Python 3.11+')
+    if sys.platform != 'linux' or sys.version_info < (3, 10):
+        raise ValueError('Run on a supported Ubuntu/Debian amd64 system with Python 3.10+')
     values = {}
     for line in Path('/etc/os-release').read_text().splitlines():
         if '=' in line:
             key, value = line.split('=', 1)
             values[key] = value.strip('"\'')
     distro = values.get('ID'), values.get('VERSION_ID')
-    if distro not in {('ubuntu', '24.04'), ('debian', '12'), ('debian', '13')}:
-        raise ValueError('Supported systems: Ubuntu 24.04 or Debian 12/13')
+    if distro not in {('ubuntu', '22.04'), ('ubuntu', '24.04'), ('debian', '12'), ('debian', '13')}:
+        raise ValueError('Supported evaluation systems: Ubuntu 22.04/24.04 or Debian 12/13')
     if subprocess.check_output(['dpkg', '--print-architecture'], text=True).strip() != 'amd64':
         raise ValueError('amd64 architecture required')
     if distro == ('debian', '13') and not (Path(java_home) / 'bin/java').is_file():
@@ -295,7 +305,10 @@ def main(argv=None):
         print('Configuration and all licensed inputs verified. Installing prerequisites...', flush=True)
         # Package configuration needs adduser; install it only after input validation.
         subprocess.run(['apt-get', 'update'], check=True)
-        subprocess.run(['apt-get', 'install', '-y', '--no-install-recommends', 'python3', 'adduser', 'ca-certificates'],
+        prerequisites = ['python3', 'adduser', 'ca-certificates']
+        if sys.version_info < (3, 11):
+            prerequisites.append('python3-tomli')
+        subprocess.run(['apt-get', 'install', '-y', '--no-install-recommends', *prerequisites],
                        env=dict(os.environ, DEBIAN_FRONTEND='noninteractive'), check=True)
         command = ['sh', str(assets['install.sh']), '--package', str(package), '--payload', str(payload),
                    '--config', str(config), '--java-home', args.java_home,
