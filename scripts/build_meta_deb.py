@@ -2,8 +2,8 @@
 """Build the user-facing cmnd-linux APT meta package.
 
 The payload remains in linux-cmnd during 0.8 development so the known 0.7.1 file
-layout and package internals do not need a risky rename.  Repository users will
-install `cmnd-linux`; APT then resolves the matching payload package.
+layout and package internals do not need a risky rename. Repository users install
+`cmnd-linux`; APT resolves the matching tooling plus verified vendor payload.
 """
 from __future__ import annotations
 
@@ -11,6 +11,8 @@ from hashlib import sha256
 from pathlib import Path
 
 from build_deb import ROOT, ar_member, tar_blob
+
+VENDOR_PACKAGE_VERSION = '7.5.9-1'
 
 
 def build() -> Path:
@@ -20,15 +22,16 @@ Version: {version}
 Section: admin
 Priority: optional
 Architecture: all
-Depends: linux-cmnd (= {version})
+Depends: linux-cmnd (= {version}), cmnd-vendor-759 (= {VENDOR_PACKAGE_VERSION})
 Maintainer: Music City Telecom <tommy@tomcom.us>
 Description: Philips CMND for Linux installation entry point
  User-facing APT package for CMND for Linux. The version-matched linux-cmnd
- payload package contains the deployment tooling and runtime integration.
+ payload provides deployment/runtime integration and cmnd-vendor-759 provides
+ the separately packaged hash-verified Philips CMND 7.5.9 application inputs.
 '''.encode()
     notice = (
         'cmnd-linux is the user-facing APT installation package.\n'
-        f'It requires the exact linux-cmnd {version} payload package.\n'
+        f'It requires exact linux-cmnd {version} and cmnd-vendor-759 {VENDOR_PACKAGE_VERSION}.\n'
         'Philips vendor applications retain their original ownership and attribution.\n'
     ).encode()
     deb = b'!<arch>\n' + ar_member('debian-binary', b'2.0\n')
