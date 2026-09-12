@@ -7,7 +7,7 @@ placed under /usr/lib/cmnd/vendor/7.5.9 in the generated package.
 """
 from __future__ import annotations
 
-from hashlib import file_digest
+import hashlib
 from io import BytesIO
 from pathlib import Path
 import gzip
@@ -29,6 +29,13 @@ PACKAGE = 'cmnd-vendor-759'
 PACKAGE_VERSION = '7.5.9-1'
 INSTALL_ROOT = 'usr/lib/cmnd/vendor/7.5.9'
 EPOCH = int(os.environ.get('SOURCE_DATE_EPOCH', '1788835200'))
+
+
+def _stream_digest(stream, algorithm='sha256') -> str:
+    digest = hashlib.new(algorithm)
+    for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+        digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _tar_header(archive: tarfile.TarFile, name: str, *, mode: int, size: int = 0,
@@ -119,7 +126,7 @@ def build(bundle: Path) -> Path:
             _write_ar_member(deb, 'control.tar.gz', control)
             _write_ar_member(deb, 'data.tar.gz', data)
     with output.open('rb') as stream:
-        digest = file_digest(stream, 'sha256').hexdigest()
+        digest = _stream_digest(stream)
     Path(str(output) + '.sha256').write_text(f'{digest}  {output.name}\n')
     return output
 
