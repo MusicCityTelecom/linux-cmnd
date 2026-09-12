@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+# Intentionally retain /etc/cmnd, /opt/cmnd, /var/lib/cmnd*, databases,
+# certificates, logs and customer content. Destructive purge requires a
+# separately reviewed operator command; package removal never deletes site data.
+exit 0
