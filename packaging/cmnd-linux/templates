@@ -1,0 +1,36 @@
+Template: cmnd-linux/server-ip
+Type: string
+Default: auto
+Description: IPv4 address CMND should use:
+ Enter an IPv4 address already assigned to this server. Use "auto" to select the first active non-loopback IPv4 address.
+
+Template: cmnd-linux/database-mode
+Type: select
+Choices: auto, existing, isolated
+Default: auto
+Description: Database integration mode:
+ "auto" reuses an existing MySQL service only if it passes the CMND compatibility gate; otherwise it uses the isolated pinned MySQL runtime. "existing" refuses fallback. "isolated" never changes an existing database service.
+
+Template: cmnd-linux/database-admin-user
+Type: string
+Default: root
+Description: Existing database administrator user:
+ Used only when an existing database requires password authentication. The password is never stored in CMND persistent configuration.
+
+Template: cmnd-linux/database-admin-password
+Type: password
+Description: Existing database administrator password:
+ Leave blank to let auto mode use the isolated database fallback. This value is used only during package configuration and is cleared after the activation attempt.
+
+Template: cmnd-linux/apache-mode
+Type: select
+Choices: auto, host, standalone
+Default: auto
+Description: Apache integration mode:
+ "auto" attaches a CMND-owned fragment to an already-running Debian/Ubuntu Apache service, otherwise it runs an isolated CMND Apache process. Existing unrelated sites and listeners are preserved.
+
+Template: cmnd-linux/accept-legacy-runtime
+Type: boolean
+Default: false
+Description: Accept CMND's legacy PHP 5.6 / MySQL 5.7 compatibility runtime?
+ The original Philips CMND 7.5.9 application requires legacy compatibility components. They are isolated where practical and should not be exposed directly to the Internet.
