@@ -10,7 +10,12 @@ from __future__ import annotations
 from hashlib import sha256
 from pathlib import Path
 
-from build_deb import ROOT, ar_member, tar_blob
+try:
+    # Normal direct execution: python scripts/build_meta_deb.py
+    from build_deb import ROOT, ar_member, tar_blob
+except ModuleNotFoundError:
+    # Test/import execution from the repository root: scripts.build_meta_deb
+    from scripts.build_deb import ROOT, ar_member, tar_blob
 
 VENDOR_PACKAGE_VERSION = '7.5.9-1'
 
