@@ -89,6 +89,21 @@ Native EXE/DLL work uses offline Ghidra analysis, disassembly, function manifest
 and reconstructed pseudocode. Neither the target executables nor drivers are run.
 RF-related files are included, with hardware qualification lower in the queue.
 
+The native pilot exported disassembly and pseudocode for all functions identified
+in three helpers: 549 in `HTV_DWPack_1401.exe`, 372 in `TSGen.dll`, and 51 in
+`TsGenUtil.exe`. No per-function export failures were reported in that pilot.
+These are **identified-function** counts, not proof that analysis discovered
+every code path or recovered buildable C/C++. The rest of the native inventory,
+including MGate and driver internals, remains pending. `TSGen.dll` exposes
+transport-stream generation, multiple-service generation, and merge entry points;
+their signatures, callers and output formats require behavior-level comparison.
+
+The preserved originals also include 58 Java source files, 151 headers, three
+PDB files, 34 map files, and 5,745 `.class_terracotta` members verified by Java
+class magic bytes. The latter are retained and explicitly pending decompilation,
+not excluded by a normal `*.class` filter. The master installer itself has also
+been retained separately from its extracted tree and hash-verified.
+
 Compilation experiments found malformed control flow, generic-type reconstruction
 errors and missing compile-time dependencies. These failures are recorded rather
 than patched out merely to obtain a successful build. A readable decompilation
