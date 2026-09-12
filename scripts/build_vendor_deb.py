@@ -7,7 +7,7 @@ placed under /usr/lib/cmnd/vendor/7.5.9 in the generated package.
 """
 from __future__ import annotations
 
-from hashlib import sha256
+from hashlib import file_digest
 from io import BytesIO
 from pathlib import Path
 import gzip
@@ -119,7 +119,7 @@ def build(bundle: Path) -> Path:
             _write_ar_member(deb, 'control.tar.gz', control)
             _write_ar_member(deb, 'data.tar.gz', data)
     with output.open('rb') as stream:
-        digest = sha256(stream.read()).hexdigest()
+        digest = file_digest(stream, 'sha256').hexdigest()
     Path(str(output) + '.sha256').write_text(f'{digest}  {output.name}\n')
     return output
 
