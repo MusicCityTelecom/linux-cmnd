@@ -19,7 +19,7 @@ def ar_members(blob):
 
 
 class MetaDebianPackageTests(unittest.TestCase):
-    def test_user_facing_package_depends_on_exact_payload_version(self):
+    def test_user_facing_package_depends_on_exact_payload_versions(self):
         package = build()
         self.assertTrue(package.name.startswith('cmnd-linux_'))
         members = ar_members(package.read_bytes())
@@ -27,7 +27,7 @@ class MetaDebianPackageTests(unittest.TestCase):
             control = archive.extractfile('control').read().decode()
         self.assertIn('Package: cmnd-linux\n', control)
         self.assertIn('Architecture: all\n', control)
-        self.assertIn('Depends: linux-cmnd (= 0.8.0)\n', control)
+        self.assertIn('Depends: linux-cmnd (= 0.8.0), cmnd-vendor-759 (= 7.5.9-1)\n', control)
 
     def test_meta_build_is_reproducible(self):
         first = build().read_bytes()
