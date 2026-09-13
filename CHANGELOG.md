@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.2 - evaluation candidate (publication gated on qualification)
+## 0.7.2 - 2026-09-13 (evaluation)
 
 - Central root-only installation summary/show-login command displays actual initial
   credentials, configured application URLs, ports and diagnostic paths. The fresh

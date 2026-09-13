@@ -121,6 +121,12 @@ bootstrap prints a plan and makes no downloads or changes.
 
 ## Qualification status
 
+**v0.7.2:** all 218 Ubuntu tests passed, including the opt-in isolated MySQL
+runtime test. Candidate clean installation, actual browser logins, reboot recovery,
+package lifecycle and upgrade-worker preservation passed. See the
+[v0.7.2 evidence and scope](docs/QUALIFICATION-072.md) and release notes for public
+GitHub transport verification. No physical TV was contacted for this maintenance fix.
+
 The 0.6 series adds a terminal update switch, without changing Philips GUI
 pages: `sudo cmndctl --updates`. It checks the fixed GitHub repository and asks
 for an exact version confirmation before handing off to the verified update
