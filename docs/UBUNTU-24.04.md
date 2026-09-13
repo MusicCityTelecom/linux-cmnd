@@ -3,6 +3,11 @@
 Use the exact release's qualification results in TEST-RESULTS.md. A working
 service does not certify every TV model, licensing entitlement or Windows feature.
 
+For v0.7.2 also read [its qualification record](QUALIFICATION-072.md) and
+[installer receipts, storage and diagnostics](INSTALLER-072.md). Already on
+v0.7.1? Follow the [in-place update instructions](../README.md#already-installed-v071)
+instead of reinstalling the application.
+
 ## 1. Prepare a dedicated machine
 
 - Ubuntu Server 24.04 LTS, amd64/x86_64 (not ARM), with systemd.
@@ -42,8 +47,8 @@ activated disk or copy another installation's serial/activation state. See
 
 ```sh
 curl --fail --location --proto '=https' --proto-redir '=https' \
-  -o bootstrap.py https://raw.githubusercontent.com/MusicCityTelecom/linux-cmnd/main/scripts/bootstrap.py
-sudo python3 bootstrap.py --execute --release v0.7.0
+  -o bootstrap.py https://github.com/MusicCityTelecom/linux-cmnd/releases/download/v0.7.2/bootstrap.py
+sudo python3 bootstrap.py --execute --release v0.7.2
 ```
 
 Review the downloaded script first if required by policy. It asks for the
@@ -64,7 +69,7 @@ dependencies: this is not an Internet-facing deployment.
 For unattended installation:
 
 ```sh
-sudo python3 bootstrap.py --execute --release v0.7.0 \
+sudo python3 bootstrap.py --execute --release v0.7.2 \
   --server-ip YOUR_ASSIGNED_IPV4 --accept-legacy-runtime
 ```
 
@@ -81,10 +86,11 @@ Open `https://SERVER_IP:8444/linux-cmnd/` for management and
 `https://SERVER_IP:8443/SmartInstall/` for original Philips TV management.
 The CMS is at `https://SERVER_IP:8444/SmartCMS/`.
 
-Retrieve the initial administrator credentials locally over a trusted terminal:
+The very last successful installer output displays all configured URLs and the
+actual initial credentials. Retrieve them again locally over a trusted terminal:
 
 ```sh
-sudo cat /var/lib/cmnd-deployment/initial-admin.json
+sudo cmndctl install-summary
 sudo cmndctl native-health --seconds 900
 sudo systemctl --no-pager status cmnd-egress cmnd-mysql cmnd-php cmnd-apache cmnd-tomcat cmnd-admin
 sudo ss -lntp
@@ -95,6 +101,14 @@ Current tooling creates a fresh random initial administrator password; do not
 assume `admin/tpvision`. Upgrades preserve existing credentials. Change passwords
 through the application; the original first-login/default-password parity is
 not claimed until separately qualified.
+
+The full summary is retained root-only in
+`/var/lib/cmnd-deployment/install-summary.txt`; it contains the initial password.
+The startup log is `/var/lib/cmnd-deployment/deployment.log`, and preparation
+transcripts are `/var/log/linux-cmnd-install-*.log`. Storage is checked before
+large downloads (27.8125 GiB free at the default upload size on one filesystem).
+Pending reboot requirements are reported; no step reboots/powers off the machine
+or grows a partition automatically.
 
 Trust only the public installation CA certificate through your organization's
 trusted process. Never copy or distribute the CA private key/server private key.
