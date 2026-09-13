@@ -1,0 +1,39 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package be.tpvision.smartcontrol.domain.device_settings.input_sources;
+
+public enum Failover {
+    HDMI_1,
+    COMPONENT,
+    COMPOSITE,
+    DISPLAY_PORT_1,
+    DVI_D,
+    VGA,
+    OPS,
+    USB,
+    BROWSER,
+    SMART_CMS,
+    INTERNAL_STORAGE,
+    DIGITAL_MEDIA_SERVER,
+    HDMI_2,
+    HDMI_3,
+    USB_PLAYLIST,
+    USB_AUTOPLAY,
+    MEDIA_PLAYER,
+    PDF_PLAYER,
+    CUSTOM,
+    HDMI_4,
+    VGA_2,
+    VGA_3,
+    IWB,
+    CMND_PLAY_WEB,
+    HOME_LAUNCHER,
+    USB_TYPEC,
+    KIOSK,
+    SMART_INFO,
+    TUNER,
+    GOOGLE_CAST;
+
+}
+

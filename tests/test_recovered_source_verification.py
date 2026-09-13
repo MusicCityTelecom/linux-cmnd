@@ -53,3 +53,10 @@ class RecoverySourceVerificationTests(unittest.TestCase):
             (root / 'provenance.json').write_text(json.dumps([{'path': '../outside.java', 'sha256': '0'*64}]))
             with self.assertRaisesRegex(ValueError, 'Unsafe manifest path'):
                 module.verify(root)
+
+    def test_class_named_notice_is_still_binary(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.fixture(root, name='notices/original-license', content=b'\xca\xfe\xba\xbebytecode')
+            with self.assertRaisesRegex(ValueError, 'Executable content'):
+                module.verify(root)

@@ -1,0 +1,54 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.glassfish.jersey.message.internal;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import javax.inject.Singleton;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Encoded;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import org.glassfish.jersey.internal.util.collection.NullableMultivaluedHashMap;
+import org.glassfish.jersey.message.internal.AbstractFormProvider;
+
+@Produces(value={"application/x-www-form-urlencoded", "*/*"})
+@Consumes(value={"application/x-www-form-urlencoded", "*/*"})
+@Singleton
+public final class FormProvider
+extends AbstractFormProvider<Form> {
+    @Override
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return type == Form.class;
+    }
+
+    @Override
+    public Form readFrom(Class<Form> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
+        return new Form(this.readFrom(new NullableMultivaluedHashMap(), mediaType, this.decode(annotations), entityStream));
+    }
+
+    private boolean decode(Annotation[] annotations) {
+        for (Annotation annotation : annotations) {
+            if (!annotation.annotationType().equals(Encoded.class)) continue;
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return type == Form.class;
+    }
+
+    @Override
+    public void writeTo(Form t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
+        this.writeTo(t.asMap(), mediaType, entityStream);
+    }
+}
+

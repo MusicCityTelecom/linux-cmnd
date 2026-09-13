@@ -1,0 +1,23 @@
+package be.tpvision.smartcontrol.protocol.todelete;
+
+import be.tpvision.smartcontrol.util.Convertible;
+
+public enum VolumeUpDown implements Convertible {
+   DOWN((byte)0),
+   UP((byte)1);
+
+   private byte data;
+
+   VolumeUpDown(final byte data) {
+      this.data = data;
+   }
+
+   public byte getData() {
+      return this.data;
+   }
+
+   @Override
+   public byte convert() {
+      return this.data;
+   }
+}

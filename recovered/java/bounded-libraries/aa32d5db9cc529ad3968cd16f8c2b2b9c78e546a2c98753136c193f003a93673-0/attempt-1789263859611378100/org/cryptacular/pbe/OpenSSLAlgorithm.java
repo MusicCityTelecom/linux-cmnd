@@ -1,0 +1,42 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.cryptacular.pbe;
+
+import org.cryptacular.spec.KeyedBlockCipherSpec;
+
+public enum OpenSSLAlgorithm {
+    AES_128_CBC("aes-128-cbc", new KeyedBlockCipherSpec("AES", "CBC", "PKCS5", 128)),
+    AES_192_CBC("aes-192-cbc", new KeyedBlockCipherSpec("AES", "CBC", "PKCS5", 192)),
+    AES_256_CBC("aes-256-cbc", new KeyedBlockCipherSpec("AES", "CBC", "PKCS5", 256)),
+    DES_CBC("des-cbc", new KeyedBlockCipherSpec("DES", "CBC", "PKCS5", 64)),
+    DES_EDE3_CBC("des-ede3-cbc", new KeyedBlockCipherSpec("DESede", "CBC", "PKCS5", 192)),
+    RC2_CBC("rc2-cbc", new KeyedBlockCipherSpec("RC2", "CBC", "PKCS5", 128)),
+    RC2_40_CBC("rc2-40-cbc", new KeyedBlockCipherSpec("RC2", "CBC", "PKCS5", 40)),
+    RC2_64_CBC("rc2-64-cbc", new KeyedBlockCipherSpec("RC2", "CBC", "PKCS5", 64));
+
+    private final String algorithmId;
+    private final KeyedBlockCipherSpec cipherSpec;
+
+    private OpenSSLAlgorithm(String algId, KeyedBlockCipherSpec cipherSpec) {
+        this.algorithmId = algId;
+        this.cipherSpec = cipherSpec;
+    }
+
+    public String getAlgorithmId() {
+        return this.algorithmId;
+    }
+
+    public KeyedBlockCipherSpec getCipherSpec() {
+        return this.cipherSpec;
+    }
+
+    public static OpenSSLAlgorithm fromAlgorithmId(String algorithmId) {
+        for (OpenSSLAlgorithm alg : OpenSSLAlgorithm.values()) {
+            if (!alg.getAlgorithmId().equalsIgnoreCase(algorithmId)) continue;
+            return alg;
+        }
+        throw new IllegalArgumentException("Unsupported algorithm " + algorithmId);
+    }
+}
+

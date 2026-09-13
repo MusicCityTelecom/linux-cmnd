@@ -1,0 +1,18 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.glassfish.jersey.internal;
+
+public class ServiceConfigurationError
+extends Error {
+    private static final long serialVersionUID = -8532392338326428074L;
+
+    public ServiceConfigurationError(String msg) {
+        super(msg);
+    }
+
+    public ServiceConfigurationError(Throwable x) {
+        super(x);
+    }
+}
+

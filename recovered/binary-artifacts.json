@@ -1,0 +1,87 @@
+{
+  "asset": "original-notice-binaries.zip",
+  "records": [
+    {
+      "path": "notices/d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf",
+      "sha256": "d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf",
+      "bytes": 3815,
+      "origin": "{app}/cas.war!WEB-INF/lib/mysql-connector-java-8.0.30.jar!com/mysql/cj/protocol/x/Notice.class",
+      "status": "vendor-original-binary",
+      "content_unchanged": true,
+      "asset": "original-notice-binaries.zip",
+      "asset_path": "d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf.class"
+    },
+    {
+      "path": "notices/f48590e4d04d67e3005079bafa738f8003785970f7528000ba522d152ca7acd9",
+      "sha256": "f48590e4d04d67e3005079bafa738f8003785970f7528000ba522d152ca7acd9",
+      "bytes": 532,
+      "origin": "{app}/cas.war!WEB-INF/lib/swagger-annotations-2.2.2.jar!io/swagger/v3/oas/annotations/info/License.class",
+      "status": "vendor-original-binary",
+      "content_unchanged": true,
+      "asset": "original-notice-binaries.zip",
+      "asset_path": "f48590e4d04d67e3005079bafa738f8003785970f7528000ba522d152ca7acd9.class"
+    },
+    {
+      "path": "notices/f7834cf377f698bed6dcfc8913192cc37314526701922473bc8c886e2c4cc883",
+      "sha256": "f7834cf377f698bed6dcfc8913192cc37314526701922473bc8c886e2c4cc883",
+      "bytes": 2001,
+      "origin": "{app}/cas.war!WEB-INF/lib/bcprov-jdk15on-1.70.jar!org/bouncycastle/LICENSE.class",
+      "status": "vendor-original-binary",
+      "content_unchanged": true,
+      "asset": "original-notice-binaries.zip",
+      "asset_path": "f7834cf377f698bed6dcfc8913192cc37314526701922473bc8c886e2c4cc883.class"
+    },
+    {
+      "path": "notices/43759b226e1f0b85312c6ec6732b27b54ce601260c47657a861fb0a93968b7f2",
+      "sha256": "43759b226e1f0b85312c6ec6732b27b54ce601260c47657a861fb0a93968b7f2",
+      "bytes": 2001,
+      "origin": "{app}/cas.war!WEB-INF/lib/bcprov-jdk18on-1.71.jar!org/bouncycastle/LICENSE.class",
+      "status": "vendor-original-binary",
+      "content_unchanged": true,
+      "asset": "original-notice-binaries.zip",
+      "asset_path": "43759b226e1f0b85312c6ec6732b27b54ce601260c47657a861fb0a93968b7f2.class"
+    },
+    {
+      "path": "notices/a5dc310caabf9a0bb4da57e1581aba2ed564942f9b16bb046f4d02d8df99516b",
+      "sha256": "a5dc310caabf9a0bb4da57e1581aba2ed564942f9b16bb046f4d02d8df99516b",
+      "bytes": 2051,
+      "origin": "{app}/keytool.zip!keytool/bcprov-jdk16-1.46.jar!org/bouncycastle/LICENSE.class",
+      "status": "vendor-original-binary",
+      "content_unchanged": true,
+      "asset": "original-notice-binaries.zip",
+      "asset_path": "a5dc310caabf9a0bb4da57e1581aba2ed564942f9b16bb046f4d02d8df99516b.class"
+    },
+    {
+      "path": "notices/6adc8539414e304b2581b30dd218f94dfc818089430b5e6fd6af9c794b6398c5",
+      "sha256": "6adc8539414e304b2581b30dd218f94dfc818089430b5e6fd6af9c794b6398c5",
+      "bytes": 2000,
+      "origin": "{app}/keytool.zip!keytool/bundletool.jar!org/bouncycastle/LICENSE.class",
+      "status": "vendor-original-binary",
+      "content_unchanged": true,
+      "asset": "original-notice-binaries.zip",
+      "asset_path": "6adc8539414e304b2581b30dd218f94dfc818089430b5e6fd6af9c794b6398c5.class"
+    },
+    {
+      "path": "notices/d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf",
+      "sha256": "d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf",
+      "bytes": 3815,
+      "origin": "{app}/smartcms.war!WEB-INF/lib/mysql-connector-java-8.0.27.jar!com/mysql/cj/protocol/x/Notice.class",
+      "status": "vendor-original-binary",
+      "content_unchanged": true,
+      "asset": "original-notice-binaries.zip",
+      "asset_path": "d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf.class"
+    },
+    {
+      "path": "notices/d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf",
+      "sha256": "d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf",
+      "bytes": 3815,
+      "origin": "{app}/smartcontrol.war!WEB-INF/lib/mysql-connector-java-8.0.28.jar!com/mysql/cj/protocol/x/Notice.class",
+      "status": "vendor-original-binary",
+      "content_unchanged": true,
+      "asset": "original-notice-binaries.zip",
+      "asset_path": "d592ae136b0c292471fee7e62ce1f8c620d00f60b0c8a2755c6a1d119f93e9bf.class"
+    }
+  ],
+  "binaries_preserved": 6,
+  "source_redactions": 0
+}

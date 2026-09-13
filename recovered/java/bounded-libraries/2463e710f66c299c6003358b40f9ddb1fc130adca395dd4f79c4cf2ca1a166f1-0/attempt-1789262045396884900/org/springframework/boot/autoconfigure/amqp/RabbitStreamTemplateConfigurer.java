@@ -1,0 +1,46 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.amqp.support.converter.MessageConverter
+ *  org.springframework.rabbit.stream.producer.ProducerCustomizer
+ *  org.springframework.rabbit.stream.producer.RabbitStreamTemplate
+ *  org.springframework.rabbit.stream.support.converter.StreamMessageConverter
+ */
+package org.springframework.boot.autoconfigure.amqp;
+
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.rabbit.stream.producer.ProducerCustomizer;
+import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
+import org.springframework.rabbit.stream.support.converter.StreamMessageConverter;
+
+public class RabbitStreamTemplateConfigurer {
+    private MessageConverter messageConverter;
+    private StreamMessageConverter streamMessageConverter;
+    private ProducerCustomizer producerCustomizer;
+
+    public void setMessageConverter(MessageConverter messageConverter) {
+        this.messageConverter = messageConverter;
+    }
+
+    public void setStreamMessageConverter(StreamMessageConverter streamMessageConverter) {
+        this.streamMessageConverter = streamMessageConverter;
+    }
+
+    public void setProducerCustomizer(ProducerCustomizer producerCustomizer) {
+        this.producerCustomizer = producerCustomizer;
+    }
+
+    public void configure(RabbitStreamTemplate template) {
+        if (this.messageConverter != null) {
+            template.setMessageConverter(this.messageConverter);
+        }
+        if (this.streamMessageConverter != null) {
+            template.setStreamConverter(this.streamMessageConverter);
+        }
+        if (this.producerCustomizer != null) {
+            template.setProducerCustomizer(this.producerCustomizer);
+        }
+    }
+}
+

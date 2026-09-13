@@ -157,3 +157,23 @@ Research snapshots must use a non-installer tag namespace and never include an
 installer update manifest. Tests verify that the current bootstrap and updater
 ignore a `research-recovery-*` snapshot even on their preview channel. Compiled
 research assets must label partial outputs separately from successful compilation.
+
+## Preserved development snapshot
+
+The `recovered/` tree contains the unchanged recovery baseline and a per-file
+provenance manifest. `scripts/research_snapshot/` preserves 15 historical recovery,
+compilation and native-export drivers for adaptation by future developers.
+`python3 scripts/verify_recovered_source.py` checks source hashes and rejects
+unexpected files and executable artifacts from the source tree.
+
+The bounded snapshot covers 220 of 729 units: 219 tools exited successfully and
+one timed out; all partial output is retained. Those attempts emitted 24,539 Java
+files. Exit success does not imply complete coverage; per-unit missing-source
+and warning fields remain in `recovered/recovery-status.json`. An earlier
+successful large job is retained separately. The remaining 509 units and most
+native binaries still need recovery/analysis.
+
+Research assets preserve the complete original installer, all 175 extracted
+installer-tree files, managed project resources, original inventories and all
+current compiler output. Original vendor signing constants reviewed with the
+operator are retained unchanged. Customer/site data is not part of this snapshot.

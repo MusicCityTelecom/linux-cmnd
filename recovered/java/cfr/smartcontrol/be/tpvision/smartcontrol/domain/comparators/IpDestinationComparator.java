@@ -1,0 +1,18 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package be.tpvision.smartcontrol.domain.comparators;
+
+import be.tpvision.smartcontrol.domain.comparators.DelegatingComparator;
+import be.tpvision.smartcontrol.io.Destination;
+import be.tpvision.smartcontrol.io.ip.IpDestination;
+import java.net.InetSocketAddress;
+import java.util.Comparator;
+
+public class IpDestinationComparator
+extends DelegatingComparator<IpDestination> {
+    public IpDestinationComparator(Comparator<? super InetSocketAddress> addressComparator, Comparator<? super Integer> groupIdComparator, Comparator<? super Integer> controlIdComparator) {
+        super(Comparator.comparing(IpDestination::getAddress, addressComparator).thenComparing(Destination::getGroupId, groupIdComparator).thenComparing(Destination::getControlId, controlIdComparator));
+    }
+}
+

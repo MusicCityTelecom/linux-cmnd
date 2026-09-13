@@ -1,0 +1,29 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package com.github.benmanes.caffeine.cache;
+
+import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
+import com.github.benmanes.caffeine.cache.BoundedLocalCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import java.lang.ref.ReferenceQueue;
+
+class WS<K, V>
+extends BoundedLocalCache<K, V> {
+    final ReferenceQueue<K> keyReferenceQueue = new ReferenceQueue();
+
+    WS(Caffeine<K, V> caffeine, AsyncCacheLoader<? super K, V> asyncCacheLoader, boolean bl) {
+        super(caffeine, asyncCacheLoader, bl);
+    }
+
+    @Override
+    protected final ReferenceQueue<K> keyReferenceQueue() {
+        return this.keyReferenceQueue;
+    }
+
+    @Override
+    protected final boolean collectKeys() {
+        return true;
+    }
+}
+

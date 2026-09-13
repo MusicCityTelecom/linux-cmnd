@@ -1,0 +1,17 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package com.sun.xml.bind.v2.schemagen.xmlschema;
+
+import com.sun.xml.bind.v2.schemagen.xmlschema.AttrDecls;
+import com.sun.xml.bind.v2.schemagen.xmlschema.ExtensionType;
+import com.sun.xml.txw2.TypedXmlWriter;
+import com.sun.xml.txw2.annotation.XmlElement;
+
+@XmlElement(value="extension")
+public interface SimpleExtension
+extends AttrDecls,
+ExtensionType,
+TypedXmlWriter {
+}
+

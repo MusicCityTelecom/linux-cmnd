@@ -1,0 +1,87 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.boot.context.properties.ConfigurationProperties
+ *  org.springframework.boot.context.properties.NestedConfigurationProperty
+ *  org.springframework.boot.rsocket.server.RSocketServer$Transport
+ *  org.springframework.boot.web.server.Ssl
+ *  org.springframework.util.unit.DataSize
+ */
+package org.springframework.boot.autoconfigure.rsocket;
+
+import java.net.InetAddress;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.boot.rsocket.server.RSocketServer;
+import org.springframework.boot.web.server.Ssl;
+import org.springframework.util.unit.DataSize;
+
+@ConfigurationProperties(value="spring.rsocket")
+public class RSocketProperties {
+    @NestedConfigurationProperty
+    private final Server server = new Server();
+
+    public Server getServer() {
+        return this.server;
+    }
+
+    public static class Server {
+        private Integer port;
+        private InetAddress address;
+        private RSocketServer.Transport transport = RSocketServer.Transport.TCP;
+        private String mappingPath;
+        private DataSize fragmentSize;
+        @NestedConfigurationProperty
+        private Ssl ssl;
+
+        public Integer getPort() {
+            return this.port;
+        }
+
+        public void setPort(Integer port) {
+            this.port = port;
+        }
+
+        public InetAddress getAddress() {
+            return this.address;
+        }
+
+        public void setAddress(InetAddress address) {
+            this.address = address;
+        }
+
+        public RSocketServer.Transport getTransport() {
+            return this.transport;
+        }
+
+        public void setTransport(RSocketServer.Transport transport) {
+            this.transport = transport;
+        }
+
+        public String getMappingPath() {
+            return this.mappingPath;
+        }
+
+        public void setMappingPath(String mappingPath) {
+            this.mappingPath = mappingPath;
+        }
+
+        public DataSize getFragmentSize() {
+            return this.fragmentSize;
+        }
+
+        public void setFragmentSize(DataSize fragmentSize) {
+            this.fragmentSize = fragmentSize;
+        }
+
+        public Ssl getSsl() {
+            return this.ssl;
+        }
+
+        public void setSsl(Ssl ssl) {
+            this.ssl = ssl;
+        }
+    }
+}
+

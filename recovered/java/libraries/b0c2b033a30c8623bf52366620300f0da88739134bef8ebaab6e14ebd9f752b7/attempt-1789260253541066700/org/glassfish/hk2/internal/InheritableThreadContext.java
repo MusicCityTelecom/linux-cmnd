@@ -1,0 +1,104 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.glassfish.hk2.internal;
+
+import java.lang.annotation.Annotation;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.HashMap;
+import javax.inject.Singleton;
+import org.glassfish.hk2.api.ActiveDescriptor;
+import org.glassfish.hk2.api.Context;
+import org.glassfish.hk2.api.DescriptorVisibility;
+import org.glassfish.hk2.api.InheritableThread;
+import org.glassfish.hk2.api.ServiceHandle;
+import org.glassfish.hk2.api.Visibility;
+import org.glassfish.hk2.utilities.reflection.Logger;
+
+@Singleton
+@Visibility(value=DescriptorVisibility.LOCAL)
+public class InheritableThreadContext
+implements Context<InheritableThread> {
+    private static final boolean LOG_THREAD_DESTRUCTION = AccessController.doPrivileged(new PrivilegedAction<Boolean>(){
+
+        @Override
+        public Boolean run() {
+            return Boolean.parseBoolean(System.getProperty("org.hk2.debug.inheritablethreadcontext.log", "false"));
+        }
+    });
+    private InheritableThreadLocal<InheritableContextThreadWrapper> threadMap = new InheritableThreadLocal<InheritableContextThreadWrapper>(){
+
+        @Override
+        public InheritableContextThreadWrapper initialValue() {
+            return new InheritableContextThreadWrapper();
+        }
+    };
+
+    @Override
+    public Class<? extends Annotation> getScope() {
+        return InheritableThread.class;
+    }
+
+    @Override
+    public <U> U findOrCreate(ActiveDescriptor<U> activeDescriptor, ServiceHandle<?> root) {
+        Object retVal = ((InheritableContextThreadWrapper)this.threadMap.get()).get(activeDescriptor);
+        if (retVal == null) {
+            retVal = activeDescriptor.create(root);
+            ((InheritableContextThreadWrapper)this.threadMap.get()).put(activeDescriptor, retVal);
+        }
+        return (U)retVal;
+    }
+
+    @Override
+    public boolean containsKey(ActiveDescriptor<?> descriptor) {
+        return ((InheritableContextThreadWrapper)this.threadMap.get()).has(descriptor);
+    }
+
+    @Override
+    public boolean isActive() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsNullCreation() {
+        return false;
+    }
+
+    @Override
+    public void shutdown() {
+        this.threadMap = null;
+    }
+
+    @Override
+    public void destroyOne(ActiveDescriptor<?> descriptor) {
+    }
+
+    private static class InheritableContextThreadWrapper {
+        private final HashMap<ActiveDescriptor<?>, Object> instances = new HashMap();
+        private final long id = Thread.currentThread().getId();
+
+        private InheritableContextThreadWrapper() {
+        }
+
+        public boolean has(ActiveDescriptor<?> d) {
+            return this.instances.containsKey(d);
+        }
+
+        public Object get(ActiveDescriptor<?> d) {
+            return this.instances.get(d);
+        }
+
+        public void put(ActiveDescriptor<?> d, Object v) {
+            this.instances.put(d, v);
+        }
+
+        public void finalize() throws Throwable {
+            this.instances.clear();
+            if (LOG_THREAD_DESTRUCTION) {
+                Logger.getLogger().debug("Removing PerThreadContext data for thread " + this.id);
+            }
+        }
+    }
+}
+

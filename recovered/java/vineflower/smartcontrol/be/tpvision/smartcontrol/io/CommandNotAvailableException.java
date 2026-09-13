@@ -1,0 +1,9 @@
+package be.tpvision.smartcontrol.io;
+
+public class CommandNotAvailableException extends RuntimeException {
+   private static final long serialVersionUID = -3167432744688205203L;
+
+   public CommandNotAvailableException(final String message) {
+      super(message);
+   }
+}

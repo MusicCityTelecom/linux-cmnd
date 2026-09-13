@@ -1,0 +1,46 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.lang.Nullable
+ *  org.springframework.messaging.Message
+ *  org.springframework.util.Assert
+ */
+package org.springframework.integration.channel;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.integration.channel.QueueChannel;
+import org.springframework.integration.core.MessageSelector;
+import org.springframework.lang.Nullable;
+import org.springframework.messaging.Message;
+import org.springframework.util.Assert;
+
+public class ChannelPurger {
+    private final QueueChannel[] channels;
+    private final MessageSelector selector;
+
+    public ChannelPurger(QueueChannel ... channels) {
+        this((MessageSelector)null, channels);
+    }
+
+    public ChannelPurger(@Nullable MessageSelector selector, QueueChannel ... channels) {
+        Assert.notEmpty((Object[])channels, (String)"at least one channel is required");
+        if (channels.length == 1) {
+            Assert.notNull((Object)channels[0], (String)"channel must not be null");
+        }
+        this.selector = selector;
+        this.channels = Arrays.copyOf(channels, channels.length);
+    }
+
+    public final List<Message<?>> purge() {
+        ArrayList purgedMessages = new ArrayList();
+        for (QueueChannel channel : this.channels) {
+            List<Message<?>> results = this.selector == null ? channel.clear() : channel.purge(this.selector);
+            purgedMessages.addAll(results);
+        }
+        return purgedMessages;
+    }
+}
+

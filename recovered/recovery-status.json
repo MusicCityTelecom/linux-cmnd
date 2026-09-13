@@ -1,0 +1,2635 @@
+{
+  "original_cmnd_version": "7.5.9",
+  "original_master_sha256": "4cc2d3bf79a8d6d8445c308ba5b4d2b6d551492b9f8ffddf3071c53b51de2348",
+  "bounded_units_total": 729,
+  "bounded_units_in_snapshot": 220,
+  "pending_units": 509,
+  "reused_prior_jobs": [
+    {
+      "parent": "abaf0031f6dd9a1e01a87a991a397168cab15eb73f4bd26fde8891700d22389f",
+      "result": "java-recovery-v1\\abaf0031f6dd9a1e01a87a991a397168cab15eb73f4bd26fde8891700d22389f\\result.json"
+    }
+  ],
+  "bounded_java_files": 24539,
+  "results": [
+    {
+      "key": "00624c6a8092b6691301dbd811d52ce01a105cbf42233677b9afc20a48c336e6-0",
+      "classes": 4,
+      "exit": 0,
+      "java_files": 4,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261850286584000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "04b2de3bebef4c2ef976a983dd2a773755ef36a87d715dc8763a129b159d1f62-0",
+      "classes": 135,
+      "exit": 0,
+      "java_files": 110,
+      "warning_files": [
+        "org/apereo/cas/authentication/adaptive/intel/BlackDotIPAddressIntelligenceService.java",
+        "org/apereo/cas/authentication/adaptive/intel/RestfulIPAddressIntelligenceService.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261689772317900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0709f9e94992fc03d3bb6c28b1f4f9a0ab6ad32066ff9649a9455133682f20e5-0",
+      "classes": 17,
+      "exit": 0,
+      "java_files": 6,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262451170012700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "071ccd3df6f52da4b67ad724c6658d65aeb211ce24a6de345044d4f5444c8e75-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 288,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262312499752600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "071ccd3df6f52da4b67ad724c6658d65aeb211ce24a6de345044d4f5444c8e75-1",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 357,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262315835390400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "071ccd3df6f52da4b67ad724c6658d65aeb211ce24a6de345044d4f5444c8e75-2",
+      "classes": 10,
+      "exit": 0,
+      "java_files": 8,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262352726344600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "098d26ba66f57227973aa7c3b03c017240395bf4e7e7baa4dfdf8247eeff5ee5-0",
+      "classes": 25,
+      "exit": 0,
+      "java_files": 17,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261828027299000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0990379e34bf462e104015408c396c8f1f65bc93e8284f6cca8495a24bfc3d44-0",
+      "classes": 261,
+      "exit": 0,
+      "java_files": 206,
+      "warning_files": [
+        "org/springframework/transaction/reactive/TransactionalOperatorExtensionsKt.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262292346210400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0a417db2da3add715749ea8c3abd158df6dcdfb2bede6762c3dff36984a806b9-0",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 373,
+      "warning_files": [
+        "com/mysql/cj/jdbc/StatementImpl.java",
+        "com/mysql/cj/jdbc/ha/LoadBalancedConnectionProxy.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263603998610900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0a417db2da3add715749ea8c3abd158df6dcdfb2bede6762c3dff36984a806b9-1",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 120,
+      "warning_files": [
+        "com/mysql/cj/util/EscapeTokenizer.java",
+        "com/mysql/cj/xdevapi/ClientImpl.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263613668722400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0a417db2da3add715749ea8c3abd158df6dcdfb2bede6762c3dff36984a806b9-2",
+      "classes": 65,
+      "exit": 0,
+      "java_files": 53,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263675199269800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0b43eaa06328a01171eb9132414a90d4a57f00dbe6622ec18c8cca22bf2df526-0",
+      "classes": 67,
+      "exit": 0,
+      "java_files": 60,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263586692033900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0b579ff4410eb5c185fef042635f333f12b89cea5733af990e4857efd0f3a9a4-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 0,
+      "warning_files": [],
+      "missing_expected_outer": [
+        "module-info.java"
+      ],
+      "attempt": "attempt-1789263821565927300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0f136fbf8fb7d12760d2b10a48e33ee8553b84c8b928986ad12f76a7ecd2653e-0",
+      "classes": 52,
+      "exit": 0,
+      "java_files": 38,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261832475876000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0f2a84132e6c89aa10f156dc445c15938c7e4b1d30b468bb6d92fcac8777a691-0",
+      "classes": 79,
+      "exit": 0,
+      "java_files": 71,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261628145303000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0f9314ee37d507ded079690446f294c26036c8e4a2018d6370d65ef5d6a22963-0",
+      "classes": 73,
+      "exit": 0,
+      "java_files": 63,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263772976941100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "0fa1be8069a6db1aff2fe9c328e4d61c31ba1802d451d4e0690984d0feffa6c8-0",
+      "classes": 29,
+      "exit": 0,
+      "java_files": 28,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261852043995300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-0",
+      "classes": 498,
+      "exit": 0,
+      "java_files": 305,
+      "warning_files": [
+        "groovy/grape/GrapeIvy.java",
+        "groovy/lang/MetaClassImpl.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264405531626700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-1",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 274,
+      "warning_files": [
+        "groovyjarjarantlr4/v4/parse/ANTLRLexer.java",
+        "groovyjarjarantlr4/v4/parse/LeftRecursiveRuleWalker.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264410872112000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-2",
+      "classes": 390,
+      "exit": 0,
+      "java_files": 313,
+      "warning_files": [
+        "groovyjarjarasm/asm/signature/SignatureReader.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264497658981000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-3",
+      "classes": 498,
+      "exit": 0,
+      "java_files": 57,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264514646666000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-4",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 264,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264617314455900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-5",
+      "classes": 221,
+      "exit": "timeout",
+      "java_files": 60,
+      "warning_files": [],
+      "missing_expected_outer": [
+        "org/codehaus/groovy/runtime/DefaultGroovyMethodsSupport.java",
+        "org/codehaus/groovy/runtime/DefaultGroovyStaticMethods.java",
+        "org/codehaus/groovy/runtime/DefaultMethodKey.java",
+        "org/codehaus/groovy/runtime/EncodingGroovyMethods.java",
+        "org/codehaus/groovy/runtime/EncodingGroovyMethodsSupport.java",
+        "org/codehaus/groovy/runtime/FlushingStreamWriter.java",
+        "org/codehaus/groovy/runtime/FormatHelper.java",
+        "org/codehaus/groovy/runtime/GStringImpl.java",
+        "org/codehaus/groovy/runtime/GStringUtil.java",
+        "org/codehaus/groovy/runtime/GeneratedClosure.java",
+        "org/codehaus/groovy/runtime/GeneratedLambda.java",
+        "org/codehaus/groovy/runtime/GroovyCategorySupport.java",
+        "org/codehaus/groovy/runtime/HandleMetaClass.java",
+        "org/codehaus/groovy/runtime/IOGroovyMethods.java",
+        "org/codehaus/groovy/runtime/InvokerHelper.java",
+        "org/codehaus/groovy/runtime/InvokerInvocationException.java",
+        "org/codehaus/groovy/runtime/IteratorClosureAdapter.java",
+        "org/codehaus/groovy/runtime/MetaClassHelper.java",
+        "org/codehaus/groovy/runtime/MethodClosure.java",
+        "org/codehaus/groovy/runtime/MethodKey.java",
+        "org/codehaus/groovy/runtime/MethodRankHelper.java",
+        "org/codehaus/groovy/runtime/NullObject.java",
+        "org/codehaus/groovy/runtime/NumberAwareComparator.java",
+        "org/codehaus/groovy/runtime/ProcessGroovyMethods.java",
+        "org/codehaus/groovy/runtime/ProxyGeneratorAdapter.java",
+        "org/codehaus/groovy/runtime/RangeInfo.java",
+        "org/codehaus/groovy/runtime/ReflectionMethodInvoker.java",
+        "org/codehaus/groovy/runtime/Reflector.java",
+        "org/codehaus/groovy/runtime/RegexSupport.java",
+        "org/codehaus/groovy/runtime/ResourceGroovyMethods.java",
+        "org/codehaus/groovy/runtime/ReverseListIterator.java",
+        "org/codehaus/groovy/runtime/ScriptBytecodeAdapter.java",
+        "org/codehaus/groovy/runtime/ScriptReference.java",
+        "org/codehaus/groovy/runtime/SocketGroovyMethods.java",
+        "org/codehaus/groovy/runtime/StackTraceUtils.java",
+        "org/codehaus/groovy/runtime/StreamGroovyMethods.java",
+        "org/codehaus/groovy/runtime/StringBufferWriter.java",
+        "org/codehaus/groovy/runtime/StringGroovyMethods.java",
+        "org/codehaus/groovy/runtime/WritableFile.java",
+        "org/codehaus/groovy/runtime/callsite/AbstractCallSite.java",
+        "org/codehaus/groovy/runtime/callsite/BooleanClosureWrapper.java",
+        "org/codehaus/groovy/runtime/callsite/BooleanReturningMethodInvoker.java",
+        "org/codehaus/groovy/runtime/callsite/CallSite.java",
+        "org/codehaus/groovy/runtime/callsite/CallSiteArray.java",
+        "org/codehaus/groovy/runtime/callsite/CallSiteAwareMetaMethod.java",
+        "org/codehaus/groovy/runtime/callsite/CallSiteClassLoader.java",
+        "org/codehaus/groovy/runtime/callsite/CallSiteGenerator.java",
+        "org/codehaus/groovy/runtime/callsite/ClassMetaClassGetPropertySite.java",
+        "org/codehaus/groovy/runtime/callsite/ConstructorMetaClassSite.java",
+        "org/codehaus/groovy/runtime/callsite/ConstructorMetaMethodSite.java",
+        "org/codehaus/groovy/runtime/callsite/ConstructorSite.java",
+        "org/codehaus/groovy/runtime/callsite/DummyCallSite.java",
+        "org/codehaus/groovy/runtime/callsite/GetEffectivePogoFieldSite.java",
+        "org/codehaus/groovy/runtime/callsite/GetEffectivePogoPropertySite.java",
+        "org/codehaus/groovy/runtime/callsite/GetEffectivePojoFieldSite.java",
+        "org/codehaus/groovy/runtime/callsite/GetEffectivePojoPropertySite.java",
+        "org/codehaus/groovy/runtime/callsite/GroovySunClassLoader.java",
+        "org/codehaus/groovy/runtime/callsite/MetaClassConstructorSite.java",
+        "org/codehaus/groovy/runtime/callsite/MetaClassSite.java",
+        "org/codehaus/groovy/runtime/callsite/MetaMethodSite.java",
+        "org/codehaus/groovy/runtime/callsite/NullCallSite.java",
+        "org/codehaus/groovy/runtime/callsite/PerInstancePojoMetaClassSite.java",
+        "org/codehaus/groovy/runtime/callsite/PlainObjectMetaMethodSite.java",
+        "org/codehaus/groovy/runtime/callsite/PogoGetPropertySite.java",
+        "org/codehaus/groovy/runtime/callsite/PogoInterceptableSite.java",
+        "org/codehaus/groovy/runtime/callsite/PogoMetaClassGetPropertySite.java",
+        "org/codehaus/groovy/runtime/callsite/PogoMetaClassSite.java",
+        "org/codehaus/groovy/runtime/callsite/PogoMetaMethodSite.java",
+        "org/codehaus/groovy/runtime/callsite/PojoMetaClassGetPropertySite.java",
+        "org/codehaus/groovy/runtime/callsite/PojoMetaClassSite.java",
+        "org/codehaus/groovy/runtime/callsite/PojoMetaMethodSite.java",
+        "org/codehaus/groovy/runtime/callsite/StaticMetaClassSite.java",
+        "org/codehaus/groovy/runtime/callsite/StaticMetaMethodSite.java"
+      ],
+      "attempt": "attempt-1789264644099201800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-6",
+      "classes": 1368,
+      "exit": 0,
+      "java_files": 1368,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264747780040900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-7",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 279,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264811998494900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "121fe2d536ec045774fa2b6e3b36310ae15a6f85a4a1103888489d08e91f2eb7-8",
+      "classes": 81,
+      "exit": 0,
+      "java_files": 39,
+      "warning_files": [
+        "org/codehaus/groovy/util/StringUtil.java",
+        "org/codehaus/groovy/vmplugin/v8/Selector.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264863572059900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "12c0ac2f4f2462bd4524ce90a35d854f4706000af1ea6a075449536332a21e9c-0",
+      "classes": 20,
+      "exit": 0,
+      "java_files": 16,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261715955580800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "148adf8820cacc858bfcdbb38d506eac235242a683c0768caf173e392bc1ae3b-0",
+      "classes": 47,
+      "exit": 0,
+      "java_files": 38,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262519260733200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "149da9ea7e6d916fbc266bc93205200eca60e66474643da3fe9e1baea49f4e33-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 330,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262165179175600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "149da9ea7e6d916fbc266bc93205200eca60e66474643da3fe9e1baea49f4e33-1",
+      "classes": 57,
+      "exit": 0,
+      "java_files": 42,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262186180469600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "155cc7c1c85efdf9a6f31e58f7d15e8171b0d1ea4a60d5cce3aa8195327d0611-0",
+      "classes": 2,
+      "exit": 0,
+      "java_files": 2,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261769890225400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "157c759c2199d278be7731a7249afca8e29cd65a502c47ae581d19ee79800bd7-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261838206506400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "17dd3c87d7e4f8f101b5197c52ae88c4f3a37e7876786838bb8c5a6431a55952-0",
+      "classes": 4,
+      "exit": 0,
+      "java_files": 4,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261732483303300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "1965fe3b90d65e7218d04d292be0c76cc27bc7ee947a69fbb3c96274a68a9c5d-0",
+      "classes": 12,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263363090598500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "1d15945db6bcf19045f32f84464a782f6198e683aa50567710b33dcd881c0c09-0",
+      "classes": 413,
+      "exit": 0,
+      "java_files": 351,
+      "warning_files": [
+        "org/bouncycastle/oer/OERInputStream.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263871357152000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "1d7f2b1135735d404f8b24c1d33d2cbf73b040f890cbcad1609a95cf27c096c5-0",
+      "classes": 75,
+      "exit": 0,
+      "java_files": 49,
+      "warning_files": [
+        "com/zaxxer/hikari/pool/HikariPool.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263520670020900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "1daa164774c562f7e85a0b0ce1381c52d0ff99455a57c722822d4693b45d7791-0",
+      "classes": 80,
+      "exit": 0,
+      "java_files": 64,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264248535490700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "22433e401c52e97fe672cce793e5c065ef0af148795ab8d4fe07bb86b9518377-0",
+      "classes": 35,
+      "exit": 0,
+      "java_files": 29,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262591160537300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "230b17aa63f5aeaf0fac4ae1a232dece016ad5979ed38edd686ee03fc1997253-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261777865713100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "2463e710f66c299c6003358b40f9ddb1fc130adca395dd4f79c4cf2ca1a166f1-0",
+      "classes": 497,
+      "exit": 0,
+      "java_files": 269,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262045396884900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "2463e710f66c299c6003358b40f9ddb1fc130adca395dd4f79c4cf2ca1a166f1-1",
+      "classes": 498,
+      "exit": 0,
+      "java_files": 241,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262046384886400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "2463e710f66c299c6003358b40f9ddb1fc130adca395dd4f79c4cf2ca1a166f1-2",
+      "classes": 226,
+      "exit": 0,
+      "java_files": 94,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262085336285800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "25be9c8f5f75ad173fd30d6172b229b77d648b91ae11321f9651e18ae3698e1f-0",
+      "classes": 16,
+      "exit": 0,
+      "java_files": 15,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263687048839600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "27011d4863d78f2d39e968ad92b00c75a908a532f61deba3281f942fa4435435-0",
+      "classes": 38,
+      "exit": 0,
+      "java_files": 37,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261719084172900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "28b7bae8d553541d46f5bf512ba0b9c87111683b2b467114ef1aa4771fb19843-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 316,
+      "warning_files": [
+        "org/springframework/boot/ImageBanner.java",
+        "org/springframework/boot/env/OriginTrackedPropertiesLoader.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262113820095600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "28b7bae8d553541d46f5bf512ba0b9c87111683b2b467114ef1aa4771fb19843-1",
+      "classes": 422,
+      "exit": 0,
+      "java_files": 293,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262143025573000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "28d1dd786512a613f01d02ab089b4e8fb634a1c4c5144b697b4889481a8e6703-0",
+      "classes": 9,
+      "exit": 0,
+      "java_files": 7,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261724873151600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "2a3b96463787012acb23022265b7bcd5f44c9f755a6937380ea96271784a2299-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261831810947400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "2babf1b35f84acac08bbde174d86a1a04f305b8b22e3016008fe04801e84e571-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 302,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264316355628400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "2babf1b35f84acac08bbde174d86a1a04f305b8b22e3016008fe04801e84e571-1",
+      "classes": 24,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264350440105600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "2f4724c5a3e972101849b97d923605e03e2146122f5f37ab78295764816b070a-0",
+      "classes": 8,
+      "exit": 0,
+      "java_files": 8,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261677270395900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "2fc684fb860a4190f241e651049f92b43646618eefb163337664f46906a83201-0",
+      "classes": 163,
+      "exit": 0,
+      "java_files": 120,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262259736943500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "312af6dad5af979dc279a25f6c43c331257241b83b13eb43f51b128106692322-0",
+      "classes": 154,
+      "exit": 0,
+      "java_files": 103,
+      "warning_files": [
+        "org/apache/commons/text/ExtendedMessageFormat.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263446678119700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "31dd5f7ce970a9353bb7965c10f0f612fdeb31a15527ebd0c89c26860327a945-0",
+      "classes": 290,
+      "exit": 0,
+      "java_files": 180,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264213179546700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "32d079d55974e7b152566b6399e132657c475500af8642ff4dfb1ccf6650b9d4-0",
+      "classes": 50,
+      "exit": 0,
+      "java_files": 19,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264365478034900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "3337464d71252caa158a1571c6b53a92d932f5c1fd4d39a2763bf89cb7e99e61-0",
+      "classes": 495,
+      "exit": 0,
+      "java_files": 195,
+      "warning_files": [
+        "reactor/core/publisher/FluxFilterFuseable.java",
+        "reactor/core/publisher/FluxWindowTimeout.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261926554227900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "3337464d71252caa158a1571c6b53a92d932f5c1fd4d39a2763bf89cb7e99e61-1",
+      "classes": 399,
+      "exit": 0,
+      "java_files": 233,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261950116296500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "35a932022e7c6eb1e6d32d00acfef2309aa9be3ff7ba0943947320e7350d0038-0",
+      "classes": 5,
+      "exit": 0,
+      "java_files": 2,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261703636642800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "376d770eaf44eae69eaabb8a537f4b7570946f1fa4486edce2e3cc91c784eea4-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263577249144700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "39b1dd7eb1924d5b199ede96dcd40829ddff4f1dc77fb4b766f9d82912aa5b60-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 400,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263369316375200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "39b1dd7eb1924d5b199ede96dcd40829ddff4f1dc77fb4b766f9d82912aa5b60-1",
+      "classes": 203,
+      "exit": 0,
+      "java_files": 202,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263420634374600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "39d17c13c068792f9ec635fb785b2398e077aabdee674ac264e3d1661bddb131-0",
+      "classes": 12,
+      "exit": 0,
+      "java_files": 11,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261700852689800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "3a41ba89fc56ea89e0dc289c49dc3f35cf3c3ffcac7a9c23c6824636a86f649a-0",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 366,
+      "warning_files": [
+        "aj/org/objectweb/asm/signature/SignatureReader.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262529324741600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "3a41ba89fc56ea89e0dc289c49dc3f35cf3c3ffcac7a9c23c6824636a86f649a-1",
+      "classes": 471,
+      "exit": 0,
+      "java_files": 319,
+      "warning_files": [
+        "org/aspectj/weaver/loadtime/Aj.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262548244547300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "3ca8ab537bab686b2c89ff05b15fd7e706bb9285e7da39011dfcac89667d93bc-0",
+      "classes": 49,
+      "exit": 0,
+      "java_files": 47,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263812128993700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "4018bf7de0e814e45e24f42bc02850818695b26c479123ef8e2fa6cad88d6785-0",
+      "classes": 119,
+      "exit": 0,
+      "java_files": 99,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262355458946600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "415b757fe90b65dab21c7deb39294ddad80add67f0cd3432bd247df67e6bf96d-0",
+      "classes": 34,
+      "exit": 0,
+      "java_files": 29,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263721067961800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "42ec6868dbbf71f6e136925f6154b6b692b5cab2747746c485f00bd26ccd5c40-0",
+      "classes": 21,
+      "exit": 0,
+      "java_files": 20,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262453281512600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "4311abe9d0a4415ab5c22f32bfa518596d56e7f4aa64faafa615de86bec45561-0",
+      "classes": 288,
+      "exit": 0,
+      "java_files": 242,
+      "warning_files": [
+        "org/springframework/jdbc/datasource/init/ScriptUtils.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262292055449300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "44e82ab20efae26094750b0ec615f0a09e0cee22a1a10a06bbb3ab4f61799976-0",
+      "classes": 263,
+      "exit": 0,
+      "java_files": 8,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262601210515200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "44e82ab20efae26094750b0ec615f0a09e0cee22a1a10a06bbb3ab4f61799976-1",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 33,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263273300656600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "44e82ab20efae26094750b0ec615f0a09e0cee22a1a10a06bbb3ab4f61799976-2",
+      "classes": 489,
+      "exit": 0,
+      "java_files": 48,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263273309975100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "44e82ab20efae26094750b0ec615f0a09e0cee22a1a10a06bbb3ab4f61799976-3",
+      "classes": 467,
+      "exit": 0,
+      "java_files": 42,
+      "warning_files": [
+        "net/bytebuddy/dynamic/loading/ClassInjector.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263320200401400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "44e82ab20efae26094750b0ec615f0a09e0cee22a1a10a06bbb3ab4f61799976-4",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 83,
+      "warning_files": [
+        "net/bytebuddy/implementation/bytecode/StackManipulation.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263320567907900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "44e82ab20efae26094750b0ec615f0a09e0cee22a1a10a06bbb3ab4f61799976-5",
+      "classes": 432,
+      "exit": 0,
+      "java_files": 152,
+      "warning_files": [
+        "net/bytebuddy/pool/TypePool.java",
+        "net/bytebuddy/jar/asm/signature/SignatureReader.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263362900754800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "460a7c8a61d113c9ba4d3e477029f2c1fbae389f9a90f763f51b84de723bac18-0",
+      "classes": 15,
+      "exit": 0,
+      "java_files": 14,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263584007585700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "4a6e76dcdb5bcc98070a4df6c8351887f25a29bf32ad07f17581b7fdd29b4f06-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261846850891700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "4b2c172254df6afac20b3cc19520213aa5f1e0c6538812aecdbb6bd06ca2f00d-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 387,
+      "warning_files": [
+        "org/bouncycastle/est/ESTService.java",
+        "org/bouncycastle/cms/jcajce/JceKeyAgreeRecipient.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263822547104700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "4b2c172254df6afac20b3cc19520213aa5f1e0c6538812aecdbb6bd06ca2f00d-1",
+      "classes": 303,
+      "exit": 0,
+      "java_files": 208,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263827848709000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "4e389b2bb46fe3fa240c03743b380013e04289dba7677f218c61e0c1e62b7508-0",
+      "classes": 5,
+      "exit": 0,
+      "java_files": 4,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262086025621800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "4fed9b073ce6fb7a9785cb989e20548685f9403634b933789463f11bf734468e-0",
+      "classes": 143,
+      "exit": 0,
+      "java_files": 88,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263595581959100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "507662fdab3dd654d53fe6eaf0445900b9432b976c972336af3652d3dee41a12-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263815756246100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "52033d8da85db4edd3e256aca3ccba5958703d9e4a07190c6d08194a5ab9743f-0",
+      "classes": 22,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261604054416100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "52ae5724be886acfbc4ed8c32821206973055e92c4249f6ccf50e2ebfea0c305-0",
+      "classes": 58,
+      "exit": 0,
+      "java_files": 51,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261778881816800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "5809a49b8632e0640b99bfb8a55180a2458d7cef317864f25d71f0bfbc2029f2-0",
+      "classes": 80,
+      "exit": 0,
+      "java_files": 49,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263478571794300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "5a2d981ba696b1e52796a86b3ae54ace8979182d1cca077dfe54ff361e310da4-0",
+      "classes": 8,
+      "exit": 0,
+      "java_files": 6,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261847757923200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "5b0877039ff2185a55072a7269900d990708d5d93547792a65f1cd64975e1afb-0",
+      "classes": 18,
+      "exit": 0,
+      "java_files": 14,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261708504163700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "5e72869ddb2e66363363e2b4484346960a57d31be994de07f1c3b1ffdc690dad-0",
+      "classes": 85,
+      "exit": 0,
+      "java_files": 79,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263709107830400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "5f44bd40c958908490ccc28f2cb56084f4a55ae5d241c53420b56871fe28edd1-0",
+      "classes": 201,
+      "exit": 0,
+      "java_files": 180,
+      "warning_files": [
+        "org/apache/commons/io/FileUtils.java",
+        "org/apache/commons/io/IOUtils.java",
+        "org/apache/commons/io/file/PathUtils.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264206702972100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "650e37386559bc708524a3c663be55a7f208d616abc3bda4b5685f62998ceb7e-0",
+      "classes": 388,
+      "exit": 0,
+      "java_files": 303,
+      "warning_files": [
+        "org/springframework/beans/factory/xml/XmlBeanDefinitionReader.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262353802326200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "670f3ddb79a2b07dca0f553d6a9f7e83fafafcadd3decc7e9643dfa7cb0b548f-0",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 302,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262198965659000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "670f3ddb79a2b07dca0f553d6a9f7e83fafafcadd3decc7e9643dfa7cb0b548f-1",
+      "classes": 393,
+      "exit": 0,
+      "java_files": 341,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262224354028400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "6807c314e4d8cb2a3244122e673afbff6864ae7f6dd66c2698e3ce904199f9ae-0",
+      "classes": 10,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261697799233800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "6dbd317c8f9d9766074958ee52433049469413acdf3989de0dc8a6f2edc0fe15-0",
+      "classes": 60,
+      "exit": 0,
+      "java_files": 58,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261616912021200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "6fe0f01a254557e8966c870702271428b62fce2b7a4b6689825cdbdc8a585fa1-0",
+      "classes": 172,
+      "exit": 0,
+      "java_files": 122,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264273007956500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7073a984eb37fb605e87d718ac93bd7122d4ac81a06cef29bfeb74c6f75dde92-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 388,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263931259562400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7073a984eb37fb605e87d718ac93bd7122d4ac81a06cef29bfeb74c6f75dde92-1",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 425,
+      "warning_files": [
+        "org/bouncycastle/crypto/generators/DSAParametersGenerator.java",
+        "org/bouncycastle/crypto/generators/GOST3410ParametersGenerator.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263967348528400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7073a984eb37fb605e87d718ac93bd7122d4ac81a06cef29bfeb74c6f75dde92-2",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 195,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263973848657500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7073a984eb37fb605e87d718ac93bd7122d4ac81a06cef29bfeb74c6f75dde92-3",
+      "classes": 465,
+      "exit": 0,
+      "java_files": 100,
+      "warning_files": [
+        "org/bouncycastle/jcajce/provider/keystore/pkcs12/PKCS12KeyStoreSpi.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264065218311900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7073a984eb37fb605e87d718ac93bd7122d4ac81a06cef29bfeb74c6f75dde92-4",
+      "classes": 490,
+      "exit": 0,
+      "java_files": 46,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264100113081400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7073a984eb37fb605e87d718ac93bd7122d4ac81a06cef29bfeb74c6f75dde92-5",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 388,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264109042255400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7073a984eb37fb605e87d718ac93bd7122d4ac81a06cef29bfeb74c6f75dde92-6",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 391,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264117699579700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7073a984eb37fb605e87d718ac93bd7122d4ac81a06cef29bfeb74c6f75dde92-7",
+      "classes": 12,
+      "exit": 0,
+      "java_files": 10,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264205358473100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "711d7712ba65952cecc7665942ea3def34d44ca27537495a4438bb841c6ee5f5-0",
+      "classes": 277,
+      "exit": 0,
+      "java_files": 216,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262242410113400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7403f736153f7bad0804a9b42f3b10bd833ecb22bc5ecd08199358aed6fa2692-0",
+      "classes": 14,
+      "exit": 0,
+      "java_files": 10,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263753477472800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "74ea51cd8efb75349266bf15123bf7c05df164401a49543b26178d4c3815b885-0",
+      "classes": 24,
+      "exit": 0,
+      "java_files": 20,
+      "warning_files": [],
+      "missing_expected_outer": [
+        "module-info.java"
+      ],
+      "attempt": "attempt-1789263765015418700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7821fd45bee8d3ddff925be81ef28216bd427cc5023532ece72b69c8f2aa0c91-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263518778302200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7be17aaf08208a05e3dd49f220bf8e46593313c705f81e6e9a896741598090f3-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 303,
+      "warning_files": [
+        "com/fasterxml/jackson/databind/deser/std/BaseNodeDeserializer.java",
+        "com/fasterxml/jackson/databind/deser/std/ThrowableDeserializer.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261788741559200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7be17aaf08208a05e3dd49f220bf8e46593313c705f81e6e9a896741598090f3-1",
+      "classes": 207,
+      "exit": 0,
+      "java_files": 134,
+      "warning_files": [
+        "com/fasterxml/jackson/databind/type/TypeFactory.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261799023543200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7bea9b535d0e23fea9ce10af9185476b15ad8dc6e462dc8079a8608f3a351889-0",
+      "classes": 4,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261621160640300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7d61aca2b06396e63527c449dc0dace4bfab75795b065291c521bafa4a838730-0",
+      "classes": 8,
+      "exit": 0,
+      "java_files": 8,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263445633036600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7ecb93b2b0f2e81d9e09a719d04bac2e544f24bd63fcbdc3b41e9bd4ee781b3c-0",
+      "classes": 21,
+      "exit": 0,
+      "java_files": 18,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264874817799700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "7efd4d053037855f6a279d42fe073f7c7fcfa41ca34dce577f7895cbfd929f4d-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261787538403400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "804aa218222a352c25fa4e58e56e3c1814404daa1f4c88b8f19222bbac83f036-0",
+      "classes": 137,
+      "exit": 0,
+      "java_files": 106,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264245904572500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "80e83ef54291d0084ca861a5d889a277fb38f4c987dd27772b20f7b5a1689233-0",
+      "classes": 20,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263926696177000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "817fcf10021b858cd340a122b9bd3b8be9b548325c8e22dc4fab2290b2c97635-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261713260963500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "82e8e742fe5cb2afb93ac8d51f31ccfad5908160e18bf128c15f50ebcbea9fca-0",
+      "classes": 6,
+      "exit": 0,
+      "java_files": 4,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261723950999800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "832e663b51f1d5361b47c171dd00183d8fbe5d268492d0f8ee9dd2394365a379-0",
+      "classes": 29,
+      "exit": 0,
+      "java_files": 25,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263439656227200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "8673b1d1e5b1ba306b72d9df8a60bf2b86c8e14ff9c5eff154724c4af187d091-0",
+      "classes": 253,
+      "exit": 0,
+      "java_files": 239,
+      "warning_files": [
+        "org/apache/http/pool/AbstractConnPool.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263533927423800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "877ed69a67c97611c6d44cfe676d02d38e9fec84aac3621248645a24ec62a5a7-0",
+      "classes": 496,
+      "exit": 0,
+      "java_files": 304,
+      "warning_files": [
+        "org/springframework/cglib/core/AbstractClassGenerator.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262387580560800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "877ed69a67c97611c6d44cfe676d02d38e9fec84aac3621248645a24ec62a5a7-1",
+      "classes": 482,
+      "exit": 0,
+      "java_files": 345,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262389359127200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "88a52969ca9a2ae40c8fbc3136673ce5bee333ff869e713565646d8027ce8595-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261706039420400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "88d37b06fc911bce00f1e892ab8e88132a34194a8a083143cfc3598c1565d36e-0",
+      "classes": 66,
+      "exit": 0,
+      "java_files": 51,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264354665330200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "89e5fff9b64c39037a3551934d42d82881264d00f5760013af19ae1a707f377c-0",
+      "classes": 183,
+      "exit": 0,
+      "java_files": 71,
+      "warning_files": [
+        "org/apache/groovy/groovysh/BufferManager.java",
+        "org/apache/groovy/groovysh/ComplexCommandSupport.java",
+        "org/apache/groovy/groovysh/antlr4/RelaxedParser.java",
+        "org/apache/groovy/groovysh/completion/antlr4/GroovySyntaxCompleter.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264364832277400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "8c5b3142b9d4fe6165f2f1911bcc1597bb206adab21ea870ff3f9e9770fce9b0-0",
+      "classes": 20,
+      "exit": 0,
+      "java_files": 20,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261628343550600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "8c967b6ddb1488ba8a3fe788c5a8b5ca23e6cd4d2ae13322a2458c7808050bc9-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 303,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262090447109500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "8c967b6ddb1488ba8a3fe788c5a8b5ca23e6cd4d2ae13322a2458c7808050bc9-1",
+      "classes": 14,
+      "exit": 0,
+      "java_files": 10,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262106154753600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "8f0d885a8409f1c42b886d27efab85b783ad961a92c9e7559892ec11359adeaf-0",
+      "classes": 42,
+      "exit": 0,
+      "java_files": 38,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261732068314100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "8f865b8bf2365d5d5d8072eeab5d25b7280d3445b985ad5682db5a9f74dbf7ec-0",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 332,
+      "warning_files": [
+        "oshi/software/os/linux/LinuxNetworkParams.java",
+        "oshi/hardware/platform/windows/WindowsPowerSource.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263784051642900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "8f865b8bf2365d5d5d8072eeab5d25b7280d3445b985ad5682db5a9f74dbf7ec-1",
+      "classes": 67,
+      "exit": 0,
+      "java_files": 58,
+      "warning_files": [
+        "oshi/software/os/windows/WindowsOSProcess.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263790063798300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "9293ea66ba950e66ccd92b2c29bbb3d49967873f30eeb8b60a20beafea20e48d-0",
+      "classes": 25,
+      "exit": 0,
+      "java_files": 14,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261684873141300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "933416b089d7833cb516a4f7310f9d229e34cff9230b65fd10c6208256a79445-0",
+      "classes": 207,
+      "exit": 0,
+      "java_files": 188,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263587096890900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "95216d7b2a1634a96968634a702eed56839961383780de7ac4c804e4b0b78f10-0",
+      "classes": 131,
+      "exit": 0,
+      "java_files": 114,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262528349990000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "959c028cf9da45f70685f73271cb2b3c122d2089d42ba1f3589e53ffe60910c9-0",
+      "classes": 111,
+      "exit": 0,
+      "java_files": 92,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263572190472100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "95c63410e85ee6e686627234ff9a9be7720e7ea5875a71a0bfe9ed0edb4b4416-0",
+      "classes": 455,
+      "exit": 0,
+      "java_files": 372,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262455038784100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "976d54a8f64d3aee794fc8a3803746382c3c676a6c969e8bf8e6d666315a7b05-0",
+      "classes": 7,
+      "exit": 0,
+      "java_files": 7,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261677270144900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "99beb51a9fd6024df4e9f0e68fa9023749ffaef71924543e7a480767a7239b1c-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 0,
+      "warning_files": [],
+      "missing_expected_outer": [
+        "module-info.java"
+      ],
+      "attempt": "attempt-1789263870097761200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "9bdccc31b31bdd7a01950d5d796547c9f622d50725d2d69eeeba30c3190edd9d-0",
+      "classes": 22,
+      "exit": 0,
+      "java_files": 16,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261766763443100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "9c06a2794ffe960abf6724a888e8c7e210a6bfd87cfc0f5d2413792ba7dafd47-0",
+      "classes": 14,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263775088187200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "9d6e10fe62550534f91fa730edba5ceba582a2b279bf34d5fbd8ccdf3c3fc6e7-0",
+      "classes": 58,
+      "exit": 0,
+      "java_files": 58,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263757935002300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "9dcfc673d61d3d6b977a66b1d151ee4ba3452581a23409642c70fc65e3c763a6-0",
+      "classes": 106,
+      "exit": 0,
+      "java_files": 72,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263430094601200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "a37e9a201070ac83268950cd23ab774864aebdf145699aab7e958ecfd6bdf10a-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263719488946300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "a4466c06ceb65fc824d783e2da543fb85e8f1a7dd538bab1fe4cb10232399479-0",
+      "classes": 131,
+      "exit": 0,
+      "java_files": 46,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264377569380000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "a5ec23f69e4ab3e5db5cd01efdaf60eb047af2ebf35577b78f437db2cacd529f-0",
+      "classes": 46,
+      "exit": 0,
+      "java_files": 43,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261840125293700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "a7fe17b7c1a58a0829062a16ad901ca64dad2f6705f9565124e80fe599df0fe7-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261845750012300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "a9be30514346718f27b538df61dd506dc365d7536df45c3d34764ad150c361bf-0",
+      "classes": 9,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261596806290100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "aa32d5db9cc529ad3968cd16f8c2b2b9c78e546a2c98753136c193f003a93673-0",
+      "classes": 128,
+      "exit": 0,
+      "java_files": 121,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263859611378100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "aaf279e71ec7c7bbb96d3917894e899ce5772cd2d412b763e9a5bea569ec3313-0",
+      "classes": 72,
+      "exit": 0,
+      "java_files": 46,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261772898935400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "aba9848e02c88cbb1b0df5e91d0aa76527ddc70ce9a31ced0ef95464bdfa05e0-0",
+      "classes": 30,
+      "exit": 0,
+      "java_files": 28,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261605247253800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "ac07aa569df4d94284f5fddbc513eb13a0c905d0b6c5f8f222d1d68d9bd463f5-0",
+      "classes": 31,
+      "exit": 0,
+      "java_files": 21,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263580719861300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "afce02980782b19dc5dcc321efd82a4e68496dbc9a2d87b090baca8d6b323a97-0",
+      "classes": 29,
+      "exit": 0,
+      "java_files": 25,
+      "warning_files": [
+        "org/apereo/cas/services/ReturnRestfulAttributeReleasePolicy.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261682871157400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "aff09ae47ab10c77a5ba1cd03eb6ef67c6b473d178a0e82a56968661e748cb7f-0",
+      "classes": 17,
+      "exit": 0,
+      "java_files": 13,
+      "warning_files": [
+        "com/fasterxml/jackson/dataformat/yaml/UTF8Reader.java",
+        "com/fasterxml/jackson/dataformat/yaml/UTF8Writer.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261838276320500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b0f6c9617a6145589662028fec844b72b3440895fe4dd4024efb7496616893d5-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263496206839200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b1f786d7ad5cab8dfffd056ce5636646aee6c475ec01caa680b0be3f6abaaab3-0",
+      "classes": 59,
+      "exit": 0,
+      "java_files": 50,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261727362645400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b30c5119f45efe0b8710bb5cdeb51b79e12c31216a9e94ba2f8b70867502af48-0",
+      "classes": 96,
+      "exit": 0,
+      "java_files": 70,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263562598015100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b36a5d3ff8ede97d86f11d26a1d219e00f32f6991ecf6afadf07256be9e5c299-0",
+      "classes": 22,
+      "exit": 0,
+      "java_files": 22,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261846445949000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b4559be4a39dc0e1d06412668acf343bb601febf1875289bb84ac64eb58ab361-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 327,
+      "warning_files": [
+        "com/sun/xml/bind/v2/runtime/ValueListBeanInfoImpl.java",
+        "com/sun/xml/bind/v2/runtime/reflect/opt/Injector.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263498483490600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b4559be4a39dc0e1d06412668acf343bb601febf1875289bb84ac64eb58ab361-1",
+      "classes": 142,
+      "exit": 0,
+      "java_files": 95,
+      "warning_files": [],
+      "missing_expected_outer": [
+        "module-info.java"
+      ],
+      "attempt": "attempt-1789263502175792400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b5749bfcfe9f247ba4260241d5e95d114e6a52e4091fcee3d8b5fc830aa3c03e-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 318,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261993089603800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b5749bfcfe9f247ba4260241d5e95d114e6a52e4091fcee3d8b5fc830aa3c03e-1",
+      "classes": 366,
+      "exit": 0,
+      "java_files": 210,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262004136031200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b5d86b48b464fd8cb394dc4be978974632103a7ce3bac5a73413de3293833ca0-0",
+      "classes": 496,
+      "exit": 0,
+      "java_files": 390,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261859030372000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b5d86b48b464fd8cb394dc4be978974632103a7ce3bac5a73413de3293833ca0-1",
+      "classes": 422,
+      "exit": 0,
+      "java_files": 322,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261900466155500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "b67c4bccae86720270b79e709b7fcc0cf3d5568f7090ccb3967e8f456c73dc01-0",
+      "classes": 12,
+      "exit": 0,
+      "java_files": 9,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261722210342000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "bb239b3b39f43e9a6442725d9de27898aff03abc655673d94188c1ed5d20f63d-0",
+      "classes": 47,
+      "exit": 0,
+      "java_files": 32,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263693895039400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "bdcb7fe3f749931b817258504a7eb78d3924d56313a8650eb1cebc26b2f4bf6d-0",
+      "classes": 7,
+      "exit": 0,
+      "java_files": 7,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261599815821700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "bedb56c6c3994f98ad34bd245f6f3633bda177ebb309719026fb423ddcf6b7b2-0",
+      "classes": 13,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261989335190500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "bf9191162e229e6eaf4e40df0e242805653175b6cc723f8a1052491f06e29f97-0",
+      "classes": 8,
+      "exit": 0,
+      "java_files": 8,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261703552952000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "bfc4f894e71d1d97e644581f76b775a0efaf8114258b754a1dc64b2b06d25488-0",
+      "classes": 127,
+      "exit": 0,
+      "java_files": 110,
+      "warning_files": [
+        "com/fasterxml/jackson/core/io/UTF8Writer.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261774607113000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c06241f9a53420b412bd1f1ea3ed63327333a30471221c5bc34f0d18e58e6be2-0",
+      "classes": 73,
+      "exit": 0,
+      "java_files": 63,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261733761161600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c2cf1bed997c53dd34a838018c61b0ee76dc92c2eba2781c6672661e8ca920f2-0",
+      "classes": 460,
+      "exit": 0,
+      "java_files": 274,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264299573318100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c45b264461fbbda7f1df6ace74392535119df38532f366b9f28a7ca5e4330f40-0",
+      "classes": 150,
+      "exit": 0,
+      "java_files": 118,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262372989476400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c61cdbbd20355ed1c3c978982886ce3715886136722980459227f46d5380f43e-0",
+      "classes": 345,
+      "exit": 0,
+      "java_files": 198,
+      "warning_files": [
+        "org/apache/commons/lang3/CharSequenceUtils.java",
+        "org/apache/commons/lang3/text/ExtendedMessageFormat.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263448671342500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c69050d2f9772e8cad7fbff7be6f801ec0435c7f9c0431a0bcce7755a49209ec-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 428,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261734934263800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c69050d2f9772e8cad7fbff7be6f801ec0435c7f9c0431a0bcce7755a49209ec-1",
+      "classes": 260,
+      "exit": 0,
+      "java_files": 178,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261743726063700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c8116b5bc3c26366e04a0e4b4ce2ed1cb350ac7b07a6a3ecaa08e7fef25ed35f-0",
+      "classes": 100,
+      "exit": 0,
+      "java_files": 72,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262283493945900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c8338e39ce51159de3ca9ad346eb38d02fadb984cfab355fa8a6c80ca1d9f492-0",
+      "classes": 8,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261729614784900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c8bf7851c54182ce9fd42d320687b7a2190b9783607b057eec8e8cad20a5ad30-0",
+      "classes": 8,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264872318797400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "c8eee3289f9a458df126f0a275f7a36bcbfcf6df7e6f607a8fdd2fe9c46fd246-0",
+      "classes": 26,
+      "exit": 0,
+      "java_files": 7,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261617020380100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "ccb50f272ab0fb14d7d6af9d31f77a7dbbd10b6c25b00db8b703152ae459c415-0",
+      "classes": 332,
+      "exit": 0,
+      "java_files": 233,
+      "warning_files": [
+        "org/springframework/messaging/rsocket/RSocketRequesterExtensionsKt.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262260845811900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "ce6c65a5acc000ba4cb51dc681da82c9808f22cb44986471638ff00deeb2add1-0",
+      "classes": 18,
+      "exit": 0,
+      "java_files": 18,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261624328153700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "d258f6cfb4a6e0e97768ea90a8baca7ac1f6645f7e435dff0e6a2eb7c99e7ac5-0",
+      "classes": 499,
+      "exit": 0,
+      "java_files": 153,
+      "warning_files": [],
+      "missing_expected_outer": [
+        "com/google/common/collect/AbstractMapBasedMultimap.java"
+      ],
+      "attempt": "attempt-1789264879272135800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "d32022a8aad3e3eb83cc6b1764a5b6235e3714a7f3a62b21803044da6224393a-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261590930831900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "d465774379f9690d4d87eb508e5b18cce57b1864013bb3be1e3251632ee1023f-0",
+      "classes": 225,
+      "exit": 0,
+      "java_files": 118,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263728592441700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "d4edd0dc4ad9c71de74046f3d788aded71db78d35c310204e592f44d3a6940c4-0",
+      "classes": 366,
+      "exit": 0,
+      "java_files": 259,
+      "warning_files": [
+        "io/micrometer/core/instrument/util/IOUtils.java",
+        "io/micrometer/core/instrument/binder/db/DatabaseTableMetrics.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261851349554400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "d51862a3a9b1f6fe8566941292ee7ad5b0a5a6bb31b1dc98733be1f710104704-0",
+      "classes": 34,
+      "exit": 0,
+      "java_files": 30,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263758546294200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "d558693463ad6a48f96a700ef308b7df197161a77582c3f729289cc1232f785e-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 0,
+      "warning_files": [],
+      "missing_expected_outer": [
+        "module-info.java"
+      ],
+      "attempt": "attempt-1789262600092053900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "d890047e404929c5016bb13564b63b0dc9f12fc1f2c855831e7710b38cac6c47-0",
+      "classes": 30,
+      "exit": 0,
+      "java_files": 9,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261613907438400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "dac58504d78860b825d32d3d6ff8f7b9a9f2d78588e77b6da0466a7d6fbe9e17-0",
+      "classes": 8,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261606859323000",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "db6dd60727df07587f94af3dd6b53a9dea398c8ab5927ebae06c1c75d6af9e47-0",
+      "classes": 29,
+      "exit": 0,
+      "java_files": 22,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264239676773700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "dc08aa81e9e535cb595eea93ae74da20ccf5749eed91f148ac35c06f716aabc4-0",
+      "classes": 10,
+      "exit": 0,
+      "java_files": 9,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261679944728300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "dd9d9343597d8ce2beef35ae1d979c52d9b61c797771e4ab549a7c2f2d3d21eb-0",
+      "classes": 74,
+      "exit": 0,
+      "java_files": 41,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261590904324700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "ddd2432e058154d511bcc9edc0ff02246508a0c337a785d2f5b6eb9cf90b720d-0",
+      "classes": 7,
+      "exit": 0,
+      "java_files": 7,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263817759958700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "dde0629ec158a3e3e268cb73c699b19a37b45cbc14a0503b61f08a03c24da55a-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261838960407200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "de65cbb7ea7944b1c52687006ec9151fecc6fcd26c5819a1bb95650c71a25ef6-0",
+      "classes": 2,
+      "exit": 0,
+      "java_files": 2,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261771629029300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "df07e78bddceea22aa7eafe34ef4d48fd13c0256d7ec83f4bc27e8671ca51bad-0",
+      "classes": 123,
+      "exit": 0,
+      "java_files": 88,
+      "warning_files": [
+        "org/springframework/retry/support/RetryTemplate.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263729752558600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "df48c773024c7df3e17256b4d3f6d182d9a6b101b8c7fd570ba4179efcf963c9-0",
+      "classes": 4,
+      "exit": 0,
+      "java_files": 2,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261611545941800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "e027c8169f987de878227d97e0485992026e9a6c2ca9d30720a7fcfc84f4b9ae-0",
+      "classes": 353,
+      "exit": 0,
+      "java_files": 247,
+      "warning_files": [
+        "org/quartz/impl/jdbcjobstore/oracle/OracleDelegate.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263685751137700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "e1127d33c2c9388afd9eccb171427b56737b6417fea9a8d01e7f561e0731c215-0",
+      "classes": 32,
+      "exit": 0,
+      "java_files": 5,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263922408215300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "e175dad40d515a38d87bc7913f202db471e714e3e58d51188078348e93637082-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261849687789800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "e55b99515d2f90b633f05102277db3a13b6001ddb0681861fc37cc55783f4094-0",
+      "classes": 66,
+      "exit": 0,
+      "java_files": 20,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264400017409100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "e55d89aa9d324c8675566ea7cea2cd559e7ab18d6bbfb637b864d67ba93f4ac7-0",
+      "classes": 133,
+      "exit": 0,
+      "java_files": 86,
+      "warning_files": [
+        "org/apache/commons/lang/text/ExtendedMessageFormat.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264271527324500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "e5bdbe9d2ab9d37750fb8b253f714dd23f36043f11253fb50d2799f08aae8faf-0",
+      "classes": 6,
+      "exit": 0,
+      "java_files": 6,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261600935104100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "e7af3f1bb17f5877d09f59d51fad667d97bba01baf6112a9d07e1347ed53cba9-0",
+      "classes": 470,
+      "exit": 0,
+      "java_files": 402,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263531668546100",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "eb26e57bb1cc9261d527b842c40c6da576dd56943173e9f39d88a98d6d341768-0",
+      "classes": 36,
+      "exit": 0,
+      "java_files": 35,
+      "warning_files": [
+        "org/apereo/cas/authentication/mfa/trigger/TimedMultifactorAuthenticationTrigger.java"
+      ],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261689868136700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "ebc42772654cae7d2617931dcd879c58f3aa4706014c1a689fb32a8c9c6a5db4-0",
+      "classes": 139,
+      "exit": 0,
+      "java_files": 114,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261705655965600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "ef23b4fb6aff67e8cbfac14c070f5a619ba61860332098b9d59d985a487c2832-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261850592238400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f04790c5b776173b458fc72c721fa6ab85358ff13b163b2bfb3e71f6afa0402d-0",
+      "classes": 15,
+      "exit": 0,
+      "java_files": 13,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261609917480200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f19d91ff2ede1046c24c5e2e79b2e9d723af197f1ac7de0c5b330dc6998230cb-0",
+      "classes": 2,
+      "exit": 0,
+      "java_files": 2,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261593345469200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f219726558d3b0347aa22c3a5083778bf47e8c5541326ac24bc80af22a9a898d-0",
+      "classes": 46,
+      "exit": 0,
+      "java_files": 35,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263765814042200",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f228531958b74f7f322095f5b84cf7623c5d8040e402398e2898dd2c9bca80af-0",
+      "classes": 93,
+      "exit": 0,
+      "java_files": 40,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263601709496300",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f2d66ca73e4efdb24f9e5b71361f393eae943528326ad062953466942fab0384-0",
+      "classes": 6,
+      "exit": 0,
+      "java_files": 6,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261602434934400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f2f47073dffea9ad6484d56b510cbb148e1c97355190e72a713530d663b52df9-0",
+      "classes": 10,
+      "exit": 0,
+      "java_files": 8,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261614005647600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f43638ecd8decaa3cad48594194f72c35ee2cddaccbae4c116922b2993101c53-0",
+      "classes": 12,
+      "exit": 0,
+      "java_files": 8,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263434213478900",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f62e1e9115663f5844867cf974d7489281cbe712870f916abb3bcfa64b443ebe-0",
+      "classes": 1,
+      "exit": 0,
+      "java_files": 1,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261827182681800",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "f9761074f7da3ce5df33abce007fc096757211cefec354cd0555f3de42a12347-0",
+      "classes": 25,
+      "exit": 0,
+      "java_files": 23,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261679764768600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "fb5cd4e1a06115ad37b11c8becc2cdd1b8b021eaf5176206b8cb99b137ce9819-0",
+      "classes": 500,
+      "exit": 0,
+      "java_files": 302,
+      "warning_files": [],
+      "missing_expected_outer": [
+        "module-info.java"
+      ],
+      "attempt": "attempt-1789263873615435500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "fb5cd4e1a06115ad37b11c8becc2cdd1b8b021eaf5176206b8cb99b137ce9819-1",
+      "classes": 305,
+      "exit": 0,
+      "java_files": 251,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789263917895952400",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "fbf72f2a3dd0c1edfb860259dee92f74a1add5952263d8758d5a100418b2ed43-0",
+      "classes": 19,
+      "exit": 0,
+      "java_files": 15,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789261726392399600",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "fe5ba4c4c647ec2465ce268b1bb425cb6a5a0d7d8f1921f781b758d8baa0f38e-0",
+      "classes": 337,
+      "exit": 0,
+      "java_files": 293,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789262461885432500",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    },
+    {
+      "key": "feed132d688e79df3285b2e452bbb126adfe4f01d30184d59dafc7b200d2d8a1-0",
+      "classes": 3,
+      "exit": 0,
+      "java_files": 2,
+      "warning_files": [],
+      "missing_expected_outer": [],
+      "attempt": "attempt-1789264399776650700",
+      "vendor_executed": false,
+      "equivalence_verified": false
+    }
+  ],
+  "source_redactions": 0,
+  "vendor_signing_key_publication_approved": true,
+  "complete_recovery": false,
+  "runtime_equivalence_verified": false,
+  "publication_record": "See the Git commit and research release metadata; this file records recovery evidence."
+}

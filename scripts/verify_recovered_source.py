@@ -3,15 +3,17 @@
 import argparse
 import hashlib
 import json
+import os
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path, PurePosixPath
 
 SOURCE_EXTENSIONS = {'.java', '.cs', '.csproj', '.resx', '.config', '.xml',
                      '.json', '.sln', '.props', '.targets', '.il', '.c', '.h',
                      '.map', '.txt', '.tsv'}
-PROJECT_METADATA = {'README.md', 'provenance.json', 'build-status.json', 'recovery-status.json'}
+PROJECT_METADATA = {'README.md', 'provenance.json', 'build-status.json', 'recovery-status.json', 'binary-artifacts.json'}
 
 
-def verify(root):
+def verify(root, progress=None):
     root = Path(root).resolve()
     records = json.loads((root / 'provenance.json').read_text(encoding='utf-8'))
     expected = {}
@@ -23,8 +25,8 @@ def verify(root):
         if relative in expected and expected[relative] != row['sha256']:
             raise ValueError('Conflicting provenance hashes: ' + relative)
         expected[relative] = row['sha256']
-    total_bytes = 0
-    for relative, digest in expected.items():
+    def check_file(item):
+        relative, digest = item
         path = root / relative
         if path.is_symlink() or not path.resolve().is_relative_to(root):
             raise ValueError('Source escapes snapshot: ' + relative)
@@ -35,10 +37,19 @@ def verify(root):
             raise ValueError('Non-source artifact belongs in release assets: ' + relative)
         if raw[:4] in (b'\xca\xfe\xba\xbe', b'\x7fELF') or raw[:2] == b'MZ':
             raise ValueError('Executable content belongs in release assets: ' + relative)
-        total_bytes += len(raw)
-    extras = [p.relative_to(root).as_posix() for p in root.rglob('*')
-              if p.is_file() and p.relative_to(root).as_posix() not in expected
-              and p.relative_to(root).as_posix() not in PROJECT_METADATA]
+        return len(raw)
+    total_bytes = 0
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        for count, size in enumerate(pool.map(check_file, expected.items()), 1):
+            total_bytes += size
+            if progress and count % 5000 == 0:
+                progress(count, len(expected))
+    extras = []
+    for folder, _, names in os.walk(root):
+        for name in names:
+            relative = (Path(folder) / name).relative_to(root).as_posix()
+            if relative not in expected and relative not in PROJECT_METADATA:
+                extras.append(relative)
     if extras:
         raise ValueError('Files missing provenance: ' + ', '.join(extras[:10]))
     return {'verified_source_files': len(expected), 'source_bytes': total_bytes,

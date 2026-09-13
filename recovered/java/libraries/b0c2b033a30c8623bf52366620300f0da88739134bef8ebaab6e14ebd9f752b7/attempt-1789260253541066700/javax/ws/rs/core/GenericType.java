@@ -1,0 +1,119 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package javax.ws.rs.core;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
+import java.util.Stack;
+import javax.ws.rs.core.GenericEntity;
+
+public class GenericType<T> {
+    private final Type type;
+    private final Class<?> rawType;
+
+    public static GenericType forInstance(Object instance) {
+        GenericType genericType = instance instanceof GenericEntity ? new GenericType(((GenericEntity)instance).getType()) : (instance == null ? null : new GenericType(instance.getClass()));
+        return genericType;
+    }
+
+    protected GenericType() {
+        this.type = GenericType.getTypeArgument(this.getClass(), GenericType.class);
+        this.rawType = GenericType.getClass(this.type);
+    }
+
+    public GenericType(Type genericType) {
+        if (genericType == null) {
+            throw new IllegalArgumentException("Type must not be null");
+        }
+        this.type = genericType;
+        this.rawType = GenericType.getClass(this.type);
+    }
+
+    public final Type getType() {
+        return this.type;
+    }
+
+    public final Class<?> getRawType() {
+        return this.rawType;
+    }
+
+    private static Class getClass(Type type) {
+        if (type instanceof Class) {
+            return (Class)type;
+        }
+        if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType)type;
+            if (parameterizedType.getRawType() instanceof Class) {
+                return (Class)parameterizedType.getRawType();
+            }
+        } else if (type instanceof GenericArrayType) {
+            GenericArrayType array = (GenericArrayType)type;
+            Class componentRawType = GenericType.getClass(array.getGenericComponentType());
+            return GenericType.getArrayClass(componentRawType);
+        }
+        throw new IllegalArgumentException("Type parameter " + type.toString() + " not a class or parameterized type whose raw type is a class");
+    }
+
+    private static Class getArrayClass(Class c) {
+        try {
+            Object o = Array.newInstance(c, 0);
+            return o.getClass();
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    static Type getTypeArgument(Class<?> clazz, Class<?> baseClass) {
+        ParameterizedType pt;
+        Class rawType;
+        int argIndex;
+        Type currentType;
+        Stack<Type> superclasses = new Stack<Type>();
+        Class currentClass = clazz;
+        do {
+            currentType = currentClass.getGenericSuperclass();
+            superclasses.push(currentType);
+            if (currentType instanceof Class) {
+                currentClass = (Class)currentType;
+                continue;
+            }
+            if (!(currentType instanceof ParameterizedType)) continue;
+            currentClass = (Class)((ParameterizedType)currentType).getRawType();
+        } while (!currentClass.equals(baseClass));
+        TypeVariable tv = baseClass.getTypeParameters()[0];
+        while (!superclasses.isEmpty() && (currentType = (Type)superclasses.pop()) instanceof ParameterizedType && (argIndex = Arrays.asList((rawType = (Class)(pt = (ParameterizedType)currentType).getRawType()).getTypeParameters()).indexOf(tv)) > -1) {
+            Type typeArg = pt.getActualTypeArguments()[argIndex];
+            if (typeArg instanceof TypeVariable) {
+                tv = (TypeVariable)typeArg;
+                continue;
+            }
+            return typeArg;
+        }
+        throw new IllegalArgumentException(currentType + " does not specify the type parameter T of GenericType<T>");
+    }
+
+    public boolean equals(Object obj) {
+        boolean result;
+        boolean bl = result = this == obj;
+        if (!result && obj instanceof GenericType) {
+            GenericType that = (GenericType)obj;
+            return this.type.equals(that.type);
+        }
+        return result;
+    }
+
+    public int hashCode() {
+        return this.type.hashCode();
+    }
+
+    public String toString() {
+        return "GenericType{" + this.type.toString() + "}";
+    }
+}
+

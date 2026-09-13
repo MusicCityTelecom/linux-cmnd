@@ -1,0 +1,16 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package be.tpvision.smartcontrol.messages.mappers.twa.device_address_wrapper;
+
+import be.tpvision.smartcontrol.messages.Messages;
+
+public class ToDeviceAddressWrapperMessages {
+    public static final String DEVICE_ADDRESS_WRAPPER_VIEW_MODEL_CAN_NOT_BE_NULL = Messages.getViewModelCanNotBeNullMessage("Device address wrapper");
+    public static final String DEVICE_ADDRESS_VIEW_MODEL_CAN_NOT_BE_NULL = Messages.getViewModelCanNotBeNullMessage("Device address");
+    public static final String DEVICE_ADDRESS_CAN_NOT_BE_NULL = Messages.getCanNotBeNullMessage("Device address");
+
+    private ToDeviceAddressWrapperMessages() {
+    }
+}
+

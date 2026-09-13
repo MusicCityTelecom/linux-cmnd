@@ -1,0 +1,100 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.beans.factory.BeanFactoryAware
+ *  org.springframework.context.Lifecycle
+ *  org.springframework.core.convert.ConversionService
+ *  org.springframework.lang.Nullable
+ *  org.springframework.messaging.Message
+ */
+package org.springframework.integration.handler;
+
+import java.lang.reflect.Method;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.context.Lifecycle;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.integration.IntegrationPattern;
+import org.springframework.integration.IntegrationPatternType;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.handler.AbstractMessageProcessor;
+import org.springframework.integration.handler.AbstractReplyProducingMessageHandler;
+import org.springframework.integration.handler.MessageProcessor;
+import org.springframework.integration.handler.MethodInvokingMessageProcessor;
+import org.springframework.integration.support.management.ManageableLifecycle;
+import org.springframework.lang.Nullable;
+import org.springframework.messaging.Message;
+
+public class ServiceActivatingHandler
+extends AbstractReplyProducingMessageHandler
+implements ManageableLifecycle {
+    private final MessageProcessor<?> processor;
+
+    public ServiceActivatingHandler(Object object) {
+        this(new MethodInvokingMessageProcessor(object, ServiceActivator.class));
+    }
+
+    public ServiceActivatingHandler(Object object, Method method) {
+        this(new MethodInvokingMessageProcessor(object, method));
+    }
+
+    public ServiceActivatingHandler(Object object, String methodName) {
+        this(new MethodInvokingMessageProcessor(object, methodName));
+    }
+
+    public <T> ServiceActivatingHandler(MessageProcessor<T> processor) {
+        this.processor = processor;
+    }
+
+    @Override
+    public String getComponentType() {
+        return "service-activator";
+    }
+
+    @Override
+    public IntegrationPatternType getIntegrationPatternType() {
+        return this.processor instanceof IntegrationPattern ? ((IntegrationPattern)((Object)this.processor)).getIntegrationPatternType() : IntegrationPatternType.service_activator;
+    }
+
+    @Override
+    protected void doInit() {
+        ConversionService conversionService;
+        if (this.processor instanceof AbstractMessageProcessor && (conversionService = this.getConversionService()) != null) {
+            ((AbstractMessageProcessor)this.processor).setConversionService(conversionService);
+        }
+        if (this.processor instanceof BeanFactoryAware && this.getBeanFactory() != null) {
+            ((BeanFactoryAware)this.processor).setBeanFactory(this.getBeanFactory());
+        }
+    }
+
+    @Override
+    public void start() {
+        if (this.processor instanceof Lifecycle) {
+            ((Lifecycle)this.processor).start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (this.processor instanceof Lifecycle) {
+            ((Lifecycle)this.processor).stop();
+        }
+    }
+
+    @Override
+    public boolean isRunning() {
+        return !(this.processor instanceof Lifecycle) || ((Lifecycle)this.processor).isRunning();
+    }
+
+    @Override
+    @Nullable
+    protected Object handleRequestMessage(Message<?> message) {
+        return this.processor.processMessage(message);
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceActivator for [" + this.processor + "]" + (this.getComponentName() == null ? "" : " (" + this.getComponentName() + ")");
+    }
+}
+

@@ -1,0 +1,17 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package com.sun.xml.bind.v2.schemagen.xmlschema;
+
+import com.sun.xml.bind.v2.schemagen.xmlschema.Annotated;
+import com.sun.xml.txw2.TypedXmlWriter;
+import com.sun.xml.txw2.annotation.XmlAttribute;
+import javax.xml.namespace.QName;
+
+public interface ExtensionType
+extends Annotated,
+TypedXmlWriter {
+    @XmlAttribute
+    public ExtensionType base(QName var1);
+}
+

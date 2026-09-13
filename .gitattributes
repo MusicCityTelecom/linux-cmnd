@@ -10,3 +10,4 @@ HANDOFF.md export-ignore
 
 # Preserve the recovered vendor source bytes, including original line endings.
 recovered/** -text
+scripts/research_snapshot/** -text

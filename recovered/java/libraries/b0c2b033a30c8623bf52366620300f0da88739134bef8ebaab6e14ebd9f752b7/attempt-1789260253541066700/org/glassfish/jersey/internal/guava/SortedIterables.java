@@ -1,0 +1,38 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.glassfish.jersey.internal.guava;
+
+import java.util.Comparator;
+import java.util.SortedSet;
+import org.glassfish.jersey.internal.guava.Ordering;
+import org.glassfish.jersey.internal.guava.Preconditions;
+import org.glassfish.jersey.internal.guava.SortedIterable;
+
+final class SortedIterables {
+    private SortedIterables() {
+    }
+
+    public static boolean hasSameComparator(Comparator<?> comparator, Iterable<?> elements) {
+        Comparator<Object> comparator2;
+        Preconditions.checkNotNull(comparator);
+        Preconditions.checkNotNull(elements);
+        if (elements instanceof SortedSet) {
+            comparator2 = SortedIterables.comparator((SortedSet)elements);
+        } else if (elements instanceof SortedIterable) {
+            comparator2 = ((SortedIterable)elements).comparator();
+        } else {
+            return false;
+        }
+        return comparator.equals(comparator2);
+    }
+
+    private static <E> Comparator<? super E> comparator(SortedSet<E> sortedSet) {
+        Comparator<E> result = sortedSet.comparator();
+        if (result == null) {
+            result = Ordering.natural();
+        }
+        return result;
+    }
+}
+

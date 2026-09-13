@@ -1,0 +1,32 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.springframework.boot.jdbc.metadata;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import javax.sql.DataSource;
+import org.springframework.boot.jdbc.metadata.DataSourcePoolMetadata;
+import org.springframework.boot.jdbc.metadata.DataSourcePoolMetadataProvider;
+
+public class CompositeDataSourcePoolMetadataProvider
+implements DataSourcePoolMetadataProvider {
+    private final List<DataSourcePoolMetadataProvider> providers;
+
+    public CompositeDataSourcePoolMetadataProvider(Collection<? extends DataSourcePoolMetadataProvider> providers) {
+        this.providers = providers != null ? Collections.unmodifiableList(new ArrayList<DataSourcePoolMetadataProvider>(providers)) : Collections.emptyList();
+    }
+
+    @Override
+    public DataSourcePoolMetadata getDataSourcePoolMetadata(DataSource dataSource) {
+        for (DataSourcePoolMetadataProvider provider : this.providers) {
+            DataSourcePoolMetadata metadata = provider.getDataSourcePoolMetadata(dataSource);
+            if (metadata == null) continue;
+            return metadata;
+        }
+        return null;
+    }
+}
+

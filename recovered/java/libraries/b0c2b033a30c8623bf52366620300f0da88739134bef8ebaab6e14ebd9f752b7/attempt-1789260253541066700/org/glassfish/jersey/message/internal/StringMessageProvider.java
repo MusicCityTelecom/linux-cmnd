@@ -1,0 +1,51 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.glassfish.jersey.message.internal;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import javax.inject.Singleton;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import org.glassfish.jersey.message.internal.AbstractMessageReaderWriterProvider;
+
+@Produces(value={"text/plain", "*/*"})
+@Consumes(value={"text/plain", "*/*"})
+@Singleton
+final class StringMessageProvider
+extends AbstractMessageReaderWriterProvider<String> {
+    StringMessageProvider() {
+    }
+
+    @Override
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return type == String.class;
+    }
+
+    @Override
+    public String readFrom(Class<String> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
+        return StringMessageProvider.readFromAsString(entityStream, mediaType);
+    }
+
+    @Override
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return type == String.class;
+    }
+
+    @Override
+    public long getSize(String s, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return s.length();
+    }
+
+    @Override
+    public void writeTo(String t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
+        StringMessageProvider.writeToAsString(t, entityStream, mediaType);
+    }
+}
+

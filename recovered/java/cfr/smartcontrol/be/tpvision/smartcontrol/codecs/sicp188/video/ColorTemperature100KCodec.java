@@ -1,0 +1,193 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package be.tpvision.smartcontrol.codecs.sicp188.video;
+
+import be.tpvision.smartcontrol.codecs.sicp.SingleValueCodec;
+import be.tpvision.smartcontrol.domain.device_settings.video.ColorTemperature100K;
+import java.util.EnumMap;
+
+public class ColorTemperature100KCodec
+extends SingleValueCodec<ColorTemperature100K> {
+    static final byte _2000K_BYTE = 20;
+    static final byte _2100K_BYTE = 21;
+    static final byte _2200K_BYTE = 22;
+    static final byte _2300K_BYTE = 23;
+    static final byte _2400K_BYTE = 24;
+    static final byte _2500K_BYTE = 25;
+    static final byte _2600K_BYTE = 26;
+    static final byte _2700K_BYTE = 27;
+    static final byte _2800K_BYTE = 28;
+    static final byte _2900K_BYTE = 29;
+    static final byte _3000K_BYTE = 30;
+    static final byte _3100K_BYTE = 31;
+    static final byte _3200K_BYTE = 32;
+    static final byte _3300K_BYTE = 33;
+    static final byte _3400K_BYTE = 34;
+    static final byte _3500K_BYTE = 35;
+    static final byte _3600K_BYTE = 36;
+    static final byte _3700K_BYTE = 37;
+    static final byte _3800K_BYTE = 38;
+    static final byte _3900K_BYTE = 39;
+    static final byte _4000K_BYTE = 40;
+    static final byte _4100K_BYTE = 41;
+    static final byte _4200K_BYTE = 42;
+    static final byte _4300K_BYTE = 43;
+    static final byte _4400K_BYTE = 44;
+    static final byte _4500K_BYTE = 45;
+    static final byte _4600K_BYTE = 46;
+    static final byte _4700K_BYTE = 47;
+    static final byte _4800K_BYTE = 48;
+    static final byte _4900K_BYTE = 49;
+    static final byte _5000K_BYTE = 50;
+    static final byte _5100K_BYTE = 51;
+    static final byte _5200K_BYTE = 52;
+    static final byte _5300K_BYTE = 53;
+    static final byte _5400K_BYTE = 54;
+    static final byte _5500K_BYTE = 55;
+    static final byte _5600K_BYTE = 56;
+    static final byte _5700K_BYTE = 57;
+    static final byte _5800K_BYTE = 58;
+    static final byte _5900K_BYTE = 59;
+    static final byte _6000K_BYTE = 60;
+    static final byte _6100K_BYTE = 61;
+    static final byte _6200K_BYTE = 62;
+    static final byte _6300K_BYTE = 63;
+    static final byte _6400K_BYTE = 64;
+    static final byte _6500K_BYTE = 65;
+    static final byte _6600K_BYTE = 66;
+    static final byte _6700K_BYTE = 67;
+    static final byte _6800K_BYTE = 68;
+    static final byte _6900K_BYTE = 69;
+    static final byte _7000K_BYTE = 70;
+    static final byte _7100K_BYTE = 71;
+    static final byte _7200K_BYTE = 72;
+    static final byte _7300K_BYTE = 73;
+    static final byte _7400K_BYTE = 74;
+    static final byte _7500K_BYTE = 75;
+    static final byte _7600K_BYTE = 76;
+    static final byte _7700K_BYTE = 77;
+    static final byte _7800K_BYTE = 78;
+    static final byte _7900K_BYTE = 79;
+    static final byte _8000K_BYTE = 80;
+    static final byte _8100K_BYTE = 81;
+    static final byte _8200K_BYTE = 82;
+    static final byte _8300K_BYTE = 83;
+    static final byte _8400K_BYTE = 84;
+    static final byte _8500K_BYTE = 85;
+    static final byte _8600K_BYTE = 86;
+    static final byte _8700K_BYTE = 87;
+    static final byte _8800K_BYTE = 88;
+    static final byte _8900K_BYTE = 89;
+    static final byte _9000K_BYTE = 90;
+    static final byte _9100K_BYTE = 91;
+    static final byte _9200K_BYTE = 92;
+    static final byte _9300K_BYTE = 93;
+    static final byte _9400K_BYTE = 94;
+    static final byte _9500K_BYTE = 95;
+    static final byte _9600K_BYTE = 96;
+    static final byte _9700K_BYTE = 97;
+    static final byte _9800K_BYTE = 98;
+    static final byte _9900K_BYTE = 99;
+    static final byte _10000K_BYTE = 100;
+    private static ColorTemperature100KCodec colorTemperature100KCodec;
+
+    private ColorTemperature100KCodec() {
+        super(ColorTemperature100K.class);
+    }
+
+    public static synchronized ColorTemperature100KCodec getInstance() {
+        if (colorTemperature100KCodec == null) {
+            colorTemperature100KCodec = new ColorTemperature100KCodec();
+        }
+        return colorTemperature100KCodec;
+    }
+
+    @Override
+    protected void initializeDeviceSettings() {
+        EnumMap<ColorTemperature100K, Byte> domainColorTemperature100Ks = new EnumMap<ColorTemperature100K, Byte>(ColorTemperature100K.class);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2000K, (byte)20);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2100K, (byte)21);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2200K, (byte)22);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2300K, (byte)23);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2400K, (byte)24);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2500K, (byte)25);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2600K, (byte)26);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2700K, (byte)27);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2800K, (byte)28);
+        domainColorTemperature100Ks.put(ColorTemperature100K._2900K, (byte)29);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3000K, (byte)30);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3100K, (byte)31);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3200K, (byte)32);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3300K, (byte)33);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3400K, (byte)34);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3500K, (byte)35);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3600K, (byte)36);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3700K, (byte)37);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3800K, (byte)38);
+        domainColorTemperature100Ks.put(ColorTemperature100K._3900K, (byte)39);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4000K, (byte)40);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4100K, (byte)41);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4200K, (byte)42);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4300K, (byte)43);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4400K, (byte)44);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4500K, (byte)45);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4600K, (byte)46);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4700K, (byte)47);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4800K, (byte)48);
+        domainColorTemperature100Ks.put(ColorTemperature100K._4900K, (byte)49);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5000K, (byte)50);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5100K, (byte)51);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5200K, (byte)52);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5300K, (byte)53);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5400K, (byte)54);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5500K, (byte)55);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5600K, (byte)56);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5700K, (byte)57);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5800K, (byte)58);
+        domainColorTemperature100Ks.put(ColorTemperature100K._5900K, (byte)59);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6000K, (byte)60);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6100K, (byte)61);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6200K, (byte)62);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6300K, (byte)63);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6400K, (byte)64);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6500K, (byte)65);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6600K, (byte)66);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6700K, (byte)67);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6800K, (byte)68);
+        domainColorTemperature100Ks.put(ColorTemperature100K._6900K, (byte)69);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7000K, (byte)70);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7100K, (byte)71);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7200K, (byte)72);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7300K, (byte)73);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7400K, (byte)74);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7500K, (byte)75);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7600K, (byte)76);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7700K, (byte)77);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7800K, (byte)78);
+        domainColorTemperature100Ks.put(ColorTemperature100K._7900K, (byte)79);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8000K, (byte)80);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8100K, (byte)81);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8200K, (byte)82);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8300K, (byte)83);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8400K, (byte)84);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8500K, (byte)85);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8600K, (byte)86);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8700K, (byte)87);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8800K, (byte)88);
+        domainColorTemperature100Ks.put(ColorTemperature100K._8900K, (byte)89);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9000K, (byte)90);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9100K, (byte)91);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9200K, (byte)92);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9300K, (byte)93);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9400K, (byte)94);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9500K, (byte)95);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9600K, (byte)96);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9700K, (byte)97);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9800K, (byte)98);
+        domainColorTemperature100Ks.put(ColorTemperature100K._9900K, (byte)99);
+        domainColorTemperature100Ks.put(ColorTemperature100K._10000K, (byte)100);
+        super.setDeviceSettings(domainColorTemperature100Ks);
+    }
+}
+

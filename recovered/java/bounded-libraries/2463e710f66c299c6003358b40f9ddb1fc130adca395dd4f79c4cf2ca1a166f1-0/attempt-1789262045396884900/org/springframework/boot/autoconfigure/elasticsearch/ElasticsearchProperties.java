@@ -1,0 +1,72 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.boot.context.properties.ConfigurationProperties
+ */
+package org.springframework.boot.autoconfigure.elasticsearch;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(value="spring.elasticsearch")
+public class ElasticsearchProperties {
+    private List<String> uris = new ArrayList<String>(Collections.singletonList("http://localhost:9200"));
+    private String username;
+    private String password;
+    private Duration connectionTimeout = Duration.ofSeconds(1L);
+    private Duration socketTimeout = Duration.ofSeconds(30L);
+    private String pathPrefix;
+
+    public List<String> getUris() {
+        return this.uris;
+    }
+
+    public void setUris(List<String> uris) {
+        this.uris = uris;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Duration getConnectionTimeout() {
+        return this.connectionTimeout;
+    }
+
+    public void setConnectionTimeout(Duration connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+    public Duration getSocketTimeout() {
+        return this.socketTimeout;
+    }
+
+    public void setSocketTimeout(Duration socketTimeout) {
+        this.socketTimeout = socketTimeout;
+    }
+
+    public String getPathPrefix() {
+        return this.pathPrefix;
+    }
+
+    public void setPathPrefix(String pathPrefix) {
+        this.pathPrefix = pathPrefix;
+    }
+}
+

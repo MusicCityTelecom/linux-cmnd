@@ -1,0 +1,115 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.boot.context.properties.ConfigurationProperties
+ *  org.springframework.boot.context.properties.NestedConfigurationProperty
+ */
+package org.springframework.boot.autoconfigure.jms.activemq;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.boot.autoconfigure.jms.JmsPoolConnectionFactoryProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
+@ConfigurationProperties(prefix="spring.activemq")
+public class ActiveMQProperties {
+    private String brokerUrl;
+    private boolean inMemory = true;
+    private String user;
+    private String password;
+    private Duration closeTimeout = Duration.ofSeconds(15L);
+    private boolean nonBlockingRedelivery = false;
+    private Duration sendTimeout = Duration.ofMillis(0L);
+    @NestedConfigurationProperty
+    private final JmsPoolConnectionFactoryProperties pool = new JmsPoolConnectionFactoryProperties();
+    private final Packages packages = new Packages();
+
+    public String getBrokerUrl() {
+        return this.brokerUrl;
+    }
+
+    public void setBrokerUrl(String brokerUrl) {
+        this.brokerUrl = brokerUrl;
+    }
+
+    public boolean isInMemory() {
+        return this.inMemory;
+    }
+
+    public void setInMemory(boolean inMemory) {
+        this.inMemory = inMemory;
+    }
+
+    public String getUser() {
+        return this.user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Duration getCloseTimeout() {
+        return this.closeTimeout;
+    }
+
+    public void setCloseTimeout(Duration closeTimeout) {
+        this.closeTimeout = closeTimeout;
+    }
+
+    public boolean isNonBlockingRedelivery() {
+        return this.nonBlockingRedelivery;
+    }
+
+    public void setNonBlockingRedelivery(boolean nonBlockingRedelivery) {
+        this.nonBlockingRedelivery = nonBlockingRedelivery;
+    }
+
+    public Duration getSendTimeout() {
+        return this.sendTimeout;
+    }
+
+    public void setSendTimeout(Duration sendTimeout) {
+        this.sendTimeout = sendTimeout;
+    }
+
+    public JmsPoolConnectionFactoryProperties getPool() {
+        return this.pool;
+    }
+
+    public Packages getPackages() {
+        return this.packages;
+    }
+
+    public static class Packages {
+        private Boolean trustAll;
+        private List<String> trusted = new ArrayList<String>();
+
+        public Boolean getTrustAll() {
+            return this.trustAll;
+        }
+
+        public void setTrustAll(Boolean trustAll) {
+            this.trustAll = trustAll;
+        }
+
+        public List<String> getTrusted() {
+            return this.trusted;
+        }
+
+        public void setTrusted(List<String> trusted) {
+            this.trusted = trusted;
+        }
+    }
+}
+

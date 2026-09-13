@@ -1,0 +1,78 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.apache.commons.logging.Log
+ *  org.apache.commons.logging.LogFactory
+ *  org.springframework.messaging.Message
+ *  org.springframework.messaging.MessageHandler
+ *  org.springframework.util.Assert
+ */
+package org.springframework.integration.dispatcher;
+
+import java.util.Set;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.integration.dispatcher.MessageDispatcher;
+import org.springframework.integration.dispatcher.OrderedAwareCopyOnWriteArraySet;
+import org.springframework.integration.support.utils.IntegrationUtils;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHandler;
+import org.springframework.util.Assert;
+
+public abstract class AbstractDispatcher
+implements MessageDispatcher {
+    protected final Log logger = LogFactory.getLog(this.getClass());
+    private final OrderedAwareCopyOnWriteArraySet<MessageHandler> handlers = new OrderedAwareCopyOnWriteArraySet();
+    private volatile int maxSubscribers = Integer.MAX_VALUE;
+    private volatile MessageHandler theOneHandler;
+
+    public void setMaxSubscribers(int maxSubscribers) {
+        this.maxSubscribers = maxSubscribers;
+    }
+
+    protected Set<MessageHandler> getHandlers() {
+        return this.handlers.asUnmodifiableSet();
+    }
+
+    @Override
+    public synchronized boolean addHandler(MessageHandler handler) {
+        Assert.notNull((Object)handler, (String)"handler must not be null");
+        Assert.isTrue((this.handlers.size() < this.maxSubscribers ? 1 : 0) != 0, (String)"Maximum subscribers exceeded");
+        boolean added = this.handlers.add(handler);
+        this.theOneHandler = this.handlers.size() == 1 ? handler : null;
+        return added;
+    }
+
+    @Override
+    public synchronized boolean removeHandler(MessageHandler handler) {
+        Assert.notNull((Object)handler, (String)"handler must not be null");
+        boolean removed = this.handlers.remove(handler);
+        this.theOneHandler = this.handlers.size() == 1 ? this.handlers.iterator().next() : null;
+        return removed;
+    }
+
+    protected boolean tryOptimizedDispatch(Message<?> message) {
+        MessageHandler handler = this.theOneHandler;
+        if (handler != null) {
+            try {
+                handler.handleMessage(message);
+                return true;
+            }
+            catch (Exception e) {
+                throw IntegrationUtils.wrapInDeliveryExceptionIfNecessary(message, () -> "Dispatcher failed to deliver Message", e);
+            }
+        }
+        return false;
+    }
+
+    public String toString() {
+        return this.getClass().getSimpleName() + " with handlers: " + this.handlers.toString();
+    }
+
+    @Override
+    public int getHandlerCount() {
+        return this.handlers.size();
+    }
+}
+

@@ -1,0 +1,330 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.htng._2011b;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.htng._2011b.HTNGAuthorizationType;
+import org.opentravel.ota._2003._05.CommentType;
+import org.opentravel.ota._2003._05.ErrorsType;
+import org.opentravel.ota._2003._05.SuccessType;
+import org.opentravel.ota._2003._05.WarningsType;
+
+@XmlAccessorType(value=XmlAccessType.FIELD)
+@XmlType(name="", propOrder={"success", "warnings", "authorization", "errors"})
+@XmlRootElement(name="HTNG_PaymentCardProcessingRS")
+public class HTNGPaymentCardProcessingRS {
+    @XmlElement(name="Success")
+    protected SuccessType success;
+    @XmlElement(name="Warnings")
+    protected WarningsType warnings;
+    @XmlElement(name="Authorization")
+    protected List<Authorization> authorization;
+    @XmlElement(name="Errors")
+    protected ErrorsType errors;
+    @XmlAttribute(name="EchoToken")
+    protected String echoToken;
+    @XmlAttribute(name="TimeStamp")
+    @XmlSchemaType(name="dateTime")
+    protected XMLGregorianCalendar timeStamp;
+    @XmlAttribute(name="Target")
+    @XmlJavaTypeAdapter(value=CollapsedStringAdapter.class)
+    protected String target;
+    @XmlAttribute(name="TargetName")
+    protected String targetName;
+    @XmlAttribute(name="Version", required=true)
+    protected BigDecimal version;
+    @XmlAttribute(name="TransactionIdentifier")
+    protected String transactionIdentifier;
+    @XmlAttribute(name="SequenceNmbr")
+    @XmlSchemaType(name="nonNegativeInteger")
+    protected BigInteger sequenceNmbr;
+    @XmlAttribute(name="TransactionStatusCode")
+    @XmlJavaTypeAdapter(value=CollapsedStringAdapter.class)
+    protected String transactionStatusCode;
+    @XmlAttribute(name="RetransmissionIndicator")
+    protected Boolean retransmissionIndicator;
+    @XmlAttribute(name="CorrelationID")
+    protected String correlationID;
+    @XmlAttribute(name="AltLangID")
+    @XmlJavaTypeAdapter(value=CollapsedStringAdapter.class)
+    @XmlSchemaType(name="language")
+    protected String altLangID;
+    @XmlAttribute(name="PrimaryLangID")
+    @XmlJavaTypeAdapter(value=CollapsedStringAdapter.class)
+    @XmlSchemaType(name="language")
+    protected String primaryLangID;
+
+    public SuccessType getSuccess() {
+        return this.success;
+    }
+
+    public void setSuccess(SuccessType value) {
+        this.success = value;
+    }
+
+    public WarningsType getWarnings() {
+        return this.warnings;
+    }
+
+    public void setWarnings(WarningsType value) {
+        this.warnings = value;
+    }
+
+    public List<Authorization> getAuthorization() {
+        if (this.authorization == null) {
+            this.authorization = new ArrayList<Authorization>();
+        }
+        return this.authorization;
+    }
+
+    public ErrorsType getErrors() {
+        return this.errors;
+    }
+
+    public void setErrors(ErrorsType value) {
+        this.errors = value;
+    }
+
+    public String getEchoToken() {
+        return this.echoToken;
+    }
+
+    public void setEchoToken(String value) {
+        this.echoToken = value;
+    }
+
+    public XMLGregorianCalendar getTimeStamp() {
+        return this.timeStamp;
+    }
+
+    public void setTimeStamp(XMLGregorianCalendar value) {
+        this.timeStamp = value;
+    }
+
+    public String getTarget() {
+        return this.target;
+    }
+
+    public void setTarget(String value) {
+        this.target = value;
+    }
+
+    public String getTargetName() {
+        return this.targetName;
+    }
+
+    public void setTargetName(String value) {
+        this.targetName = value;
+    }
+
+    public BigDecimal getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(BigDecimal value) {
+        this.version = value;
+    }
+
+    public String getTransactionIdentifier() {
+        return this.transactionIdentifier;
+    }
+
+    public void setTransactionIdentifier(String value) {
+        this.transactionIdentifier = value;
+    }
+
+    public BigInteger getSequenceNmbr() {
+        return this.sequenceNmbr;
+    }
+
+    public void setSequenceNmbr(BigInteger value) {
+        this.sequenceNmbr = value;
+    }
+
+    public String getTransactionStatusCode() {
+        return this.transactionStatusCode;
+    }
+
+    public void setTransactionStatusCode(String value) {
+        this.transactionStatusCode = value;
+    }
+
+    public Boolean isRetransmissionIndicator() {
+        return this.retransmissionIndicator;
+    }
+
+    public void setRetransmissionIndicator(Boolean value) {
+        this.retransmissionIndicator = value;
+    }
+
+    public String getCorrelationID() {
+        return this.correlationID;
+    }
+
+    public void setCorrelationID(String value) {
+        this.correlationID = value;
+    }
+
+    public String getAltLangID() {
+        return this.altLangID;
+    }
+
+    public void setAltLangID(String value) {
+        this.altLangID = value;
+    }
+
+    public String getPrimaryLangID() {
+        return this.primaryLangID;
+    }
+
+    public void setPrimaryLangID(String value) {
+        this.primaryLangID = value;
+    }
+
+    @XmlAccessorType(value=XmlAccessType.FIELD)
+    @XmlType(name="", propOrder={"authorizationDetail", "authorizationResult", "warnings", "comments"})
+    public static class Authorization {
+        @XmlElement(name="AuthorizationDetail")
+        protected HTNGAuthorizationType authorizationDetail;
+        @XmlElement(name="AuthorizationResult")
+        protected AuthorizationResult authorizationResult;
+        @XmlElement(name="Warnings")
+        protected WarningsType warnings;
+        @XmlElement(name="Comments")
+        protected CommentType comments;
+
+        public HTNGAuthorizationType getAuthorizationDetail() {
+            return this.authorizationDetail;
+        }
+
+        public void setAuthorizationDetail(HTNGAuthorizationType value) {
+            this.authorizationDetail = value;
+        }
+
+        public AuthorizationResult getAuthorizationResult() {
+            return this.authorizationResult;
+        }
+
+        public void setAuthorizationResult(AuthorizationResult value) {
+            this.authorizationResult = value;
+        }
+
+        public WarningsType getWarnings() {
+            return this.warnings;
+        }
+
+        public void setWarnings(WarningsType value) {
+            this.warnings = value;
+        }
+
+        public CommentType getComments() {
+            return this.comments;
+        }
+
+        public void setComments(CommentType value) {
+            this.comments = value;
+        }
+
+        @XmlAccessorType(value=XmlAccessType.FIELD)
+        @XmlType(name="")
+        public static class AuthorizationResult {
+            @XmlAttribute(name="AuthorizationCode")
+            protected String authorizationCode;
+            @XmlAttribute(name="ApprovalDateTime")
+            protected String approvalDateTime;
+            @XmlAttribute(name="Result")
+            @XmlJavaTypeAdapter(value=CollapsedStringAdapter.class)
+            protected String result;
+            @XmlAttribute(name="AddressResultCode")
+            protected String addressResultCode;
+            @XmlAttribute(name="CVC_Result")
+            @XmlJavaTypeAdapter(value=CollapsedStringAdapter.class)
+            protected String cvcResult;
+            @XmlAttribute(name="Description")
+            protected String description;
+            @XmlAttribute(name="ApprovedAmount")
+            protected BigDecimal approvedAmount;
+            @XmlAttribute(name="BalanceRemaining")
+            protected BigDecimal balanceRemaining;
+
+            public String getAuthorizationCode() {
+                return this.authorizationCode;
+            }
+
+            public void setAuthorizationCode(String value) {
+                this.authorizationCode = value;
+            }
+
+            public String getApprovalDateTime() {
+                return this.approvalDateTime;
+            }
+
+            public void setApprovalDateTime(String value) {
+                this.approvalDateTime = value;
+            }
+
+            public String getResult() {
+                return this.result;
+            }
+
+            public void setResult(String value) {
+                this.result = value;
+            }
+
+            public String getAddressResultCode() {
+                return this.addressResultCode;
+            }
+
+            public void setAddressResultCode(String value) {
+                this.addressResultCode = value;
+            }
+
+            public String getCVCResult() {
+                return this.cvcResult;
+            }
+
+            public void setCVCResult(String value) {
+                this.cvcResult = value;
+            }
+
+            public String getDescription() {
+                return this.description;
+            }
+
+            public void setDescription(String value) {
+                this.description = value;
+            }
+
+            public BigDecimal getApprovedAmount() {
+                return this.approvedAmount;
+            }
+
+            public void setApprovedAmount(BigDecimal value) {
+                this.approvedAmount = value;
+            }
+
+            public BigDecimal getBalanceRemaining() {
+                return this.balanceRemaining;
+            }
+
+            public void setBalanceRemaining(BigDecimal value) {
+                this.balanceRemaining = value;
+            }
+        }
+    }
+}
+

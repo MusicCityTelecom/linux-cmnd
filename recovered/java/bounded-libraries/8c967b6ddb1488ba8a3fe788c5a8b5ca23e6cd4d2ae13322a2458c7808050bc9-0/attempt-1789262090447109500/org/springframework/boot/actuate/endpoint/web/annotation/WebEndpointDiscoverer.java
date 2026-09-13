@@ -1,0 +1,59 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.context.ApplicationContext
+ */
+package org.springframework.boot.actuate.endpoint.web.annotation;
+
+import java.util.Collection;
+import java.util.List;
+import org.springframework.boot.actuate.endpoint.EndpointFilter;
+import org.springframework.boot.actuate.endpoint.EndpointId;
+import org.springframework.boot.actuate.endpoint.annotation.DiscoveredOperationMethod;
+import org.springframework.boot.actuate.endpoint.annotation.EndpointDiscoverer;
+import org.springframework.boot.actuate.endpoint.invoke.OperationInvoker;
+import org.springframework.boot.actuate.endpoint.invoke.OperationInvokerAdvisor;
+import org.springframework.boot.actuate.endpoint.invoke.ParameterValueMapper;
+import org.springframework.boot.actuate.endpoint.web.EndpointMediaTypes;
+import org.springframework.boot.actuate.endpoint.web.ExposableWebEndpoint;
+import org.springframework.boot.actuate.endpoint.web.PathMapper;
+import org.springframework.boot.actuate.endpoint.web.WebEndpointsSupplier;
+import org.springframework.boot.actuate.endpoint.web.WebOperation;
+import org.springframework.boot.actuate.endpoint.web.WebOperationRequestPredicate;
+import org.springframework.boot.actuate.endpoint.web.annotation.DiscoveredWebEndpoint;
+import org.springframework.boot.actuate.endpoint.web.annotation.DiscoveredWebOperation;
+import org.springframework.boot.actuate.endpoint.web.annotation.RequestPredicateFactory;
+import org.springframework.context.ApplicationContext;
+
+public class WebEndpointDiscoverer
+extends EndpointDiscoverer<ExposableWebEndpoint, WebOperation>
+implements WebEndpointsSupplier {
+    private final List<PathMapper> endpointPathMappers;
+    private final RequestPredicateFactory requestPredicateFactory;
+
+    public WebEndpointDiscoverer(ApplicationContext applicationContext, ParameterValueMapper parameterValueMapper, EndpointMediaTypes endpointMediaTypes, List<PathMapper> endpointPathMappers, Collection<OperationInvokerAdvisor> invokerAdvisors, Collection<EndpointFilter<ExposableWebEndpoint>> filters) {
+        super(applicationContext, parameterValueMapper, invokerAdvisors, filters);
+        this.endpointPathMappers = endpointPathMappers;
+        this.requestPredicateFactory = new RequestPredicateFactory(endpointMediaTypes);
+    }
+
+    @Override
+    protected ExposableWebEndpoint createEndpoint(Object endpointBean, EndpointId id, boolean enabledByDefault, Collection<WebOperation> operations) {
+        String rootPath = PathMapper.getRootPath(this.endpointPathMappers, id);
+        return new DiscoveredWebEndpoint(this, endpointBean, id, rootPath, enabledByDefault, operations);
+    }
+
+    @Override
+    protected WebOperation createOperation(EndpointId endpointId, DiscoveredOperationMethod operationMethod, OperationInvoker invoker) {
+        String rootPath = PathMapper.getRootPath(this.endpointPathMappers, endpointId);
+        WebOperationRequestPredicate requestPredicate = this.requestPredicateFactory.getRequestPredicate(rootPath, operationMethod);
+        return new DiscoveredWebOperation(endpointId, operationMethod, invoker, requestPredicate);
+    }
+
+    @Override
+    protected EndpointDiscoverer.OperationKey createOperationKey(WebOperation operation) {
+        return new EndpointDiscoverer.OperationKey(operation.getRequestPredicate(), () -> "web request predicate " + operation.getRequestPredicate());
+    }
+}
+

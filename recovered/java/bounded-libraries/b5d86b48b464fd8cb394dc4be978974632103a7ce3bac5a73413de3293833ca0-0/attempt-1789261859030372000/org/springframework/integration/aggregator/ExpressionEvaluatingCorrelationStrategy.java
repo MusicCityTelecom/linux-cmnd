@@ -1,0 +1,54 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.beans.BeansException
+ *  org.springframework.beans.factory.BeanFactory
+ *  org.springframework.beans.factory.BeanFactoryAware
+ *  org.springframework.expression.Expression
+ *  org.springframework.expression.ExpressionParser
+ *  org.springframework.expression.spel.SpelParserConfiguration
+ *  org.springframework.expression.spel.standard.SpelExpressionParser
+ *  org.springframework.messaging.Message
+ *  org.springframework.util.Assert
+ */
+package org.springframework.integration.aggregator;
+
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.SpelParserConfiguration;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.integration.aggregator.CorrelationStrategy;
+import org.springframework.integration.handler.ExpressionEvaluatingMessageProcessor;
+import org.springframework.messaging.Message;
+import org.springframework.util.Assert;
+
+public class ExpressionEvaluatingCorrelationStrategy
+implements CorrelationStrategy,
+BeanFactoryAware {
+    private static final ExpressionParser EXPRESSION_PARSER = new SpelExpressionParser(new SpelParserConfiguration(true, true));
+    private final ExpressionEvaluatingMessageProcessor<Object> processor;
+
+    public ExpressionEvaluatingCorrelationStrategy(String expressionString) {
+        Assert.hasText((String)expressionString, (String)"expressionString must not be empty");
+        Expression expression = EXPRESSION_PARSER.parseExpression(expressionString);
+        this.processor = new ExpressionEvaluatingMessageProcessor<Object>(expression, Object.class);
+    }
+
+    public ExpressionEvaluatingCorrelationStrategy(Expression expression) {
+        this.processor = new ExpressionEvaluatingMessageProcessor<Object>(expression, Object.class);
+    }
+
+    @Override
+    public Object getCorrelationKey(Message<?> message) {
+        return this.processor.processMessage(message);
+    }
+
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.processor.setBeanFactory(beanFactory);
+    }
+}
+

@@ -1,0 +1,103 @@
+[
+  {
+    "component": "reload",
+    "input_classes": 2,
+    "source_files": 1,
+    "decompiler_exit": 0,
+    "compiler_exit": 0,
+    "class_files_emitted": 2,
+    "compiler_errors": {},
+    "compile_only_supplements": [],
+    "warning_files": [],
+    "vendor_executed": false,
+    "equivalence_verified": false
+  },
+  {
+    "component": "smartcms",
+    "input_classes": 12,
+    "source_files": 12,
+    "decompiler_exit": 0,
+    "compiler_exit": 0,
+    "class_files_emitted": 12,
+    "compiler_errors": {},
+    "compile_only_supplements": [
+      "validation-api-2.0.1.Final.jar"
+    ],
+    "warning_files": [],
+    "vendor_executed": false,
+    "equivalence_verified": false
+  },
+  {
+    "component": "cas",
+    "input_classes": 74,
+    "source_files": 41,
+    "decompiler_exit": 0,
+    "compiler_exit": 1,
+    "class_files_emitted": 0,
+    "compiler_errors": {
+      "package lombok does not exist": 1,
+      "cannot find symbol": 1,
+      "reference to doPrivileged is ambiguous": 1,
+      "incompatible types: Iterator<org.springframework.boot.loader.jar.JarEntry> cannot be converted to Iterator<java.util.jar.JarEntry>": 1,
+      "method does not override or implement a method from a supertype": 1
+    },
+    "compile_only_supplements": [],
+    "warning_files": [],
+    "vendor_executed": false,
+    "equivalence_verified": false
+  },
+  {
+    "component": "usermanagement",
+    "input_classes": 91,
+    "source_files": 57,
+    "decompiler_exit": 0,
+    "compiler_exit": 1,
+    "class_files_emitted": 9,
+    "compiler_errors": {
+      "reference to doPrivileged is ambiguous": 1,
+      "incompatible types: Iterator<org.springframework.boot.loader.jar.JarEntry> cannot be converted to Iterator<java.util.jar.JarEntry>": 1,
+      "method does not override or implement a method from a supertype": 1
+    },
+    "compile_only_supplements": [],
+    "warning_files": [],
+    "vendor_executed": false,
+    "equivalence_verified": false
+  },
+  {
+    "component": "smartcontrol",
+    "input_classes": 1222,
+    "source_files": 1118,
+    "decompiler_exit": 0,
+    "compiler_exit": 1,
+    "class_files_emitted": 8,
+    "compiler_errors": {
+      "reference to doPrivileged is ambiguous": 1,
+      "incompatible types: Iterator<org.springframework.boot.loader.jar.JarEntry> cannot be converted to Iterator<java.util.jar.JarEntry>": 1,
+      "method does not override or implement a method from a supertype": 1,
+      "incompatible types: Enum cannot be converted to T": 3
+    },
+    "compile_only_supplements": [],
+    "warning_files": [],
+    "vendor_executed": false,
+    "equivalence_verified": false
+  },
+  {
+    "component": "SmartInstall",
+    "input_classes": 2412,
+    "source_files": 1123,
+    "decompiler_exit": 0,
+    "compiler_exit": "timeout",
+    "class_files_emitted": 1672,
+    "compiler_errors": {
+      "incompatible types: List<Element> cannot be converted to Collection<? extends HTNGComponentRoomType>": 1,
+      "cannot find symbol": 1,
+      "incompatible types: HTNGComponentRoomType cannot be converted to HTNGRoomElementType": 1
+    },
+    "compile_only_supplements": [],
+    "warning_files": [
+      "org/htng/_2011b/StayNotificationClient.java"
+    ],
+    "vendor_executed": false,
+    "equivalence_verified": false
+  }
+]

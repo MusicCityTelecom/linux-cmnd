@@ -1,0 +1,13 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.springframework.boot.convert;
+
+import org.springframework.boot.convert.LenientObjectToEnumConverterFactory;
+
+final class LenientBooleanToEnumConverterFactory
+extends LenientObjectToEnumConverterFactory<Boolean> {
+    LenientBooleanToEnumConverterFactory() {
+    }
+}
+

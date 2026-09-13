@@ -1,0 +1,170 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.core.annotation.Order
+ *  org.springframework.util.Assert
+ *  org.springframework.util.ClassUtils
+ *  org.springframework.util.FileCopyUtils
+ *  org.springframework.util.ResourceUtils
+ *  org.springframework.util.StringUtils
+ */
+package org.springframework.boot.logging.java;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import org.springframework.boot.logging.AbstractLoggingSystem;
+import org.springframework.boot.logging.LogFile;
+import org.springframework.boot.logging.LogLevel;
+import org.springframework.boot.logging.LoggerConfiguration;
+import org.springframework.boot.logging.LoggingInitializationContext;
+import org.springframework.boot.logging.LoggingSystem;
+import org.springframework.boot.logging.LoggingSystemFactory;
+import org.springframework.core.annotation.Order;
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
+
+public class JavaLoggingSystem
+extends AbstractLoggingSystem {
+    private static final AbstractLoggingSystem.LogLevels<Level> LEVELS = new AbstractLoggingSystem.LogLevels();
+    private final Set<Logger> configuredLoggers = Collections.synchronizedSet(new HashSet());
+
+    public JavaLoggingSystem(ClassLoader classLoader) {
+        super(classLoader);
+    }
+
+    @Override
+    protected String[] getStandardConfigLocations() {
+        return new String[]{"logging.properties"};
+    }
+
+    @Override
+    public void beforeInitialize() {
+        super.beforeInitialize();
+        Logger.getLogger("").setLevel(Level.SEVERE);
+    }
+
+    @Override
+    protected void loadDefaults(LoggingInitializationContext initializationContext, LogFile logFile) {
+        if (logFile != null) {
+            this.loadConfiguration(this.getPackagedConfigFile("logging-file.properties"), logFile);
+        } else {
+            this.loadConfiguration(this.getPackagedConfigFile("logging.properties"), logFile);
+        }
+    }
+
+    @Override
+    protected void loadConfiguration(LoggingInitializationContext initializationContext, String location, LogFile logFile) {
+        this.loadConfiguration(location, logFile);
+    }
+
+    protected void loadConfiguration(String location, LogFile logFile) {
+        Assert.notNull((Object)location, (String)"Location must not be null");
+        try {
+            String configuration = FileCopyUtils.copyToString((Reader)new InputStreamReader(ResourceUtils.getURL((String)location).openStream()));
+            if (logFile != null) {
+                configuration = configuration.replace("${LOG_FILE}", StringUtils.cleanPath((String)logFile.toString()));
+            }
+            LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(configuration.getBytes()));
+        }
+        catch (Exception ex) {
+            throw new IllegalStateException("Could not initialize Java logging from " + location, ex);
+        }
+    }
+
+    @Override
+    public Set<LogLevel> getSupportedLogLevels() {
+        return LEVELS.getSupported();
+    }
+
+    @Override
+    public void setLogLevel(String loggerName, LogLevel level) {
+        Logger logger;
+        if (loggerName == null || "ROOT".equals(loggerName)) {
+            loggerName = "";
+        }
+        if ((logger = Logger.getLogger(loggerName)) != null) {
+            this.configuredLoggers.add(logger);
+            logger.setLevel(LEVELS.convertSystemToNative(level));
+        }
+    }
+
+    @Override
+    public List<LoggerConfiguration> getLoggerConfigurations() {
+        ArrayList<LoggerConfiguration> result = new ArrayList<LoggerConfiguration>();
+        Enumeration<String> names = LogManager.getLogManager().getLoggerNames();
+        while (names.hasMoreElements()) {
+            result.add(this.getLoggerConfiguration(names.nextElement()));
+        }
+        result.sort(CONFIGURATION_COMPARATOR);
+        return Collections.unmodifiableList(result);
+    }
+
+    @Override
+    public LoggerConfiguration getLoggerConfiguration(String loggerName) {
+        Logger logger = Logger.getLogger(loggerName);
+        if (logger == null) {
+            return null;
+        }
+        LogLevel level = LEVELS.convertNativeToSystem(logger.getLevel());
+        LogLevel effectiveLevel = LEVELS.convertNativeToSystem(this.getEffectiveLevel(logger));
+        String name = StringUtils.hasLength((String)logger.getName()) ? logger.getName() : "ROOT";
+        return new LoggerConfiguration(name, level, effectiveLevel);
+    }
+
+    private Level getEffectiveLevel(Logger root) {
+        Logger logger = root;
+        while (logger.getLevel() == null) {
+            logger = logger.getParent();
+        }
+        return logger.getLevel();
+    }
+
+    @Override
+    public Runnable getShutdownHandler() {
+        return () -> LogManager.getLogManager().reset();
+    }
+
+    @Override
+    public void cleanUp() {
+        this.configuredLoggers.clear();
+    }
+
+    static {
+        LEVELS.map(LogLevel.TRACE, Level.FINEST);
+        LEVELS.map(LogLevel.DEBUG, Level.FINE);
+        LEVELS.map(LogLevel.INFO, Level.INFO);
+        LEVELS.map(LogLevel.WARN, Level.WARNING);
+        LEVELS.map(LogLevel.ERROR, Level.SEVERE);
+        LEVELS.map(LogLevel.FATAL, Level.SEVERE);
+        LEVELS.map(LogLevel.OFF, Level.OFF);
+    }
+
+    @Order(value=0x7FFFFFFF)
+    public static class Factory
+    implements LoggingSystemFactory {
+        private static final boolean PRESENT = ClassUtils.isPresent((String)"java.util.logging.LogManager", (ClassLoader)Factory.class.getClassLoader());
+
+        @Override
+        public LoggingSystem getLoggingSystem(ClassLoader classLoader) {
+            if (PRESENT) {
+                return new JavaLoggingSystem(classLoader);
+            }
+            return null;
+        }
+    }
+}
+
