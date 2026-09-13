@@ -1,7 +1,7 @@
 # v0.7.2 qualification record
 
-Status: pre-publication acceptance checks PASS, 2026-09-13. Public GitHub transport
-checks are recorded separately in the release notes after publication. This is
+Status: pre-publication acceptance checks PASS, 2026-09-13. Subsequent public
+GitHub install/update checks also passed; see the [published-download record](QUALIFICATION-072-PUBLIC.md). This is
 Ubuntu evaluation qualification, not full vendor-feature or production certification.
 
 Baseline: v0.7.1 (`38fd6b4f9c4269127792ae6fac9cae6e78de734a`) plus the existing

@@ -6,8 +6,9 @@ See the [complete v0.7.2 qualification record](QUALIFICATION-072.md).
 All 218 tests passed on Ubuntu, including the opt-in isolated MySQL case test.
 Actual candidate installation, low-disk rejection, package lifecycle, Chromium
 logins, reboot recovery, unchanged credentials/data and update-worker execution
-passed in a dedicated Ubuntu 24.04 VM. Public release transport is recorded
-separately after publication. No physical TV was contacted for this maintenance fix.
+passed in a dedicated Ubuntu 24.04 VM. Subsequent public GitHub-only fresh install
+and actual public updater checks passed; see the [published-download record](QUALIFICATION-072-PUBLIC.md).
+No physical TV was contacted for this maintenance fix.
 
 ## 0.7.1 database-case patch (2026-09-11)
 
