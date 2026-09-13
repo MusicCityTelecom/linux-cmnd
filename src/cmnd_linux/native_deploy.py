@@ -30,6 +30,7 @@ from .config import Config, ConfigError, load_config
 from .egress import EgressPolicy, apply_policy
 from .native_config import NativeLayout, native_endpoint, render_native_files
 from .vendor_config import REQUIRED_SECRETS
+from .install_log import event
 
 MYSQL_IMAGE = 'mysql@sha256:4bc6bc963e6d8443453676cae56536f4b8156d78bae03c0145cbe47c2aad73bb'
 MYSQL_CASE_OPTION = '--lower-case-table-names=1'
@@ -76,13 +77,14 @@ def write_new(path: Path, content: str | bytes, mode: int = 0o600) -> None:
         handle.write(data)
 
 
-def run(*args, data: bytes | None = None, timeout: int = 180) -> bytes:
+def run(*args, data: bytes | None = None, timeout: int = 180, log_failure: bool = True) -> bytes:
     result = subprocess.run(list(map(str, args)), input=data, capture_output=True, timeout=timeout)
     if result.returncode:
-        if STATE.is_dir():
-            with (STATE / 'deployment.log').open('ab') as log:
-                log.write(result.stdout + result.stderr)
-        raise RuntimeError('deployment subprocess failed: ' + str(args[0]) + '; inspect private deployment.log')
+        error = RuntimeError('deployment subprocess failed: ' + str(args[0]) + '; inspect private deployment.log')
+        error.private_detail = (result.stdout + result.stderr).decode(errors='replace')[-8192:]
+        if log_failure:
+            event(str(error), level='ERROR', state=STATE, private_detail=error.private_detail)
+        raise error
     return result.stdout
 
 
@@ -161,11 +163,8 @@ def preflight(inputs: DeploymentInputs, config: Config) -> dict:
                 probe.bind(('0.0.0.0', port))
             except OSError as error:
                 raise ConfigError('configured port is already occupied: ' + str(port)) from error
-    if shutil.disk_usage('/var/lib').free < 10 * 1024**3:
-        raise ConfigError('at least10GiB free deployment space is required')
-    upload_reserve = 10 * 1024**3 + 2 * config.cms_upload_limit_mb * 1024**2
-    if shutil.disk_usage('/var/lib').free < upload_reserve:
-        raise ConfigError('insufficient disk for deployment plus two configured CMS uploads; reduce cms.upload_limit_mb or add disk')
+    from .install_storage import storage_preflight
+    storage_preflight(config.cms_upload_limit_mb, phase='prepared')
     memory = re.search(r'^MemTotal:\s+(\d+)', Path('/proc/meminfo').read_text(), re.M)
     if not memory or int(memory.group(1)) < 5_500_000:
         raise ConfigError('at least 6GiB installed RAM is required for the evaluation runtime')
@@ -321,25 +320,31 @@ def _owned_tree(root: Path, uid: int, gid: int, private_files: bool = False) -> 
         path.chmod(0o750 if path.is_dir() or path.suffix == '.sh' else (0o600 if private_files else 0o640))
 
 
-def _mysql(query: bytes, database: str | None = None, *, timeout: int = 900) -> bytes:
+def _mysql(query: bytes, database: str | None = None, *, timeout: int = 900, probe: bool = False) -> bytes:
     args = ['docker', 'exec', '-i', 'cmnd-native-mysql', 'mysql',
             '--defaults-extra-file=/run/secrets/client.cnf', '--binary-mode=1', '--batch', '--skip-column-names']
     if database:
         args.append(database)
-    return run(*args, data=query, timeout=timeout)
+    return run(*args, data=query, timeout=timeout, log_failure=not probe)
 
 
 def wait_database(seconds: int = 120) -> None:
     if type(seconds) is not int or not 1 <= seconds <= 600:
         raise ConfigError('database readiness timeout must be 1..600 seconds')
     deadline = time.monotonic() + seconds
+    last_reason = 'No successful SELECT 1 response'
+    progress = 0
     while time.monotonic() < deadline:
         try:
-            if _mysql(b'SELECT 1;', timeout=5).strip() == b'1':
+            if _mysql(b'SELECT 1;', timeout=5, probe=True).strip() == b'1':
                 return
-        except (RuntimeError, subprocess.TimeoutExpired):
-            pass
+        except (RuntimeError, subprocess.TimeoutExpired) as error:
+            last_reason = getattr(error, 'private_detail', str(error))
+        if time.monotonic() >= progress:
+            event('Waiting for private MySQL initialization (startup retries are expected)', state=STATE)
+            progress = time.monotonic() + 15
         time.sleep(1)
+    event('MySQL readiness deadline expired', level='ERROR', state=STATE, private_detail=last_reason)
     raise RuntimeError('private MySQL did not become ready; dependent application remains stopped')
 
 
@@ -369,7 +374,9 @@ def deploy(inputs: DeploymentInputs, *, execute: bool = False, accept_legacy: bo
     import pwd
     os.umask(0o077)
     STATE.mkdir(mode=0o700)
+    stage = 'configuration, certificates and application staging'
     try:
+        event('Starting ' + stage, state=STATE)
         values = {key: secrets.token_hex(24) for key in (*REQUIRED_SECRETS, 'tpvision_db_password')}
         write_new(STATE / 'secrets.json', json.dumps(values))
         write_new(STATE / 'certificate-password', values['cert_ca_password'])
@@ -454,8 +461,11 @@ def deploy(inputs: DeploymentInputs, *, execute: bool = False, accept_legacy: bo
             '-e', 'MYSQL_ROOT_PASSWORD_FILE=/run/secrets/root-password', MYSQL_IMAGE,
             *mysql_server_options(config.database_port))
         run('systemctl', 'start', 'cmnd-mysql')
+        stage = 'database initialization'
+        event('Starting ' + stage, state=STATE)
         wait_database()
         for schema, user, folder, numbers in SCHEMAS:
+            event('Importing initial schema: ' + schema, state=STATE)
             key = folder + '_db_password'
             _mysql((f'CREATE DATABASE `{schema}` CHARACTER SET utf8 COLLATE utf8_general_ci;'
                     f"CREATE USER '{user}'@'%' IDENTIFIED BY '{values[key]}';"
@@ -466,7 +476,7 @@ def deploy(inputs: DeploymentInputs, *, execute: bool = False, accept_legacy: bo
         # This schema was created immediately above; there is no restored/user data.
         _mysql(("DELETE FROM cas.users; INSERT INTO cas.users(username,password,role) VALUES"
                 f"('admin','{hashlib.md5(password.encode()).hexdigest()}','ADMIN');").encode())
-        write_new(STATE / 'initial-admin.json', json.dumps({'username': 'admin', 'password': password}))
+        write_new(STATE / 'initial-admin.json', json.dumps({'username': 'admin', 'password': password}, indent=2) + '\n')
         from .update_gui import password_record
         admin = pwd.getpwnam('cmnd-admin')
         for directory in (MANAGEMENT, Path('/var/lib/cmnd-updates')):
@@ -497,27 +507,46 @@ def deploy(inputs: DeploymentInputs, *, execute: bool = False, accept_legacy: bo
             '--mount', f'type=bind,src={LAYOUT.php_uploads},dst={LAYOUT.php_uploads}',
             '--mount', 'type=bind,src=/etc/cmnd/php-fpm.conf,dst=/usr/local/etc/php-fpm.conf,readonly',
             '--mount', 'type=bind,src=/etc/ssl/certs,dst=/etc/ssl/certs,readonly', inputs.php_image)
+        stage = 'PHP and SmartCMS initialization'
+        event('Starting ' + stage, state=STATE)
         run('systemctl', 'start', 'cmnd-php')
         wait_php()
         run('docker', 'exec', '-i', '-e', 'CMND_CMS_EXECUTE=1', 'cmnd-native-php', 'php',
             data=(ETC / 'configure-cms.php').read_bytes())
         run('apache2', '-t', '-f', ETC / 'apache.conf')
         run('systemctl', 'start', 'cmnd-admin', 'cmnd-apache', 'cmnd-tomcat')
+        stage = 'HTTPS contexts and Tomcat database migrations'
+        event('Checking ' + stage + ' (up to 15 minutes)', state=STATE)
         report['services_started'] = True
         report.update(wait_ready(config, seconds=900))
         if not report['readiness_verified']:
             raise RuntimeError('native readiness failed; preserve private deployment state')
+        stage = 'service enablement and completion receipts'
+        event('Starting ' + stage, state=STATE)
         run('systemctl', 'enable', 'cmnd-mysql', 'cmnd-php', 'cmnd-apache', 'cmnd-tomcat', 'cmnd-admin')
         run('systemctl', 'enable', '--now', 'cmnd-update.path')
+        report['services_enabled'] = True
         write_new(ETC / 'deployment.json', json.dumps({'state': 'active', 'managed_by': 'linux-cmnd-native', 'php_image': inputs.php_image,
             'mysql_image': MYSQL_IMAGE, 'vendor': '7.5.9', 'legacy_profile': True, 'config_sha256': file_hash(inputs.config)}))
-        write_new(STATE / 'qualification.json', json.dumps(report, indent=2))
+        write_new(STATE / 'qualification.json', json.dumps(report, indent=2) + '\n')
+        from .install_summary import summary, save_receipt
+        receipt, complete = summary()
+        if not complete:
+            raise RuntimeError('Completion receipt could not verify deployment')
+        save_receipt(receipt)
+        event('Installation checks passed; completion receipt saved', state=STATE)
         return report
-    except Exception:
+    except Exception as error:
         # Preserve database and all evidence, but do not leave a failed partial
         # application accepting requests. Never touch unrelated host services.
         subprocess.run(['systemctl', 'stop', 'cmnd-tomcat', 'cmnd-apache', 'cmnd-php', 'cmnd-admin', 'cmnd-update.path'], capture_output=True, timeout=120)
         write_new(STATE / 'FAILED', 'Incomplete deployment; preserve all state and inspect private logs.\n')
+        event('FINAL STATUS: FAIL; stage: ' + stage, level='ERROR', state=STATE,
+              private_detail=str(error))
+        from .install_summary import save_receipt
+        if not (STATE / 'install-summary.txt').exists():
+            save_receipt('FINAL STATUS: FAIL\nStage: ' + stage + '\nError: ' + str(error) +
+                '\nPreserve all state. Inspect /var/lib/cmnd-deployment/deployment.log; do not force a reinstall.\n')
         raise
 
 
@@ -533,6 +562,8 @@ def wait_ready(config: Config, seconds: int = 900) -> dict:
     opener = build_opener(ProxyHandler({}), HTTPSHandler(context=context), _NoRedirect())
     statuses, histories = {}, {}
     deadline = time.monotonic() + seconds
+    last_reasons = {}
+    progress = 0
     host = urlsplit(config.callback_base_url).hostname
     while time.monotonic() < deadline:
         paths = [(config.tomcat_https, path) for path in
@@ -551,11 +582,18 @@ def wait_ready(config: Config, seconds: int = 900) -> dict:
         for schema, table, count, version in (('smartinstall', 'flyway_schema_history', 122, '9.7'),
                                                 ('smartcontroldb', 'schema_version', 27, '1.5.1')):
             try:
-                lines = _mysql(f'SELECT version,success FROM {schema}.{table} ORDER BY installed_rank;'.encode()).decode().splitlines()
+                lines = _mysql(f'SELECT version,success FROM {schema}.{table} ORDER BY installed_rank;'.encode(), timeout=5, probe=True).decode().splitlines()
                 histories[schema] = len(lines) == count and lines[-1].split('\t')[0] == version and all(line.endswith('\t1') for line in lines)
-            except RuntimeError:
+                last_reasons[schema] = 'Migration count/version/success not yet complete' if not histories[schema] else 'ready'
+            except (RuntimeError, subprocess.TimeoutExpired) as error:
                 histories[schema] = False
+                last_reasons[schema] = getattr(error, 'private_detail', str(error))
         if all(code in (200, 301, 302, 303) for code in statuses.values()) and all(histories.values()):
             return {'readiness_verified': True, 'https_contexts': statuses, 'migration_histories': histories}
+        if time.monotonic() >= progress:
+            event(f'Waiting for HTTPS/migrations: {sum(code in (200,301,302,303) for code in statuses.values())}/7 routes; {sum(histories.values())}/2 histories ready', state=STATE)
+            progress = time.monotonic() + 15
         time.sleep(3)
+    event('HTTPS/migration readiness deadline expired', level='ERROR', state=STATE,
+          private_detail=json.dumps({'https_contexts': statuses, 'last_migration_reasons': last_reasons}))
     return {'readiness_verified': False, 'https_contexts': statuses, 'migration_histories': histories}

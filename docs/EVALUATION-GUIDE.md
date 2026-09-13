@@ -4,6 +4,11 @@ This is the evaluation-release runbook. Release publication requires the recorde
 clean-install, browser, restart, and updater checks; code presence alone is not a
 PASS. See TEST-RESULTS.md for the actual evidence, not the steps below.
 
+For v0.7.2 see [installer changes and diagnostics](INSTALLER-072.md) and the
+[candidate-specific qualification record](QUALIFICATION-072.md). Existing v0.7.1
+installations should use the [README upgrade instructions](../README.md#already-installed-v071),
+not the fresh-install command below.
+
 ## Scope and prerequisites
 
 Use a fresh, dedicated amd64 VM with at least 6 GiB RAM and 40 GiB disk. Ubuntu
@@ -50,7 +55,7 @@ sudo editor /srv/private/cmnd.toml
 ```
 
 ```sh
-sudo sh ./install.sh --package ./linux-cmnd_0.7.1_amd64.deb \
+sudo sh ./install.sh --package ./linux-cmnd_0.7.2_amd64.deb \
   --payload /srv/private/cmnd-vendor --config /srv/private/cmnd.toml \
   --install-dependencies --accept-legacy-runtime --execute
 ```
@@ -84,6 +89,11 @@ than the vendor applications; a visible management page alone is not proof that
 the Java interfaces are ready. Use `cmndctl native-health --seconds 900` to wait
 for verified application readiness before testing.
 
+The final installer summary plainly prints the configured URLs, `admin` username,
+actual initial password, ports and important file paths after readiness passes.
+Re-display it locally using `sudo cmndctl install-summary` or `sudo cmndctl show-login`.
+It is a historical installation receipt, not a replacement for live health checks.
+The initial password is random in this compatibility release, not `tpvision`.
 Initial credentials are stored root-only in
 `/var/lib/cmnd-deployment/initial-admin.json`. The Linux management login initially
 uses the same generated administrator password as CAS, but is a separate account;

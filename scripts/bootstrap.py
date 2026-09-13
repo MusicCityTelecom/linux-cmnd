@@ -190,6 +190,53 @@ def check_configuration(content):
     return address, ports['apache_https']
 
 
+# BEGIN STANDALONE STORAGE POLICY
+def storage_preflight(upload_mb=8096, *, phase='download'):
+    if type(upload_mb) is not int or not 1 <= upload_mb <= 8096:
+        raise ValueError('CMS upload_limit_mb must be an integer from 1 to 8096')
+    if phase not in ('download', 'prepared'):
+        raise ValueError('Invalid storage preflight phase')
+    gib = 1024 ** 3
+    # Peak budget, not a promise about final disk use. Two simultaneous copies
+    # of the largest configured upload are retained for staging + CMS storage.
+    allocations = [
+        ('/var/tmp', 2 if phase == 'download' else 0, 'vendor ZIP, extracted inputs and tooling download'),
+        ('/var/cache', .5, 'Tomcat archive and retained installer'),
+        ('/var/lib/docker', 4, 'MySQL/PHP images and transient build layers'),
+        ('/opt', 2, 'installed application runtime'),
+        ('/var/lib/cmnd-deployment', 1.5, 'database initialization and candidate staging'),
+        ('/usr', 1.5, 'Java, Apache and OS prerequisites'),
+        ('/tmp', .5, 'temporary working space'),
+        ('/var/lib/cmnd/php-uploads', upload_mb / 1024, 'upload staging reserve'),
+        ('/opt/cmnd/SmartCMS/sites/default/files', upload_mb / 1024, 'CMS upload copy reserve')]
+    filesystems = {}
+    for destination, size, reason in allocations:
+        path = Path(destination)
+        while not path.exists():
+            path = path.parent
+        disk = shutil.disk_usage(path)
+        entry = filesystems.setdefault(path.stat().st_dev, {'path': str(path), 'total': disk.total,
+            'free': disk.free, 'required': 0, 'costs': []})
+        entry['required'] += int(size * gib)
+        entry['costs'].append(f'{size:.2f} GiB {reason}')
+    failed = False
+    for entry in filesystems.values():
+        print(f'Storage preflight ({phase}): filesystem containing {entry["path"]}; '
+              f'total {entry["total"]/gib:.2f} GiB; free {entry["free"]/gib:.2f} GiB; '
+              f'required free {entry["required"]/gib:.2f} GiB', flush=True)
+        print('  Budget: ' + '; '.join(entry['costs']), flush=True)
+        failed |= entry['free'] < entry['required']
+    if failed:
+        raise ValueError('Insufficient free storage. Recommended target disk: at least 40 GiB; '
+                         'expand the filesystem, not just the virtual disk, or free space before retrying. '
+                         'No automatic repartitioning or database initialization was performed.')
+    if Path('/var/run/reboot-required').exists():
+        print('WARNING: This host has a pending reboot. Reboot at an operator-approved time before '
+              'installation if possible; this installer will NOT reboot or power off the host.', flush=True)
+    return list(filesystems.values())
+# END STANDALONE STORAGE POLICY
+
+
 def check_host(java_home):
     if sys.platform != 'linux' or sys.version_info < (3, 11):
         raise ValueError('Run on Ubuntu 24.04 or Debian 12/13 amd64 with Python 3.11+')
@@ -209,14 +256,14 @@ def check_host(java_home):
     for value in STATE_PATHS:
         path = Path(value)
         if path.exists() or any(p.is_symlink() for p in (path, *path.parents)):
-            raise ValueError('Fresh install refuses existing/symlink state: ' + value + '; use GUI updates for an installed system')
+            raise ValueError('Fresh install refuses existing/symlink state: ' + value +
+                '; no changes made. For v0.7.2+ use sudo cmndctl install-summary; on v0.7.1 '
+                'use sudo cat /var/lib/cmnd-deployment/initial-admin.json. Use sudo cmndctl --updates to upgrade, not bootstrap.')
     if list(Path('/etc/systemd/system').glob('cmnd-*')):
         raise ValueError('Existing CMND service definitions must be preserved')
     memory = re.search(r'^MemTotal:\s+(\d+)', Path('/proc/meminfo').read_text(), re.M)
     if not memory or int(memory[1]) < 5_500_000:
         raise ValueError('At least 6 GiB installed RAM required')
-    if shutil.disk_usage('/var/lib').free < 10 * 1024**3:
-        raise ValueError('At least 10 GiB free deployment space required (40 GiB disk recommended)')
 
 
 def main(argv=None):
@@ -260,6 +307,7 @@ def main(argv=None):
             raise ValueError('Supply --server-ip or --config')
         content = configuration(args.server_ip)
     address, https_port = check_configuration(content)
+    storage_preflight(tomllib.loads(content).get('cms', {}).get('upload_limit_mb', 8096))
     if not args.accept_legacy_runtime and interactive:
         print('Evaluation only: includes legacy PHP 5.6 / MySQL 5.7. Do not expose to the Internet.')
         args.accept_legacy_runtime = input('Type INSTALL to accept and start installation: ').strip() == 'INSTALL'
@@ -314,10 +362,8 @@ def main(argv=None):
         if args.prepare_only:
             command.append('--prepare-only')
         subprocess.run(command, check=True)
-        if not args.prepare_only:
-            print(f'CMND ready: https://{address}:{https_port}/linux-cmnd/')
-            print('Configuration: /etc/cmnd/cmnd.toml. No physical TVs authorized.')
-        else:
+        # The child CLI's centralized completion summary MUST remain last.
+        if args.prepare_only:
             print('Dependencies prepared; rerun without --prepare-only to initialize CMND.')
 
 
@@ -325,7 +371,8 @@ if __name__ == '__main__':
     try:
         main()
     except (ValueError, KeyError, OSError, subprocess.CalledProcessError) as error:
-        print('Installation stopped: ' + str(error), file=sys.stderr)
+        print('FINAL STATUS: FAIL - installation stopped: ' + str(error), file=sys.stderr)
+        print('Preserve existing state. Review the failed stage and private /var/log/linux-cmnd-install-*.log or /var/lib/cmnd-deployment/deployment.log if created. Do not force a reinstall.', file=sys.stderr)
         sys.exit(1)
     except (KeyboardInterrupt, EOFError):
         print('Installation cancelled.', file=sys.stderr)

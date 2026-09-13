@@ -1,6 +1,20 @@
 # Changelog
 
-## Unreleased
+## 0.7.2 - evaluation candidate (publication gated on qualification)
+
+- Central root-only installation summary/show-login command displays actual initial
+  credentials, configured application URLs, ports and diagnostic paths. The fresh
+  installer ends with this summary only after readiness, enablement and receipts.
+- Format the initial credential JSON with a trailing newline; preserve the existing
+  random-password semantics and never reset credentials during updates.
+- Check peak storage capacity before large downloads/dependency installation;
+  report per-filesystem budgets and pending reboot warnings without repartitioning
+  or restarting the host.
+- Separate expected MySQL/migration startup retries from actual deadline failures;
+  add stage progress and private transcripts while retaining previous evidence.
+- Create the service-account home before adduser checks it. Document non-destructive
+  v0.7.1 credential retrieval, upgrade, incomplete-install recovery and diagnostics.
+- Vendor payload, decompiled source, native-product work and v0.7.1 assets unchanged.
 
 - Reject Python versions older than 3.11 before importing installer dependencies,
   so Ubuntu 21.04/Python 3.9 receives a clear requirements message instead of a

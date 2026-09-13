@@ -129,6 +129,7 @@ def parser() -> argparse.ArgumentParser:
     q = sub.add_parser('update-gui'); q.add_argument('--settings', type=Path, default=Path('/etc/linux-cmnd-management/admin.json'))
     q = sub.add_parser('update-apply'); q.add_argument('--execute', action='store_true')
     sub.add_parser('update-check')
+    sub.add_parser('install-summary', aliases=['show-login'], help='Root-only local installation receipt and initial credentials; makes no changes')
     q = sub.add_parser('license-network', help='Allow only the original vendor license HTTPS service; does not request a license')
     q.add_argument('--execute', action='store_true')
     q = sub.add_parser('native-hardware-access', help='Internal kernel DMI read-access preparation; never synthesizes a serial')
@@ -242,10 +243,16 @@ def main(argv=None) -> int:
         elif args.command == 'update-apply':
             from .updates import install_pending
             install_pending(execute=args.execute)
+        elif args.command in ('install-summary', 'show-login'):
+            from .install_summary import show_summary
+            return 0 if show_summary() else 1
         elif args.command == 'deploy-native':
             from .native_deploy import DeploymentInputs, deploy
             emit(deploy(DeploymentInputs(Path(args.config), args.vendor, args.tomcat_archive,
                 args.php_image, args.java_home), execute=args.execute, accept_legacy=args.accept_legacy_runtime))
+            if args.execute:
+                from .install_summary import show_summary
+                return 0 if show_summary() else 1
         elif args.command == 'native-wait-database':
             from .native_deploy import wait_database
             wait_database()
@@ -268,7 +275,9 @@ def main(argv=None) -> int:
             if args.execute and not result['completed']:
                 return 1
         return 0
-    except (BackupError, ConfigError, ProtocolError, RuntimeErrorCMND, ValueError, OSError) as exc:
+    except (BackupError, ConfigError, ProtocolError, RuntimeErrorCMND, RuntimeError, ValueError, OSError, subprocess.SubprocessError) as exc:
+        if args.command == 'deploy-native' and args.execute:
+            print('FINAL STATUS: FAIL - installation did not complete. Preserve deployment state and inspect /var/lib/cmnd-deployment/deployment.log. Do not force a reinstall.', file=sys.stderr)
         print(f"cmndctl: {exc}", file=sys.stderr)
         return 2
 

@@ -3,6 +3,9 @@ set -eu
 VERSION=$(dpkg-query -W -f='${Version}' linux-cmnd)
 VERSION=${VERSION%%-*}
 getent group cmnd >/dev/null || addgroup --system cmnd
+# adduser checks the home even with --no-create-home. Create it first without
+# changing an existing account's UID/GID or replacing any existing contents.
+install -d -o root -g cmnd -m 0750 /var/lib/cmnd
 id cmnd >/dev/null 2>&1 || adduser --system --ingroup cmnd --home /var/lib/cmnd --no-create-home --disabled-login cmnd
 install -d -o root -g root -m 0755 /opt/linux-cmnd/releases
 install -d -o cmnd -g cmnd -m 0750 /opt/cmnd/releases /var/lib/cmnd /var/log/cmnd
