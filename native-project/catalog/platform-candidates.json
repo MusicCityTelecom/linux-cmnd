@@ -1,0 +1,332 @@
+[
+  {
+    "file": "modules/smartcontrol/src/main/java/be/tpvision/smartcontrol/service/MetricsServiceImpl.java",
+    "line": 18,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/be/tpvision/smartcontrol/service/MetricsServiceImpl.java",
+    "line": 20,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/be/tpvision/smartcontrol/service/MetricsServiceImpl.java",
+    "line": 32,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/be/tpvision/smartcontrol/service/MetricsServiceImpl.java",
+    "line": 54,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/be/tpvision/smartcontrol/service/MetricsServiceImpl.java",
+    "line": 75,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/be/tpvision/smartcontrol/service/MetricsServiceImpl.java",
+    "line": 77,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/androidapp/AndroidAppHelper.java",
+    "line": 963,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/androidapp/AndroidAppHelper.java",
+    "line": 964,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/api/ApiLicenseChecker.java",
+    "line": 392,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/core/SettingCreator.java",
+    "line": 1512,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/core/SettingCreator.java",
+    "line": 1520,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/core/SettingCreator.java",
+    "line": 1522,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/core/SettingCreator.java",
+    "line": 1546,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/core/SettingCreator.java",
+    "line": 1775,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/core/SettingCreator.java",
+    "line": 1777,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/core/SettingCreator.java",
+    "line": 1778,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/core/SettingCreator.java",
+    "line": 1780,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 49,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 51,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 160,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 185,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 216,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 256,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 261,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 263,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 620,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayManager.java",
+    "line": 1051,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/gateway/GatewayProcessTask.java",
+    "line": 15,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/schedule/CmndMetricsLogCleanTask.java",
+    "line": 20,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/schedule/CmndMetricsLogCleanTask.java",
+    "line": 36,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/servlet/UploadUpgServlet.java",
+    "line": 281,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/servlet/UploadUpgServlet.java",
+    "line": 283,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/CertUtils.java",
+    "line": 170,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/CertUtils.java",
+    "line": 245,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/CertUtils.java",
+    "line": 267,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/CertUtils.java",
+    "line": 546,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/CommonConstants.java",
+    "line": 34,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/CommonConstants.java",
+    "line": 69,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/CommonConstants.java",
+    "line": 99,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/Log4j2Utils.java",
+    "line": 16,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/Log4j2Utils.java",
+    "line": 28,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/Log4j2Utils.java",
+    "line": 31,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/Log4j2Utils.java",
+    "line": 79,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/Log4j2Utils.java",
+    "line": 81,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/ProcessUtils.java",
+    "line": 21,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/ProcessUtils.java",
+    "line": 22,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/ProcessUtils.java",
+    "line": 87,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/ProcessUtils.java",
+    "line": 125,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/ProcessUtils.java",
+    "line": 145,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/ProcessUtils.java",
+    "line": 161,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/ProcessUtils.java",
+    "line": 165,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/RFTask.java",
+    "line": 40,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/RFTask.java",
+    "line": 41,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/Utils.java",
+    "line": 556,
+    "category": "windows-path-or-platform-api",
+    "status": "needs-context-review-not-automatically-a-defect"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/ZipCommonUtils.java",
+    "line": 384,
+    "category": "windows-process-or-native-library",
+    "status": "needs-context-review-not-automatically-a-defect"
+  }
+]

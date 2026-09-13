@@ -1,0 +1,9 @@
+package be.tpvision.smartcontrol.domain.device_settings.system;
+
+import be.tpvision.smartcontrol.domain.device_settings.DeviceSetting;
+
+public enum SicpAndPlatformInfo implements DeviceSetting {
+   SICP_VERSION,
+   PLATFORM_LABEL,
+   PLATFORM_VERSION;
+}

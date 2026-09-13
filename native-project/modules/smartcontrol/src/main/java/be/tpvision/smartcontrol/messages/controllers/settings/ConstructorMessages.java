@@ -1,0 +1,10 @@
+package be.tpvision.smartcontrol.messages.controllers.settings;
+
+import be.tpvision.smartcontrol.messages.Messages;
+
+public class ConstructorMessages {
+   public static final String SETTINGS_SERVICE_CAN_NOT_BE_NULL = Messages.getCanNotBeNullMessage("Settings service");
+
+   private ConstructorMessages() {
+   }
+}

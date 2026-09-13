@@ -1,0 +1,21 @@
+{
+  "name": "cmnd-native-research",
+  "vendor_version": "7.5.9",
+  "status": "development-only-not-deployable",
+  "java_release": 17,
+  "source_variants": {
+    "SmartInstall": {
+      "org/htng/_2011b/StayNotificationClient.java": "cfr",
+      "org/htng/_2011b/RoomStatusManagementClient.java": "cfr"
+    }
+  },
+  "vendor_tree_sha256": "dde03139345da3d073299c1330ead0d0f2f459a8969f85d26fde0b1abe548298",
+  "modules": {
+    "reload": {"archive": "{app}/Tomcat 9.0/lib/reload.jar", "purpose": "Tomcat protocol/reload integration"},
+    "smartcms": {"archive": "{app}/smartcms.war", "purpose": "Content creation and publishing web application"},
+    "cas": {"archive": "{app}/cas.war", "purpose": "Shared login and authentication"},
+    "usermanagement": {"archive": "{app}/usermanagement.war", "purpose": "Accounts, roles and user-management API"},
+    "smartcontrol": {"archive": "{app}/smartcontrol.war", "purpose": "Device control, settings, monitoring and scheduling"},
+    "SmartInstall": {"archive": "{app}/SmartInstall.war", "purpose": "TV management, clones, channels, settings and hotel integrations"}
+  }
+}

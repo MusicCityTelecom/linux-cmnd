@@ -53,3 +53,23 @@
 # executable/binary artifacts here; those belong in research release assets.
 !/recovered/
 !/recovered/**
+
+# Editable native research project. Runtime resources and binaries are prepared
+# locally from verified release assets, never committed as source.
+!/native-project/
+!/native-project/**
+/native-project/.vendor/
+/native-project/build/
+/native-project/resources/
+/native-project/working/
+**/*.class
+**/*.jar
+**/*.war
+**/*.zip
+**/*.exe
+**/*.dll
+**/*.p12
+**/*.pem
+**/*.key
+**/*.crt
+**/*.sql

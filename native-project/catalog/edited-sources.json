@@ -1,0 +1,104 @@
+[
+  {
+    "file": "modules/cas/src/main/java/org/springframework/boot/loader/jar/JarFile.java",
+    "reference": "recovered/java/vineflower/cas/org/springframework/boot/loader/jar/JarFile.java",
+    "reference_sha256": "7933475d4a3cda74be99d07c1524b1e005a979ed66464eaa77de0c291cb7ba43",
+    "editable_sha256": "bdfd12731d3857745961249591361cdb2f803c8e5747ba22bfc0c6e92c261ce1"
+  },
+  {
+    "file": "modules/cas/src/main/java/org/springframework/boot/loader/LaunchedURLClassLoader.java",
+    "reference": "recovered/java/vineflower/cas/org/springframework/boot/loader/LaunchedURLClassLoader.java",
+    "reference_sha256": "e14f554d6cf6c0b55fd27260d46eb3e8629719c465aa6bb0f3c926ccd2695366",
+    "editable_sha256": "de18030e0adacb1d0e46bab25125201fdf5e2d1ccfa1bea825b2b3b546c39bc9"
+  },
+  {
+    "file": "modules/cas/src/main/java/org/springframework/boot/loader/MainMethodRunner.java",
+    "reference": "recovered/java/vineflower/cas/org/springframework/boot/loader/MainMethodRunner.java",
+    "reference_sha256": "3b55e2f57eae0dfd1aa2cc507ef3f356d578eff194d6799d1361fd4f134c4fd2",
+    "editable_sha256": "923f087145ed6272e19fb7f6fa82d061aa11ce663e885e6289fa8a4c2bf02779"
+  },
+  {
+    "file": "modules/usermanagement/src/main/java/org/springframework/boot/loader/jar/JarFile.java",
+    "reference": "recovered/java/vineflower/usermanagement/org/springframework/boot/loader/jar/JarFile.java",
+    "reference_sha256": "7933475d4a3cda74be99d07c1524b1e005a979ed66464eaa77de0c291cb7ba43",
+    "editable_sha256": "bdfd12731d3857745961249591361cdb2f803c8e5747ba22bfc0c6e92c261ce1"
+  },
+  {
+    "file": "modules/usermanagement/src/main/java/org/springframework/boot/loader/LaunchedURLClassLoader.java",
+    "reference": "recovered/java/vineflower/usermanagement/org/springframework/boot/loader/LaunchedURLClassLoader.java",
+    "reference_sha256": "e14f554d6cf6c0b55fd27260d46eb3e8629719c465aa6bb0f3c926ccd2695366",
+    "editable_sha256": "de18030e0adacb1d0e46bab25125201fdf5e2d1ccfa1bea825b2b3b546c39bc9"
+  },
+  {
+    "file": "modules/usermanagement/src/main/java/org/springframework/boot/loader/MainMethodRunner.java",
+    "reference": "recovered/java/vineflower/usermanagement/org/springframework/boot/loader/MainMethodRunner.java",
+    "reference_sha256": "3b55e2f57eae0dfd1aa2cc507ef3f356d578eff194d6799d1361fd4f134c4fd2",
+    "editable_sha256": "923f087145ed6272e19fb7f6fa82d061aa11ce663e885e6289fa8a4c2bf02779"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/be/tpvision/smartcontrol/rest/view_models/device_limits/MixedEnumLimitsViewModel.java",
+    "reference": "recovered/java/vineflower/smartcontrol/be/tpvision/smartcontrol/rest/view_models/device_limits/MixedEnumLimitsViewModel.java",
+    "reference_sha256": "f09eb5750a73eabc28545fcacb7e384973486e19a8f836c4abb3ee268165b8a2",
+    "editable_sha256": "2fe7d0772a23b184ad9578ad81b5df9d3616747b4522a3070466a6ff9ddc01df"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/be/tpvision/smartcontrol/util/ValueUtilities.java",
+    "reference": "recovered/java/vineflower/smartcontrol/be/tpvision/smartcontrol/util/ValueUtilities.java",
+    "reference_sha256": "cfadd6d0b4b15e1a1177d0853d0c6c8a7b63a075c126742c2be4568768a02b9d",
+    "editable_sha256": "285f9e24e2e38f5877d355a06aa8e2a38041158189c8d1f52a554dc2be3443b3"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/org/springframework/boot/loader/jar/JarFile.java",
+    "reference": "recovered/java/vineflower/smartcontrol/org/springframework/boot/loader/jar/JarFile.java",
+    "reference_sha256": "7933475d4a3cda74be99d07c1524b1e005a979ed66464eaa77de0c291cb7ba43",
+    "editable_sha256": "bdfd12731d3857745961249591361cdb2f803c8e5747ba22bfc0c6e92c261ce1"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/org/springframework/boot/loader/LaunchedURLClassLoader.java",
+    "reference": "recovered/java/vineflower/smartcontrol/org/springframework/boot/loader/LaunchedURLClassLoader.java",
+    "reference_sha256": "e14f554d6cf6c0b55fd27260d46eb3e8629719c465aa6bb0f3c926ccd2695366",
+    "editable_sha256": "de18030e0adacb1d0e46bab25125201fdf5e2d1ccfa1bea825b2b3b546c39bc9"
+  },
+  {
+    "file": "modules/smartcontrol/src/main/java/org/springframework/boot/loader/MainMethodRunner.java",
+    "reference": "recovered/java/vineflower/smartcontrol/org/springframework/boot/loader/MainMethodRunner.java",
+    "reference_sha256": "3b55e2f57eae0dfd1aa2cc507ef3f356d578eff194d6799d1361fd4f134c4fd2",
+    "editable_sha256": "923f087145ed6272e19fb7f6fa82d061aa11ce663e885e6289fa8a4c2bf02779"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/pms/PmsUtils.java",
+    "reference": "recovered/java/vineflower/SmartInstall/com/tpvision/smartinstall/pms/PmsUtils.java",
+    "reference_sha256": "33f4938e206b9fc32fc004035d60619add812fa32b62527ea5f3a246c9f290cc",
+    "editable_sha256": "ff60d67c917a3da565e00cde7492a551131a960b03157ba78c43a3e098090b6d"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/servlet/TigerTmsServlet.java",
+    "reference": "recovered/java/vineflower/SmartInstall/com/tpvision/smartinstall/servlet/TigerTmsServlet.java",
+    "reference_sha256": "acfeb97d7d0fc828ea0f8f48063c6721d0b8d0655be663ba1c56c5a15588bd59",
+    "editable_sha256": "4a93143bf982bd99b31f68172a1d663871ac26f3481dbd0f7a67621fc676b378"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/PSGCatalogGenerator.java",
+    "reference": "recovered/java/vineflower/SmartInstall/com/tpvision/smartinstall/util/PSGCatalogGenerator.java",
+    "reference_sha256": "fe7063c1bcfa753db73f089c318e71f05b96111ae5cd46cc7c46087d6cbdbe81",
+    "editable_sha256": "eb9a96693ff20843ede4dff26b1c8ff153146a7666fb49c591ff4b7fbfbf3707"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/com/tpvision/smartinstall/util/WelcomeLogoUtils.java",
+    "reference": "recovered/java/vineflower/SmartInstall/com/tpvision/smartinstall/util/WelcomeLogoUtils.java",
+    "reference_sha256": "86ef65d1fc1467e0872e4d8c1c5204441d136f2e70d1ef41d97a8ffc7b5bfb9a",
+    "editable_sha256": "ffd5643ff2cf7f44151e0e95a817062764a8c1a696ba4f8a5978fc47c84b53ee"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/org/htng/_2011b/RoomStatusManagementClient.java",
+    "reference": "recovered/java/cfr/SmartInstall/org/htng/_2011b/RoomStatusManagementClient.java",
+    "reference_sha256": "348ae474dc9fcabb571ed0591a92dc1950dd823d9f6caebfaf103591ee603da5",
+    "editable_sha256": "5b8bc4731a15c16884cbb4c0a459ce0d4296e8859044ff91a2a94da014a57473"
+  },
+  {
+    "file": "modules/SmartInstall/src/main/java/org/htng/_2011b/StayNotificationClient.java",
+    "reference": "recovered/java/cfr/SmartInstall/org/htng/_2011b/StayNotificationClient.java",
+    "reference_sha256": "1feb8aac2ca698de117cff8d7e277700865157cf1ba711987f8c08796e919fbd",
+    "editable_sha256": "4bed5fc017b1b5e67ccccf8293209e5636e86383832bc7ff85b1a67ed8ecb0ea"
+  }
+]

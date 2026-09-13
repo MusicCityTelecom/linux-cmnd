@@ -1,0 +1,307 @@
+package org.htng._2011b;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.datatype.Duration;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.opentravel.ota._2003._05.UniqueIDType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {"requestorID", "queries"})
+@XmlRootElement(name = "HTNG_StatisticsRS")
+public class HTNGStatisticsRS {
+   @XmlElement(name = "RequestorID", required = true)
+   protected UniqueIDType requestorID;
+   @XmlElement(name = "Queries", required = true)
+   protected HTNGStatisticsRS.Queries queries;
+   @XmlAttribute(name = "EchoToken")
+   protected String echoToken;
+   @XmlAttribute(name = "TimeStamp")
+   @XmlSchemaType(name = "dateTime")
+   protected XMLGregorianCalendar timeStamp;
+   @XmlAttribute(name = "Target")
+   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+   protected String target;
+   @XmlAttribute(name = "TargetName")
+   protected String targetName;
+   @XmlAttribute(name = "Version", required = true)
+   protected BigDecimal version;
+   @XmlAttribute(name = "TransactionIdentifier")
+   protected String transactionIdentifier;
+   @XmlAttribute(name = "SequenceNmbr")
+   @XmlSchemaType(name = "nonNegativeInteger")
+   protected BigInteger sequenceNmbr;
+   @XmlAttribute(name = "TransactionStatusCode")
+   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+   protected String transactionStatusCode;
+   @XmlAttribute(name = "RetransmissionIndicator")
+   protected Boolean retransmissionIndicator;
+   @XmlAttribute(name = "CorrelationID")
+   protected String correlationID;
+   @XmlAttribute(name = "AltLangID")
+   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+   @XmlSchemaType(name = "language")
+   protected String altLangID;
+   @XmlAttribute(name = "PrimaryLangID")
+   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+   @XmlSchemaType(name = "language")
+   protected String primaryLangID;
+
+   public UniqueIDType getRequestorID() {
+      return this.requestorID;
+   }
+
+   public void setRequestorID(UniqueIDType value) {
+      this.requestorID = value;
+   }
+
+   public HTNGStatisticsRS.Queries getQueries() {
+      return this.queries;
+   }
+
+   public void setQueries(HTNGStatisticsRS.Queries value) {
+      this.queries = value;
+   }
+
+   public String getEchoToken() {
+      return this.echoToken;
+   }
+
+   public void setEchoToken(String value) {
+      this.echoToken = value;
+   }
+
+   public XMLGregorianCalendar getTimeStamp() {
+      return this.timeStamp;
+   }
+
+   public void setTimeStamp(XMLGregorianCalendar value) {
+      this.timeStamp = value;
+   }
+
+   public String getTarget() {
+      return this.target;
+   }
+
+   public void setTarget(String value) {
+      this.target = value;
+   }
+
+   public String getTargetName() {
+      return this.targetName;
+   }
+
+   public void setTargetName(String value) {
+      this.targetName = value;
+   }
+
+   public BigDecimal getVersion() {
+      return this.version;
+   }
+
+   public void setVersion(BigDecimal value) {
+      this.version = value;
+   }
+
+   public String getTransactionIdentifier() {
+      return this.transactionIdentifier;
+   }
+
+   public void setTransactionIdentifier(String value) {
+      this.transactionIdentifier = value;
+   }
+
+   public BigInteger getSequenceNmbr() {
+      return this.sequenceNmbr;
+   }
+
+   public void setSequenceNmbr(BigInteger value) {
+      this.sequenceNmbr = value;
+   }
+
+   public String getTransactionStatusCode() {
+      return this.transactionStatusCode;
+   }
+
+   public void setTransactionStatusCode(String value) {
+      this.transactionStatusCode = value;
+   }
+
+   public Boolean isRetransmissionIndicator() {
+      return this.retransmissionIndicator;
+   }
+
+   public void setRetransmissionIndicator(Boolean value) {
+      this.retransmissionIndicator = value;
+   }
+
+   public String getCorrelationID() {
+      return this.correlationID;
+   }
+
+   public void setCorrelationID(String value) {
+      this.correlationID = value;
+   }
+
+   public String getAltLangID() {
+      return this.altLangID;
+   }
+
+   public void setAltLangID(String value) {
+      this.altLangID = value;
+   }
+
+   public String getPrimaryLangID() {
+      return this.primaryLangID;
+   }
+
+   public void setPrimaryLangID(String value) {
+      this.primaryLangID = value;
+   }
+
+   @XmlAccessorType(XmlAccessType.FIELD)
+   @XmlType(name = "", propOrder = "query")
+   public static class Queries {
+      @XmlElement(name = "Query", required = true)
+      protected List<HTNGStatisticsRS.Queries.Query> query;
+
+      public List<HTNGStatisticsRS.Queries.Query> getQuery() {
+         if (this.query == null) {
+            this.query = new ArrayList<>();
+         }
+
+         return this.query;
+      }
+
+      @XmlAccessorType(XmlAccessType.FIELD)
+      @XmlType(name = "", propOrder = {"requestParameters", "responseParameters", "queryResult", "executionTime", "executionNotes"})
+      public static class Query {
+         @XmlElement(name = "RequestParameters", required = true)
+         protected HTNGKeyValueItemsType requestParameters;
+         @XmlElement(name = "ResponseParameters", required = true)
+         protected HTNGStatisticsRS.Queries.Query.ResponseParameters responseParameters;
+         @XmlElement(name = "QueryResult", required = true)
+         protected String queryResult;
+         @XmlElement(name = "ExecutionTime")
+         protected Duration executionTime;
+         @XmlElement(name = "ExecutionNotes")
+         protected String executionNotes;
+         @XmlAttribute(name = "StoredQueryName")
+         protected String storedQueryName;
+         @XmlAttribute(name = "QueryTrackingID", required = true)
+         protected String queryTrackingID;
+         @XmlAttribute(name = "ResultTrackingID")
+         protected String resultTrackingID;
+
+         public HTNGKeyValueItemsType getRequestParameters() {
+            return this.requestParameters;
+         }
+
+         public void setRequestParameters(HTNGKeyValueItemsType value) {
+            this.requestParameters = value;
+         }
+
+         public HTNGStatisticsRS.Queries.Query.ResponseParameters getResponseParameters() {
+            return this.responseParameters;
+         }
+
+         public void setResponseParameters(HTNGStatisticsRS.Queries.Query.ResponseParameters value) {
+            this.responseParameters = value;
+         }
+
+         public String getQueryResult() {
+            return this.queryResult;
+         }
+
+         public void setQueryResult(String value) {
+            this.queryResult = value;
+         }
+
+         public Duration getExecutionTime() {
+            return this.executionTime;
+         }
+
+         public void setExecutionTime(Duration value) {
+            this.executionTime = value;
+         }
+
+         public String getExecutionNotes() {
+            return this.executionNotes;
+         }
+
+         public void setExecutionNotes(String value) {
+            this.executionNotes = value;
+         }
+
+         public String getStoredQueryName() {
+            return this.storedQueryName;
+         }
+
+         public void setStoredQueryName(String value) {
+            this.storedQueryName = value;
+         }
+
+         public String getQueryTrackingID() {
+            return this.queryTrackingID;
+         }
+
+         public void setQueryTrackingID(String value) {
+            this.queryTrackingID = value;
+         }
+
+         public String getResultTrackingID() {
+            return this.resultTrackingID;
+         }
+
+         public void setResultTrackingID(String value) {
+            this.resultTrackingID = value;
+         }
+
+         @XmlAccessorType(XmlAccessType.FIELD)
+         @XmlType(name = "")
+         public static class ResponseParameters {
+            @XmlAttribute(name = "ResultFormat")
+            protected HTNGResultFormatType resultFormat;
+            @XmlAttribute(name = "Size")
+            protected BigInteger size;
+            @XmlAttribute(name = "UnitOfMeasure")
+            protected HTNGQueryResultListType unitOfMeasure;
+
+            public HTNGResultFormatType getResultFormat() {
+               return this.resultFormat == null ? HTNGResultFormatType.XML : this.resultFormat;
+            }
+
+            public void setResultFormat(HTNGResultFormatType value) {
+               this.resultFormat = value;
+            }
+
+            public BigInteger getSize() {
+               return this.size == null ? new BigInteger("1") : this.size;
+            }
+
+            public void setSize(BigInteger value) {
+               this.size = value;
+            }
+
+            public HTNGQueryResultListType getUnitOfMeasure() {
+               return this.unitOfMeasure == null ? HTNGQueryResultListType.ALL_ASCENDING : this.unitOfMeasure;
+            }
+
+            public void setUnitOfMeasure(HTNGQueryResultListType value) {
+               this.unitOfMeasure = value;
+            }
+         }
+      }
+   }
+}

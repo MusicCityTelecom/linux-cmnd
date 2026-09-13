@@ -1,0 +1,9 @@
+package be.tpvision.smartcontrol.io.ip.sicp202;
+
+import be.tpvision.smartcontrol.protocol.sicp202.SicpCommandFactory;
+
+public class SicpDecoder extends be.tpvision.smartcontrol.io.ip.sicp.SicpDecoder {
+   public SicpDecoder() {
+      super(SicpCommandFactory.getInstance());
+   }
+}

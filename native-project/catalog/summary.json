@@ -1,0 +1,24 @@
+{
+  "reference_files": 42143,
+  "provenance_records": 42349,
+  "primary_java_files": 2352,
+  "families": {
+    "dotnet/DTAPINET": 974,
+    "dotnet/Gateway": 28,
+    "il/DTAPINET": 1,
+    "il/Gateway": 1,
+    "java/bounded-libraries": 24539,
+    "java/cfr": 2352,
+    "java/comparison": 7,
+    "java/libraries": 11491,
+    "java/vineflower": 2352,
+    "native/HTV_DWPack_1401.exe": 4,
+    "native/TSGen.dll": 4,
+    "native/TsGenUtil.exe": 4,
+    "notices": 356,
+    "original": 236
+  },
+  "originals": "../../recovered/README.md",
+  "recovery_status": "../../recovered/recovery-status.json",
+  "runtime_qualified": false
+}

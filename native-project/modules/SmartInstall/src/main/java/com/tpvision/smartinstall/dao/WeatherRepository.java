@@ -1,0 +1,7 @@
+package com.tpvision.smartinstall.dao;
+
+import com.tpvision.smartinstall.dao.core.Weather;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface WeatherRepository extends JpaRepository<Weather, String> {
+}

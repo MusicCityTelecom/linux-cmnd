@@ -1,5 +1,10 @@
 # Java-native development: separate from the compatibility port
 
+The editable build workspace is now under [`native-project/`](../native-project/README.md).
+Use its catalog, module sources, build driver and evidence; do not modify the
+recovered reference baseline. Linux compiler success and focused contract checks
+are recorded separately from application runtime/browser/TV qualification.
+
 ## Two independent tracks
 
 - `main`: maintain the released Linux installer/runtime integration around the

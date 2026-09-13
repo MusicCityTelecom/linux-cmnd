@@ -1,0 +1,142 @@
+[
+  {
+    "path": "lib/annotations-api.jar",
+    "sha256": "3087fc085dfb184bcdb5dae7dce51e588c530f02afa8230949d14e04427442d5"
+  },
+  {
+    "path": "lib/catalina-ant.jar",
+    "sha256": "531ba6b77370e50fe4c423b315e42b009fae1aec5ad5dfdcc4d5c5fb30ac48b7"
+  },
+  {
+    "path": "lib/catalina-ha.jar",
+    "sha256": "7c7d3e145b6ec2d28a392532810568707ac79c26a7ab36f9646dc67e77706a0a"
+  },
+  {
+    "path": "lib/catalina-ssi.jar",
+    "sha256": "f340784e5882924ff47c0fd512835ddfa49588e23a7460f3e20035450d4d275d"
+  },
+  {
+    "path": "lib/catalina-storeconfig.jar",
+    "sha256": "a858af5efe481b7408d9901c66c0eec45fc8b5db32a9e605552c6cc8640f8078"
+  },
+  {
+    "path": "lib/catalina-tribes.jar",
+    "sha256": "9c97c9e9d049615d6e0424aadb78bcd501bfa9d9884023f609329198b42d3d8c"
+  },
+  {
+    "path": "lib/catalina.jar",
+    "sha256": "8b9c43f23b859aa593c4522ff2db15f97dbb209987817fbecba921cff1feb52c"
+  },
+  {
+    "path": "lib/ecj-4.20.jar",
+    "sha256": "ac0ba5876eaf7ebb47749a0d1be179c51f194b9dd0b875d1c09e1b530f5a2db5"
+  },
+  {
+    "path": "lib/el-api.jar",
+    "sha256": "181f192673252e35551e6da555f2ab3f8e06a91cf4a42d14b64da46a95024970"
+  },
+  {
+    "path": "lib/jasper-el.jar",
+    "sha256": "57c905923870ca60a926240d45df0bbf102a164b3fa333a3653dd452ae85e1f2"
+  },
+  {
+    "path": "lib/jasper.jar",
+    "sha256": "a6174d891024029096d3c65867d7d3eb0fedf22efdf8d30aa53f05779056b174"
+  },
+  {
+    "path": "lib/jaspic-api.jar",
+    "sha256": "caaff646f8c49dbb4acd0cc57017620ae363b44154e3a06a1cf69dee4120ad39"
+  },
+  {
+    "path": "lib/jsp-api.jar",
+    "sha256": "8e102389730910d36f3684fb2736680cefd0186b80c1e493bd25f761dc4ef1d7"
+  },
+  {
+    "path": "lib/servlet-api.jar",
+    "sha256": "4b92d8c93eb6a539891716c5f2e66b39bb83d1645b7b8bdadda95bc624454c02"
+  },
+  {
+    "path": "lib/tomcat-api.jar",
+    "sha256": "718699a21abd6bba65a5aa6abf35dbc3c929af406e8c9bb2782ade386c835d5b"
+  },
+  {
+    "path": "lib/tomcat-coyote-ffm.jar",
+    "sha256": "0f4ee210472f293da4b1a806af86d36456266d668e98a520c5584b4bde119aed"
+  },
+  {
+    "path": "lib/tomcat-coyote.jar",
+    "sha256": "4057b7b3f6ef138e714de59d0c8b8203cd6aaf43073aeae4a5392c263987da3f"
+  },
+  {
+    "path": "lib/tomcat-dbcp.jar",
+    "sha256": "9299e43a2877da66e877af00b71325010f314d9bfe6e5eba5a8369a6aeff414a"
+  },
+  {
+    "path": "lib/tomcat-i18n-cs.jar",
+    "sha256": "41260c083481eec56f782c39b6e4506829519e3b0fdf9c78cbc911750c629e30"
+  },
+  {
+    "path": "lib/tomcat-i18n-de.jar",
+    "sha256": "ac30a2442d07ad37a74afcc5223700670ab5c82b3d7364c4f9e2a5779ffae9d5"
+  },
+  {
+    "path": "lib/tomcat-i18n-es.jar",
+    "sha256": "6cb5ab2456aed30974f20c7cd26487b2201c6e1104c5f53c5186ebae7489ac2b"
+  },
+  {
+    "path": "lib/tomcat-i18n-fr.jar",
+    "sha256": "453ee2645737f9c9e26f421cfca702d06cbe931e737054ec8fd04430618735ea"
+  },
+  {
+    "path": "lib/tomcat-i18n-ja.jar",
+    "sha256": "05f3e0704de51422c7ba357b7f094c428cca581574efb6948cc78e57ee60405f"
+  },
+  {
+    "path": "lib/tomcat-i18n-ko.jar",
+    "sha256": "08539ebbbacb3b7cb7892e0be531131701363368c84de885e33b2eac45bfaead"
+  },
+  {
+    "path": "lib/tomcat-i18n-pt-BR.jar",
+    "sha256": "91d44529391bafa0e465efcc051f6b359959d087e1f91012c03358a160377ff3"
+  },
+  {
+    "path": "lib/tomcat-i18n-ru.jar",
+    "sha256": "64007d4946b13862fcd52fdc20b1e69bdb325144aac6e4a3762f9078f312fb06"
+  },
+  {
+    "path": "lib/tomcat-i18n-zh-CN.jar",
+    "sha256": "b6adf3a3e6d14ad14dfe46e3e494d05276fda1660684f96a9eaeaef39881d909"
+  },
+  {
+    "path": "lib/tomcat-jdbc.jar",
+    "sha256": "197f67ef63b4bfd427e9fa67f11fbbf2b1d77261bbc430dd64adebbc0d574796"
+  },
+  {
+    "path": "lib/tomcat-jni.jar",
+    "sha256": "66b892853605b777d0d486a55418ab9f701c13c060c41ba67ed3591defe990b5"
+  },
+  {
+    "path": "lib/tomcat-util-scan.jar",
+    "sha256": "9c648519b9184b78e6eb03ab598db22644306870be9b837f37e0b51574322c73"
+  },
+  {
+    "path": "lib/tomcat-util.jar",
+    "sha256": "95a5330524b35701777ab2a4aa039e96dc786469800d7f75852fc04af309dbc1"
+  },
+  {
+    "path": "lib/tomcat-websocket.jar",
+    "sha256": "34decf79a048c46775c64c1eb39971f2ac0cd24c1f994851b06ab353650c1c6e"
+  },
+  {
+    "path": "lib/websocket-api.jar",
+    "sha256": "9ff560a58d930d0e07076039bf8a0018d69d92718a070fe6d8976cb5d2cc49e1"
+  },
+  {
+    "path": "bin/bootstrap.jar",
+    "sha256": "6495cb9fb6d7ca8427da7331c31a52585c4c1b9e2aee8d7be737b1c2c6ae47c9"
+  },
+  {
+    "path": "bin/tomcat-juli.jar",
+    "sha256": "f411a91856ddc838788f7e4612dd5a5d1a32b7d844c746f2381719ec4939c583"
+  }
+]

@@ -1,0 +1,314 @@
+{
+  "host": "Debian 13 Linux (WSL), isolated portable JDK; no system package changes",
+  "jdk": "Eclipse Temurin 17.0.20.1+1 Linux x64",
+  "jdk_archive_sha256": "3808d1d15e3ec6bd5b84057fb5d84c33d8a1536a258146bcea2e603fc726e08e",
+  "build_results": [
+    {
+      "module": "reload",
+      "compiler": "javac 17.0.20.1",
+      "compiler_exit": 0,
+      "source_files": 1,
+      "emitted_classes": 2,
+      "artifact": "reload-research-classes.jar",
+      "artifact_sha256": "d054f5b8a4be5ca3493155349f44b72b892360e64eca47c8e6735ca5479b3816",
+      "inputs_sha256": "52d10297aa0f6544ac116a6867bdb19807e85e6cd8df6f52270714946145b53a",
+      "vendor_executed": false,
+      "runtime_qualified": false,
+      "recovery_warnings": [],
+      "deployable": false
+    },
+    {
+      "module": "smartcms",
+      "compiler": "javac 17.0.20.1",
+      "compiler_exit": 0,
+      "source_files": 12,
+      "emitted_classes": 12,
+      "artifact": "smartcms-research-classes.jar",
+      "artifact_sha256": "5a0d2c1004414dd111f8a4c0677fa19d911497e6b85be955811247dcbb0fd7a3",
+      "inputs_sha256": "be5365527258f4c9d123fbaa81f543d678fd5265449b78b3da152001a3722f89",
+      "vendor_executed": false,
+      "runtime_qualified": false,
+      "recovery_warnings": [],
+      "deployable": false
+    },
+    {
+      "module": "cas",
+      "compiler": "javac 17.0.20.1",
+      "compiler_exit": 0,
+      "source_files": 42,
+      "emitted_classes": 72,
+      "artifact": "cas-research-classes.jar",
+      "artifact_sha256": "254c53af9866fa42ed77728b534252e5e15f330c9f4d5d3489f1391b85f5dce4",
+      "inputs_sha256": "15c3c3a8059fc8e3adbc66543410efea49180cb4970e3aa2412c37f4ffdda3dd",
+      "vendor_executed": false,
+      "runtime_qualified": false,
+      "recovery_warnings": [],
+      "deployable": false
+    },
+    {
+      "module": "usermanagement",
+      "compiler": "javac 17.0.20.1",
+      "compiler_exit": 0,
+      "source_files": 57,
+      "emitted_classes": 88,
+      "artifact": "usermanagement-research-classes.jar",
+      "artifact_sha256": "7c50e3a6c82b26805348860df26e8b1326cda6cd0c5926a2428cfe9418f09278",
+      "inputs_sha256": "e0b12b1e979223ef71c3eb344ab1b1f125df13243beeb96cd0a84db6c7a83237",
+      "vendor_executed": false,
+      "runtime_qualified": false,
+      "recovery_warnings": [],
+      "deployable": false
+    },
+    {
+      "module": "smartcontrol",
+      "compiler": "javac 17.0.20.1",
+      "compiler_exit": 0,
+      "source_files": 1118,
+      "emitted_classes": 1218,
+      "artifact": "smartcontrol-research-classes.jar",
+      "artifact_sha256": "82f339bfc4f85ff344c4ca495cddddfda0b7ce309d582fc6e85099cdb21a417c",
+      "inputs_sha256": "f78ebe2ca733868a26606da620f8d3f8ee27426abf7e95b610c351b2eeb07bc0",
+      "vendor_executed": false,
+      "runtime_qualified": false,
+      "recovery_warnings": [],
+      "deployable": false
+    },
+    {
+      "module": "SmartInstall",
+      "compiler": "javac 17.0.20.1",
+      "compiler_exit": 0,
+      "source_files": 1123,
+      "emitted_classes": 2409,
+      "artifact": "SmartInstall-research-classes.jar",
+      "artifact_sha256": "924a99ee6024ae4ca7b4d12dc632afe33dc67d6218b7245f349fb301699eee39",
+      "inputs_sha256": "2f2446de5339a4c768e90879894c2a0da548a9fc4ff067c0507c93bdf1040767",
+      "vendor_executed": false,
+      "runtime_qualified": false,
+      "recovery_warnings": [],
+      "deployable": false
+    }
+  ],
+  "offline_contracts_and_class_inventory": [
+    {
+      "module": "reload",
+      "original_class_count": 2,
+      "rebuilt_class_count": 2,
+      "missing_original_class_names": [],
+      "additional_class_names": [],
+      "artifact_sha256": "d054f5b8a4be5ca3493155349f44b72b892360e64eca47c8e6735ca5479b3816",
+      "full_application_runtime_tested": false,
+      "tv_tested": false,
+      "missing_class_metadata": [],
+      "selected_api_comparisons": []
+    },
+    {
+      "module": "smartcms",
+      "original_class_count": 12,
+      "rebuilt_class_count": 12,
+      "missing_original_class_names": [],
+      "additional_class_names": [],
+      "artifact_sha256": "5a0d2c1004414dd111f8a4c0677fa19d911497e6b85be955811247dcbb0fd7a3",
+      "full_application_runtime_tested": false,
+      "tv_tested": false,
+      "missing_class_metadata": [],
+      "selected_api_comparisons": []
+    },
+    {
+      "module": "cas",
+      "original_class_count": 74,
+      "rebuilt_class_count": 71,
+      "missing_original_class_names": [
+        "org/springframework/boot/loader/PropertiesLauncher$1.class",
+        "org/springframework/boot/loader/data/RandomAccessDataFile$1.class",
+        "org/springframework/boot/loader/jar/CentralDirectoryEndRecord$1.class"
+      ],
+      "additional_class_names": [],
+      "artifact_sha256": "254c53af9866fa42ed77728b534252e5e15f330c9f4d5d3489f1391b85f5dce4",
+      "full_application_runtime_tested": false,
+      "tv_tested": false,
+      "missing_class_metadata": [
+        {
+          "class": "org/springframework/boot/loader/PropertiesLauncher$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "org/springframework/boot/loader/data/RandomAccessDataFile$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "org/springframework/boot/loader/jar/CentralDirectoryEndRecord$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        }
+      ],
+      "launcher_contracts": [
+        {
+          "input": "original",
+          "exit": 0,
+          "output": "PASS: null, empty, multiple and defensive-copy launcher arguments"
+        },
+        {
+          "input": "rebuilt",
+          "exit": 0,
+          "output": "PASS: null, empty, multiple and defensive-copy launcher arguments"
+        }
+      ],
+      "selected_api_comparisons": [
+        {
+          "class": "org.springframework.boot.loader.MainMethodRunner",
+          "match": true
+        }
+      ]
+    },
+    {
+      "module": "usermanagement",
+      "original_class_count": 91,
+      "rebuilt_class_count": 88,
+      "missing_original_class_names": [
+        "org/springframework/boot/loader/PropertiesLauncher$1.class",
+        "org/springframework/boot/loader/data/RandomAccessDataFile$1.class",
+        "org/springframework/boot/loader/jar/CentralDirectoryEndRecord$1.class"
+      ],
+      "additional_class_names": [],
+      "artifact_sha256": "7c50e3a6c82b26805348860df26e8b1326cda6cd0c5926a2428cfe9418f09278",
+      "full_application_runtime_tested": false,
+      "tv_tested": false,
+      "missing_class_metadata": [
+        {
+          "class": "org/springframework/boot/loader/PropertiesLauncher$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "org/springframework/boot/loader/data/RandomAccessDataFile$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "org/springframework/boot/loader/jar/CentralDirectoryEndRecord$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        }
+      ],
+      "launcher_contracts": [
+        {
+          "input": "original",
+          "exit": 0,
+          "output": "PASS: null, empty, multiple and defensive-copy launcher arguments"
+        },
+        {
+          "input": "rebuilt",
+          "exit": 0,
+          "output": "PASS: null, empty, multiple and defensive-copy launcher arguments"
+        }
+      ],
+      "selected_api_comparisons": [
+        {
+          "class": "org.springframework.boot.loader.MainMethodRunner",
+          "match": true
+        }
+      ]
+    },
+    {
+      "module": "smartcontrol",
+      "original_class_count": 1222,
+      "rebuilt_class_count": 1218,
+      "missing_original_class_names": [
+        "be/tpvision/smartcontrol/config/AjaxSessionTimeoutRedirectFilter$1.class",
+        "org/springframework/boot/loader/PropertiesLauncher$1.class",
+        "org/springframework/boot/loader/data/RandomAccessDataFile$1.class",
+        "org/springframework/boot/loader/jar/CentralDirectoryEndRecord$1.class"
+      ],
+      "additional_class_names": [],
+      "artifact_sha256": "82f339bfc4f85ff344c4ca495cddddfda0b7ce309d582fc6e85099cdb21a417c",
+      "full_application_runtime_tested": false,
+      "tv_tested": false,
+      "missing_class_metadata": [
+        {
+          "class": "be/tpvision/smartcontrol/config/AjaxSessionTimeoutRedirectFilter$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "org/springframework/boot/loader/PropertiesLauncher$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "org/springframework/boot/loader/data/RandomAccessDataFile$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "org/springframework/boot/loader/jar/CentralDirectoryEndRecord$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        }
+      ],
+      "launcher_contracts": [
+        {
+          "input": "original",
+          "exit": 0,
+          "output": "PASS: null, empty, multiple and defensive-copy launcher arguments"
+        },
+        {
+          "input": "rebuilt",
+          "exit": 0,
+          "output": "PASS: null, empty, multiple and defensive-copy launcher arguments"
+        }
+      ],
+      "selected_api_comparisons": [
+        {
+          "class": "org.springframework.boot.loader.MainMethodRunner",
+          "match": true
+        },
+        {
+          "class": "be.tpvision.smartcontrol.util.ValueUtilities",
+          "match": true
+        },
+        {
+          "class": "be.tpvision.smartcontrol.rest.view_models.device_limits.MixedEnumLimitsViewModel",
+          "match": true
+        }
+      ]
+    },
+    {
+      "module": "SmartInstall",
+      "original_class_count": 2412,
+      "rebuilt_class_count": 2409,
+      "missing_original_class_names": [
+        "com/tpvision/smartinstall/core/UpgCreator$1.class",
+        "com/tpvision/smartinstall/gateway/GatewayManager$1.class",
+        "com/tpvision/smartinstall/util/RFTask$1.class"
+      ],
+      "additional_class_names": [],
+      "artifact_sha256": "924a99ee6024ae4ca7b4d12dc632afe33dc67d6218b7245f349fb301699eee39",
+      "full_application_runtime_tested": false,
+      "tv_tested": false,
+      "missing_class_metadata": [
+        {
+          "class": "com/tpvision/smartinstall/core/UpgCreator$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "com/tpvision/smartinstall/gateway/GatewayManager$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        },
+        {
+          "class": "com/tpvision/smartinstall/util/RFTask$1.class",
+          "original_flags": "flags: (0x1020) ACC_SUPER, ACC_SYNTHETIC",
+          "synthetic": true
+        }
+      ],
+      "selected_api_comparisons": []
+    }
+  ],
+  "full_application_started": false,
+  "database_initialized": false,
+  "tv_contacted": false,
+  "research_artifacts_are_deployable": false
+}

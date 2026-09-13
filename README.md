@@ -18,6 +18,12 @@ for further development. Original binaries/resources and partial compiler output
 belong to research release assets, not Git source history. This is an incomplete
 recovery snapshot; it is not yet a rebuilt native application.
 
+The [editable native development project](native-project/README.md) now catalogs
+the complete recovered collection and provides six Java modules, hash-locked
+offline dependencies, Linux compilation, source-repair provenance and focused
+contract tests. See [build evidence](native-project/BUILD-EVIDENCE.md). Successful
+compilation is not yet a deployable replacement for the compatibility product.
+
 ## Compatibility baseline (reference only)
 
 Philips CMND applications running on Ubuntu 24.04 x86_64, with Music City Telecom Linux deployment/update tooling. Releases include the original vendor applications; no separately obtained payload is required. Vendor ownership and notices are preserved; no Philips endorsement is implied.
