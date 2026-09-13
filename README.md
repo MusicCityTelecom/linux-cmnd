@@ -79,7 +79,7 @@ If you have since changed a password, use the new password; the initial credenti
 file is a historical record, not a reset mechanism. CAS and the Linux management
 page start with the same password but have separate account stores.
 
-**Recommended upgrade to v0.7.2, once published:** pause scheduled TV jobs and
+**Recommended upgrade to v0.7.2:** pause scheduled TV jobs and
 choose a maintenance window (services restart). Preserve an independent backup or
 VM snapshot first. The updater also retains private configuration/database backups
 and the prior `.deb` for recovery. Then:
