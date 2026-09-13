@@ -7,3 +7,6 @@ packaging/debian/* text eol=lf
 *.toml text eol=lf
 Dockerfile* text eol=lf
 HANDOFF.md export-ignore
+
+# Preserve the recovered vendor source bytes, including original line endings.
+recovered/** -text

@@ -41,9 +41,17 @@ Inventory opaque/non-Java containers and failed decompilations explicitly; retai
 the original bytes rather than dropping or silently replacing them. Native
 EXE/DLL/MSI code is not Java source and needs separate analysis where necessary.
 
-Recovered vendor source, binaries, detailed disassembly and decompiler logs stay
-in ignored private lab storage. Never commit or publish them. Keep the verified
-original archives unchanged. No third-party online decompiler uploads.
+Keep an unchanged local master of every recovered file. The operator has now
+requested publication of recovered source on this research branch, including
+vendor components, to support future development. Do not redact, strip constants,
+or remove functionality from that master or silently alter the published source.
+Flag serious credential/signing-key findings for operator review before public
+publication of the affected material. Routine verified vendor defaults remain.
+Customer data, site credentials, locally generated keys, logs and captures remain
+private. Recompiled binaries belong in clearly labeled research release assets,
+not Git source history. Preserve third-party licenses and notices; recovered
+vendor code is not relicensed under the Music City Telecom tooling license.
+Keep the verified original archives unchanged. No online decompiler uploads.
 
 Track these separately: class/source coverage; decompiler warnings; successful
 compilation; API/resource compatibility; simulated behavior; isolated runtime;
@@ -116,3 +124,36 @@ are retained locally. Nothing in this audit changes the compatibility release.
 
 The current test VM remains off; this work does not authorize TV contact, host
 network changes or deployment of reconstructed code.
+
+## Independent recovery and compilation follow-up
+
+Vineflower 1.12.0 reconstructed seven outer classes that had failed compilation
+or carried CFR warnings. All seven compiled against the original dependencies;
+their public/protected `javap` surfaces matched the originals. This comparison
+does not cover private/package-level members, resources or runtime behavior.
+
+The full direct-application pass has the following static build results:
+
+| Component | Input classes | Java source files | Compilation result |
+| --- | ---: | ---: | --- |
+| SSL reload helper | 2 | 1 | Passed; 2 classes emitted |
+| SmartCMS | 12 | 12 | Passed; 12 classes emitted |
+| CAS | 74 | 41 | Missing annotation dependency and reconstruction errors |
+| User management | 91 | 57 | Reconstruction errors; partial compiler output only |
+| SmartControl | 1,222 | 1,118 | Reconstruction errors; partial compiler output only |
+| SmartInstall | 2,412 | 1,123 | Compiler errors/time limit; partial output only |
+
+SmartCMS's compile-only validation API was available in the original CAS archive;
+no application code was changed to obtain that passing result. Successful builds
+are not deployed and do not establish behavioral equivalence.
+
+The broader input queue contains 551 normalized class sets and 120,087 distinct
+class byte sequences. Four conflicting internal names in nonstandard bytecode
+were retained in separate jobs, not overwritten. Very large jobs hit bounded
+timeouts; their partial output is preserved. Recovery is now split into smaller
+units with parent-archive dependency context and resumable per-unit results.
+
+Research snapshots must use a non-installer tag namespace and never include an
+installer update manifest. Tests verify that the current bootstrap and updater
+ignore a `research-recovery-*` snapshot even on their preview channel. Compiled
+research assets must label partial outputs separately from successful compilation.

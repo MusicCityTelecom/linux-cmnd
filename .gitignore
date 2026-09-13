@@ -48,3 +48,8 @@
 **/state/
 **/backups/
 **/support-bundles/
+
+# Explicitly reviewed research source only. Publication validation rejects
+# executable/binary artifacts here; those belong in research release assets.
+!/recovered/
+!/recovered/**
