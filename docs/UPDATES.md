@@ -1,5 +1,12 @@
 # Command-line GitHub updates
 
+For v0.7.1 to v0.7.2, use this updater rather than running the fresh installer.
+The [README upgrade/recovery instructions](../README.md#already-installed-v071)
+cover the missing completion-banner issue and existing credential retrieval.
+After upgrading, `sudo cmndctl install-summary` (alias `show-login`) prints
+the recorded initial credentials and configured URLs without changing passwords
+or restarting services. New installer reporting does not delete earlier logs.
+
 The 0.6 series provides this entry point in the installed Linux executable:
 
 ```sh

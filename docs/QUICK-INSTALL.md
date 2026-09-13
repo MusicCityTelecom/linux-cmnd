@@ -1,10 +1,11 @@
 # Guided installation from public GitHub
 
 Use a fresh, dedicated Ubuntu 24.04 amd64 server or VM with at least 6 GiB RAM
-and a 40 GiB disk. The 0.6.0 preflight requires approximately 26 GiB free after
-dependency preparation at the default CMS upload limit (10 GiB plus twice
-8096 MiB); allow additional space for your content and backups. Do not run on a
-production host or an existing CMND installation. Installed 0.6.0 systems use
+and a 40 GiB disk. The v0.7.2 preflight requires 27.8125 GiB free before downloads,
+and rechecks 25.8125 GiB after preparation at the default CMS upload limit;
+allow additional space for your content and backups. See the per-filesystem
+[storage budget](INSTALLER-072.md). Do not run on a
+production host or an existing CMND installation. Installed v0.7.1 systems use
 `sudo cmndctl --updates` for confirmed tooling updates; the fresh installer
 deliberately refuses to overwrite them. See [UPDATES.md](UPDATES.md) for the
 older 0.5.0 update entry point and runtime-migration limitations.
@@ -13,8 +14,8 @@ older 0.5.0 update entry point and runtime-migration limitations.
 
 ```sh
 curl --fail --location --proto '=https' --proto-redir '=https' \
-  -o bootstrap.py https://raw.githubusercontent.com/MusicCityTelecom/linux-cmnd/main/scripts/bootstrap.py
-sudo python3 bootstrap.py --execute
+  -o bootstrap.py https://github.com/MusicCityTelecom/linux-cmnd/releases/download/v0.7.2/bootstrap.py
+sudo python3 bootstrap.py --execute --release v0.7.2
 ```
 
 You are executing code from Music City Telecom's repository as root: inspect
@@ -44,8 +45,8 @@ The Philips application bundle downloads automatically; --payload is optional.
    route is added. Choose `127.0.0.1` only for access from the server itself.
 2. Explicit acceptance of PHP 5.6/MySQL 5.7 legacy evaluation dependencies.
 
-It then selects the highest compatible published `0.x` release (including
-evaluation prereleases), verifies SHA-256 and size for the `.deb` and full
+It selects the requested published release (or, without `--release`, the highest
+compatible published `0.x` release including evaluation prereleases), verifies SHA-256 and size for the `.deb` and full
 installer against GitHub's TLS-protected metadata, validates package identity,
 and verifies all 26 original vendor inputs before dependency installation.
 It installs the original tooling plus Apache, Java 17, Docker, pinned Tomcat and
@@ -64,6 +65,12 @@ Configuration is saved to `/etc/cmnd/cmnd.toml`. Default ports remain 8080/8443
 (Java), 8082/8444 (CMS), and 3306 (private database); 9000 and 9078 are private
 internal listeners. Services start at boot. Initial installation grants no TV
 egress and has an empty device allowlist. It never scans or contacts a TV.
+
+At the very end a successful installation plainly prints the configured URLs,
+administrator username, actual initial password, ports and important paths.
+Use `sudo cmndctl install-summary` to display that receipt again. The initial
+password is random, not `tpvision`, and upgrades never reset it. See the
+[v0.7.1 upgrade/recovery instructions](../README.md#already-installed-v071).
 
 ## Optional local/offline payload override
 
@@ -95,7 +102,7 @@ Linux is unnecessary. Extra files in a prepared ZIP are rejected.
 
 ```sh
 sudo python3 bootstrap.py --execute --accept-legacy-runtime \
-  --server-ip 192.0.2.10 --release v0.7.0
+  --server-ip 192.0.2.10 --release v0.7.2
 ```
 
 Replace the example IP with an address actually assigned to your server. Omit
@@ -109,7 +116,7 @@ contain `bootstrap.py`. To pin the bootstrap itself, replace the raw URL's `main
 with its reviewed full Git commit ID. Future releases will include the bootstrap
 and its SHA-256 in the release assets. A raw `main` download intentionally follows
 the latest reviewed source and should not be treated as immutable. The next
-tooling version is 0.7.0; check GitHub releases for its publication status. A
+tooling version is 0.7.2; check GitHub releases for its publication status. A
 draft is never installable through the public bootstrap. See TEST-RESULTS.md for
 the exact qualification checkpoint rather than assuming a version proves parity.
 
