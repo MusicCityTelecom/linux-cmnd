@@ -172,8 +172,10 @@ def build_plan(inventory: dict) -> dict:
     occupied = _occupied(inventory)
     reserved: set[int] = set()
     cmnd = inventory.get('cmnd', {})
-    existing_paths = cmnd.get('paths', {}) if isinstance(cmnd, dict) else {}
-    existing_cmnd = bool(cmnd.get('package_version')) or any(bool(value) for value in existing_paths.values())
+    runtime_paths = cmnd.get('runtime_paths', {}) if isinstance(cmnd, dict) else {}
+    existing_cmnd = bool(cmnd.get('active_runtime_detected')) or any(
+        bool(value) for value in runtime_paths.values()
+    )
 
     database = _database_plan(inventory, occupied, reserved)
     tomcat = _tomcat_plan(inventory, occupied, reserved)
