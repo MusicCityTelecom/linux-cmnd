@@ -27,7 +27,7 @@ Section: admin
 Priority: optional
 Architecture: all
 Pre-Depends: debconf (>= 1.5.0) | debconf-2.0
-Depends: linux-cmnd (= {version}), cmnd-vendor-759 (= {VENDOR_PACKAGE_VERSION}), cmnd-tomcat9 (= {TOMCAT_PACKAGE_VERSION}), python3 (>= 3.10), python3-tomli | python3 (>= 3.11), adduser, ca-certificates, openssl, iproute2, iptables, 7zip, openjdk-17-jre-headless, apache2-bin, media-types, docker.io | docker-ce
+Depends: linux-cmnd (= {version}), cmnd-vendor-759 (= {VENDOR_PACKAGE_VERSION}), cmnd-tomcat9 (= {TOMCAT_PACKAGE_VERSION}), python3 (>= 3.11), adduser, ca-certificates, openssl, iproute2, iptables, 7zip, openjdk-17-jre-headless, apache2-bin, media-types, docker.io | docker-ce
 Maintainer: Music City Telecom <tommy@tomcom.us>
 Description: Philips CMND for Linux installation entry point
  Environment-aware APT installer for CMND for Linux. Reuses compatible existing
