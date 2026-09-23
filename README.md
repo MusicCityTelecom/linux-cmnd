@@ -9,6 +9,21 @@ Windows/Linux database table-name case compatibility for fresh installs. Existin
 installs need the explicit, backed-up [database case repair](docs/DATABASE-CASE.md)
 after updating the tooling. Do not delete or re-upload your packages to fix this.
 
+## 0.8.0 development
+
+Version 0.8.0 is being developed independently from the frozen `v0.7.1`
+release. The current development target is Ubuntu 24.04 amd64 and adds an
+environment-aware APT installation path, existing-service coexistence planning,
+collision-aware CMND ports, a verified four-package dependency graph, and a
+separate Docker/Compose candidate.
+
+For the current Ubuntu 24.04 test procedure, package behavior, safety defaults
+and post-install checks, see
+[the 0.8 Ubuntu 24.04 test guide](docs/0.8.0-UBUNTU-24.04-TEST.md).
+
+Ubuntu 22.04 and 26.04 are not yet release-qualified for the 0.8 APT path.
+Published `v0.7.1` assets remain unchanged.
+
 ## Quick installation
 
 Start with the [complete Ubuntu 24.04 walkthrough](docs/UBUNTU-24.04.md), including
