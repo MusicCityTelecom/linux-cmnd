@@ -35,6 +35,7 @@ class NativeLayout:
     php_uploads: str = '/var/lib/cmnd/php-uploads'
     php_user: str = 'cmnd-cms'
     fpm_port: int = 9000
+    management_port: int = 9078
 
     def validate(self) -> None:
         for name in ('tomcat', 'cms', 'configuration', 'log', 'run', 'certificate', 'key', 'ca_bundle', 'pgt', 'php_uploads'):
@@ -49,6 +50,10 @@ class NativeLayout:
             raise ConfigError('invalid PHP service account')
         if type(self.fpm_port) is not int or not 1024 <= self.fpm_port <= 65535:
             raise ConfigError('PHP-FPM port must be an unprivileged integer port')
+        if type(self.management_port) is not int or not 1024 <= self.management_port <= 65535:
+            raise ConfigError('management port must be an unprivileged integer port')
+        if self.management_port == self.fpm_port:
+            raise ConfigError('management and PHP-FPM ports must be distinct')
 
 
 def native_endpoint(config: Config) -> tuple[str, dict[str, int]]:
@@ -164,8 +169,8 @@ Alias /SmartCMS {layout.cms}
 '''
         if port == config.apache_https:
             apache += f'SSLEngine on\nSSLCertificateFile {layout.certificate}\nSSLCertificateKeyFile {layout.key}\n'
-            apache += ('ProxyRequests Off\nProxyPass /linux-cmnd/ http://127.0.0.1:9078/ connectiontimeout=5 timeout=30\n'
-                       'ProxyPassReverse /linux-cmnd/ http://127.0.0.1:9078/\n<Location /linux-cmnd/>\nRequire all granted\n</Location>\n')
+            apache += ('ProxyRequests Off\nProxyPass /linux-cmnd/ http://127.0.0.1:{layout.management_port}/ connectiontimeout=5 timeout=30\n'
+                       f'ProxyPassReverse /linux-cmnd/ http://127.0.0.1:{layout.management_port}/\n<Location /linux-cmnd/>\nRequire all granted\n</Location>\n')
         else:
             apache += f'Redirect /linux-cmnd/ https://{host}:{config.apache_https}/linux-cmnd/\n'
         apache += '</VirtualHost>\n'
