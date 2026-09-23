@@ -1,0 +1,148 @@
+name: 0.8 Native Ubuntu 24.04 Activation
+
+on:
+  push:
+    branches:
+      - ci/0.8-native-activation
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  activate:
+    name: Full isolated CMND activation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Check out exact 0.8 source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ca-certificates curl debconf
+
+      - name: Download exact pinned vendor and Tomcat inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --proto '=https' --proto-redir '=https' --tlsv1.2 \
+            --retry 3 --output /tmp/cmnd-vendor-7.5.9.zip \
+            https://github.com/MusicCityTelecom/linux-cmnd/releases/download/v0.7.1/cmnd-vendor-7.5.9.zip
+          curl --fail --location --proto '=https' --proto-redir '=https' --tlsv1.2 \
+            --retry 3 --output /tmp/apache-tomcat-9.0.121.tar.gz \
+            https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.121/bin/apache-tomcat-9.0.121.tar.gz
+
+      - name: Build exact four-package test set
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/build_release.py \
+            --vendor-bundle /tmp/cmnd-vendor-7.5.9.zip \
+            --tomcat-archive /tmp/apache-tomcat-9.0.121.tar.gz
+          dpkg-deb -I dist/linux-cmnd_0.8.0_amd64.deb
+          dpkg-deb -I dist/cmnd-vendor-759_7.5.9-1_all.deb
+          dpkg-deb -I dist/cmnd-tomcat9_9.0.121-1_all.deb
+          dpkg-deb -I dist/cmnd-linux_0.8.0_all.deb
+
+      - name: Preseed isolated loopback-only activation
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' \
+            'cmnd-linux cmnd-linux/server-ip string 127.0.0.1' \
+            'cmnd-linux cmnd-linux/database-mode select isolated' \
+            'cmnd-linux cmnd-linux/database-admin-user string root' \
+            'cmnd-linux cmnd-linux/database-admin-password password' \
+            'cmnd-linux cmnd-linux/apache-mode select standalone' \
+            'cmnd-linux cmnd-linux/accept-legacy-runtime boolean true' \
+            | sudo debconf-set-selections
+
+      - name: Install and activate CMND
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          sudo -E apt-get install -y \
+            ./dist/linux-cmnd_0.8.0_amd64.deb \
+            ./dist/cmnd-vendor-759_7.5.9-1_all.deb \
+            ./dist/cmnd-tomcat9_9.0.121-1_all.deb \
+            ./dist/cmnd-linux_0.8.0_all.deb
+
+      - name: Verify active isolated deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo python3 - <<'PY'
+          import json
+          from pathlib import Path
+          marker = Path('/etc/cmnd/deployment.json')
+          assert marker.is_file() and not marker.is_symlink()
+          data = json.loads(marker.read_text())
+          assert data['state'] == 'active'
+          assert data['managed_by'] == 'linux-cmnd-apt'
+          assert data['database_mode'] == 'isolated'
+          assert data['apache_mode'] == 'standalone'
+          config = Path('/etc/cmnd/cmnd.toml').read_text()
+          assert 'bind = "127.0.0.1"' in config
+          assert 'allowlist = []' in config
+          assert 'permitted_ranges = ["127.0.0.0/8"]' in config
+          print(json.dumps({
+              'state': data['state'],
+              'managed_by': data['managed_by'],
+              'database_mode': data['database_mode'],
+              'apache_mode': data['apache_mode'],
+              'php_fpm_port': data.get('php_fpm_port'),
+              'management_port': data.get('management_port'),
+          }, sort_keys=True))
+          PY
+          sudo systemctl is-active --quiet cmnd-egress.service
+          sudo systemctl is-active --quiet cmnd-mysql.service
+          sudo systemctl is-active --quiet cmnd-php.service
+          sudo systemctl is-active --quiet cmnd-apache.service
+          sudo systemctl is-active --quiet cmnd-tomcat.service
+          sudo systemctl is-active --quiet cmnd-admin.service
+          sudo cmndctl native-health --seconds 120
+
+      - name: Verify package reconfiguration preserves active deployment
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          before="$(sudo sha256sum /etc/cmnd/deployment.json /etc/cmnd/cmnd.toml)"
+          sudo -E dpkg-reconfigure cmnd-linux
+          after="$(sudo sha256sum /etc/cmnd/deployment.json /etc/cmnd/cmnd.toml)"
+          test "$before" = "$after"
+          sudo systemctl is-active --quiet cmnd-tomcat.service
+
+      - name: Print bounded failure diagnostics
+        if: failure()
+        shell: bash
+        run: |
+          set +e
+          echo '=== disk/memory ==='
+          df -h / /var/lib
+          free -h
+          echo '=== CMND unit states ==='
+          for unit in cmnd-egress cmnd-mysql cmnd-php cmnd-apache cmnd-tomcat cmnd-admin; do
+            sudo systemctl --no-pager --full status "$unit.service" 2>&1 | tail -80
+          done
+          echo '=== deployment marker (non-secret fields only) ==='
+          sudo python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/etc/cmnd/deployment.json')
+          if p.is_file():
+              d=json.loads(p.read_text())
+              print({k:d.get(k) for k in ('state','managed_by','database_mode','apache_mode','vendor','php_fpm_port','management_port')})
+          PY
