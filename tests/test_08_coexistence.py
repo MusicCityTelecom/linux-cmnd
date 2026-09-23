@@ -75,6 +75,18 @@ class AptCoexistenceTests(unittest.TestCase):
              patch.object(apt_installer, '_run', side_effect=fake_run):
             self.assertEqual(apt_installer.choose_server_ip(), '10.1.10.14')
 
+    def test_private_cmnd_ports_move_when_occupied(self):
+        inv = inventory()
+        inv['listeners']['entries'] = [
+            {'port': 9000, 'process': 'existing-fpm'},
+            {'port': 9078, 'process': 'existing-admin'},
+        ]
+        plan = build_plan(inv)
+        ports = _planned_ports(inv, plan, 'isolated')
+        self.assertNotEqual(ports['php_fpm'], 9000)
+        self.assertNotEqual(ports['management'], 9078)
+        self.assertEqual(len(set(ports.values())), len(ports))
+
     def test_generated_config_has_empty_tv_allowlist(self):
         text = render_config('10.1.10.14', {
             'tomcat_http': 8080, 'tomcat_https': 8443,
@@ -90,9 +102,12 @@ class AptCoexistenceTests(unittest.TestCase):
             callback_base_url='http://10.1.10.14:8080',
             permitted_ranges=('127.0.0.0/8',), allowed_tvs=(),
         )
-        text = render_apache(config)
+        from cmnd_linux.native_config import NativeLayout
+        text = render_apache(config, layout=NativeLayout(fpm_port=9100, management_port=9178))
         self.assertIn('# Managed by CMND Linux 0.8.', text)
         self.assertIn('Listen 10.1.10.14:8082', text)
+        self.assertIn('127.0.0.1:9100', text)
+        self.assertIn('127.0.0.1:9178', text)
         self.assertNotIn('IncludeOptional sites-enabled', text)
         self.assertNotIn('ports.conf', text)
 
