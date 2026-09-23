@@ -17,8 +17,8 @@ from .native_config import NativeLayout, native_endpoint
 
 CONF_AVAILABLE = Path('/etc/apache2/conf-available/cmnd-linux.conf')
 CONF_ENABLED = Path('/etc/apache2/conf-enabled/cmnd-linux.conf')
-MODULES = ('proxy', 'proxy_fcgi', 'proxy_http', 'ssl', 'rewrite', 'headers',
-           'expires', 'filter', 'deflate')
+MODULES = ('alias', 'dir', 'proxy', 'proxy_fcgi', 'proxy_http', 'ssl', 'rewrite',
+           'headers', 'expires', 'filter', 'deflate')
 
 
 def supported() -> bool:
@@ -122,6 +122,12 @@ def apply(config: Config, *, execute: bool = False) -> dict:
         return report
     except Exception:
         subprocess.run([shutil.which('a2disconf') or 'a2disconf', 'cmnd-linux'], capture_output=True, timeout=20)
+        if CONF_AVAILABLE.is_file() and not CONF_AVAILABLE.is_symlink():
+            try:
+                if CONF_AVAILABLE.read_text(encoding='utf-8', errors='replace').startswith('# Managed by CMND Linux 0.8.'):
+                    CONF_AVAILABLE.unlink()
+            except OSError:
+                pass
         subprocess.run([shutil.which('apache2ctl') or 'apache2ctl', 'configtest'], capture_output=True, timeout=20)
         subprocess.run([shutil.which('systemctl') or 'systemctl', 'reload', 'apache2.service'], capture_output=True, timeout=30)
         raise
