@@ -75,6 +75,39 @@ jobs:
           python scripts/build_meta_deb.py
           dpkg-deb -I dist/linux-cmnd_0.8.0_amd64.deb
           dpkg-deb -I dist/cmnd-linux_0.8.0_all.deb
+      - name: Smoke-install generated packages without runtime activation
+        shell: bash
+        run: |
+          set -euo pipefail
+          make_stub() {
+            name="$1"; version="$2"
+            root="$(mktemp -d)"
+            mkdir -p "$root/DEBIAN"
+            cat >"$root/DEBIAN/control" <<EOF
+          Package: $name
+          Version: $version
+          Section: admin
+          Priority: optional
+          Architecture: all
+          Maintainer: CI <ci@example.invalid>
+          Description: CI dependency stub only
+          EOF
+            dpkg-deb --build "$root" "dist/${name}_${version}_all.deb" >/dev/null
+            rm -rf "$root"
+          }
+          make_stub cmnd-vendor-759 7.5.9-1
+          make_stub cmnd-tomcat9 9.0.121-1
+          sudo env DEBIAN_FRONTEND=noninteractive apt-get update
+          sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            ./dist/linux-cmnd_0.8.0_amd64.deb \
+            ./dist/cmnd-vendor-759_7.5.9-1_all.deb \
+            ./dist/cmnd-tomcat9_9.0.121-1_all.deb \
+            ./dist/cmnd-linux_0.8.0_all.deb
+          test "$(dpkg-query -W -f='${Status}' cmnd-linux)" = "install ok installed"
+          test -x /usr/bin/cmndctl
+          test ! -e /var/lib/cmnd-deployment
+          sudo env DEBIAN_FRONTEND=noninteractive apt-get remove -y cmnd-linux
+          test ! -e /var/lib/cmnd-deployment
 
   safety-diff:
     name: Frozen 0.7.1 ancestry check
