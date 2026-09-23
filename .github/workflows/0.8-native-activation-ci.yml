@@ -61,7 +61,6 @@ jobs:
             'cmnd-linux cmnd-linux/server-ip string 127.0.0.1' \
             'cmnd-linux cmnd-linux/database-mode select isolated' \
             'cmnd-linux cmnd-linux/database-admin-user string root' \
-            'cmnd-linux cmnd-linux/database-admin-password password' \
             'cmnd-linux cmnd-linux/apache-mode select standalone' \
             'cmnd-linux cmnd-linux/accept-legacy-runtime boolean true' \
             | sudo debconf-set-selections
