@@ -19,15 +19,22 @@ def ar_members(blob):
 
 
 class MetaDebianPackageTests(unittest.TestCase):
-    def test_user_facing_package_depends_on_exact_payload_versions(self):
+    def test_user_facing_package_contains_complete_apt_transaction(self):
         package = build()
         self.assertTrue(package.name.startswith('cmnd-linux_'))
         members = ar_members(package.read_bytes())
         with tarfile.open(fileobj=BytesIO(members['control.tar.gz']), mode='r:gz') as archive:
+            names = set(archive.getnames())
             control = archive.extractfile('control').read().decode()
         self.assertIn('Package: cmnd-linux\n', control)
         self.assertIn('Architecture: all\n', control)
-        self.assertIn('Depends: linux-cmnd (= 0.8.0), cmnd-vendor-759 (= 7.5.9-1)\n', control)
+        self.assertIn('linux-cmnd (= 0.8.0)', control)
+        self.assertIn('cmnd-vendor-759 (= 7.5.9-1)', control)
+        self.assertIn('cmnd-tomcat9 (= 9.0.121-1)', control)
+        self.assertTrue({'templates', 'config', 'postinst', 'prerm', 'postrm'} <= names)
+        with tarfile.open(fileobj=BytesIO(members['data.tar.gz']), mode='r:gz') as archive:
+            data_names = set(archive.getnames())
+        self.assertIn('usr/lib/cmnd/packages/linux-cmnd_0.8.0_amd64.deb', data_names)
 
     def test_meta_build_is_reproducible(self):
         first = build().read_bytes()
