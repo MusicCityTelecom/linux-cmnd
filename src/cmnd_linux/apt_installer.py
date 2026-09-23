@@ -75,10 +75,25 @@ def choose_server_ip(requested=None):
     return values[0] if values else '127.0.0.1'
 def _occupied(inv): return {int(x['port']) for x in inv.get('listeners',{}).get('entries',[]) if isinstance(x,dict) and isinstance(x.get('port'),int)}
 def _planned_ports(inv,plan,database_mode):
-    c=plan['components']; ports={'tomcat_http':int(c['tomcat']['ports']['http']),'tomcat_https':int(c['tomcat']['ports']['https']),'apache_http':int(c['apache']['ports']['http']),'apache_https':int(c['apache']['ports']['https'])}
-    if database_mode=='shared':ports['database']=int(c['database'].get('port') or DEFAULT_PORTS['database'])
-    else:ports['database']=allocate_port(DEFAULT_PORTS['database'],_occupied(inv),set(ports.values())|{DEFAULT_PORTS['php_fpm'],DEFAULT_PORTS['management']})
-    if len(set(ports.values())|{DEFAULT_PORTS['php_fpm'],DEFAULT_PORTS['management']})!=7: raise ConfigError('installation planner produced colliding CMND ports')
+    occupied=_occupied(inv)
+    c=plan['components']
+    ports={
+        'tomcat_http':int(c['tomcat']['ports']['http']),
+        'tomcat_https':int(c['tomcat']['ports']['https']),
+        'apache_http':int(c['apache']['ports']['http']),
+        'apache_https':int(c['apache']['ports']['https']),
+    }
+    reserved=set(ports.values())
+    if database_mode=='shared':
+        ports['database']=int(c['database'].get('port') or DEFAULT_PORTS['database'])
+    else:
+        ports['database']=allocate_port(DEFAULT_PORTS['database'],occupied,reserved)
+    reserved.add(ports['database'])
+    ports['php_fpm']=allocate_port(DEFAULT_PORTS['php_fpm'],occupied,reserved)
+    reserved.add(ports['php_fpm'])
+    ports['management']=allocate_port(DEFAULT_PORTS['management'],occupied,reserved)
+    if len(set(ports.values()))!=len(ports):
+        raise ConfigError('installation planner produced colliding CMND ports')
     return ports
 def render_config(ip,ports):
     mode='isolated' if ip.startswith('127.') else 'lab'
@@ -180,7 +195,10 @@ def activate(server_ip,database_mode,apache_mode,password_file,admin_user,execut
         address=choose_server_ip(server_ip); config=_install_config(render_config(address,ports)); cfg=load_config(config)
         if db=='shared' and cfg.database_port!=session.port:raise ConfigError('preserved config DB port does not match shared server')
         _ensure_docker(); _ensure_image(MYSQL_IMAGE) if db=='isolated' else None; php=_php_image(); _install_baseline()
-        result=deploy(CoexistInputs(config,VENDOR_ROOT,TOMCAT_ARCHIVE,php,Path('/usr/lib/jvm/java-17-openjdk-amd64'),db,web,session,True),execute=True,accept_legacy=True)
+        result=deploy(CoexistInputs(
+            config,VENDOR_ROOT,TOMCAT_ARCHIVE,php,Path('/usr/lib/jvm/java-17-openjdk-amd64'),
+            db,web,session,True,ports['php_fpm'],ports['management']
+        ),execute=True,accept_legacy=True)
         result['apt_activation']={'server_ip':address,'database_mode':db,'apache_mode':web,'notes':notes}; return result
 def main(argv=None):
     p=argparse.ArgumentParser(prog='cmndctl apt-activate'); p.add_argument('--server-ip'); p.add_argument('--database-mode',choices=('auto','existing','isolated'),default='auto'); p.add_argument('--apache-mode',choices=('auto','host','standalone'),default='auto'); p.add_argument('--database-admin-user',default='root'); p.add_argument('--database-admin-password-file',type=Path); p.add_argument('--accept-legacy-runtime',action='store_true'); p.add_argument('--execute',action='store_true'); p.add_argument('--dry-run',action='store_true'); a=p.parse_args(argv)
