@@ -1,0 +1,79 @@
+name: 0.8 Full Ubuntu 24.04 Build
+
+on:
+  push:
+    branches:
+      - develop/0.8.0
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build 0.8 Ubuntu 24.04 test bundle
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out exact 0.8 source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install release-build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ca-certificates curl
+
+      - name: Download pinned Philips and Tomcat inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --proto '=https' --proto-redir '=https' --tlsv1.2 \
+            --retry 3 --output /tmp/cmnd-vendor-7.5.9.zip \
+            https://github.com/MusicCityTelecom/linux-cmnd/releases/download/v0.7.1/cmnd-vendor-7.5.9.zip
+          curl --fail --location --proto '=https' --proto-redir '=https' --tlsv1.2 \
+            --retry 3 --output /tmp/apache-tomcat-9.0.121.tar.gz \
+            https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.121/bin/apache-tomcat-9.0.121.tar.gz
+
+      - name: Verify inputs and build all APT packages
+        env:
+          PYTHONPATH: src
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, 'scripts')
+          from vendor_bundle import verify
+          print(verify(Path('/tmp/cmnd-vendor-7.5.9.zip')))
+          PY
+          python scripts/build_release.py \
+            --vendor-bundle /tmp/cmnd-vendor-7.5.9.zip \
+            --tomcat-archive /tmp/apache-tomcat-9.0.121.tar.gz
+          dpkg-deb -I dist/linux-cmnd_0.8.0_amd64.deb
+          dpkg-deb -I dist/cmnd-linux_0.8.0_all.deb
+          dpkg-deb -I dist/cmnd-vendor-759_7.5.9-1_all.deb
+          dpkg-deb -I dist/cmnd-tomcat9_9.0.121-1_all.deb
+          sha256sum \
+            dist/linux-cmnd_0.8.0_amd64.deb \
+            dist/cmnd-linux_0.8.0_all.deb \
+            dist/cmnd-vendor-759_7.5.9-1_all.deb \
+            dist/cmnd-tomcat9_9.0.121-1_all.deb \
+            > dist/SHA256SUMS-APT
+
+      - name: Upload Ubuntu 24.04 test bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmnd-linux-0.8.0-ubuntu24-test
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            dist/linux-cmnd_0.8.0_amd64.deb
+            dist/cmnd-linux_0.8.0_all.deb
+            dist/cmnd-vendor-759_7.5.9-1_all.deb
+            dist/cmnd-tomcat9_9.0.121-1_all.deb
+            dist/SHA256SUMS-APT
