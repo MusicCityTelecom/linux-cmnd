@@ -268,10 +268,23 @@ def runtime_inventory() -> dict[str, object]:
 
 
 def cmnd_inventory() -> dict[str, object]:
-    paths = ('/opt/linux-cmnd', '/opt/cmnd', '/etc/cmnd', '/var/lib/cmnd-deployment')
+    # Installing the linux-cmnd tooling package itself creates /opt/linux-cmnd,
+    # /opt/cmnd/releases and /etc/cmnd. Those paths are NOT proof that the
+    # Philips application runtime has been activated.
+    tooling_paths = ('/opt/linux-cmnd', '/opt/cmnd', '/etc/cmnd')
+    runtime_paths = (
+        '/var/lib/cmnd-deployment',
+        '/opt/cmnd/tomcat',
+        '/opt/cmnd/SmartCMS',
+        '/opt/Philips',
+        '/etc/cmnd/deployment.json',
+    )
+    runtime = {path: Path(path).exists() for path in runtime_paths}
     return {
         'package_version': package_version('linux-cmnd'),
-        'paths': {path: Path(path).exists() for path in paths},
+        'paths': {path: Path(path).exists() for path in tooling_paths},
+        'runtime_paths': runtime,
+        'active_runtime_detected': any(runtime.values()),
         'services': {name: service_state(name) for name in (
             'cmnd-egress.service', 'cmnd-mysql.service', 'cmnd-php.service',
             'cmnd-apache.service', 'cmnd-tomcat.service',
