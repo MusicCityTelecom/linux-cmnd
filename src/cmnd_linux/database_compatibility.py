@@ -14,7 +14,7 @@ from typing import Mapping
 
 REQUIRED_CASE_MODE = '1'
 REQUIRED_VARIABLES = (
-    'lower_case_table_names', 'event_scheduler', 'sql_mode', 'character_set_server',
+    'lower_case_table_names', 'event_scheduler', 'local_infile', 'sql_mode', 'character_set_server',
     'collation_server', 'max_allowed_packet', 'read_only',
 )
 
@@ -75,6 +75,19 @@ def assess(version: str, variables: Mapping[str, str]) -> DatabaseCompatibility:
     read_only = normalized.get('read_only', '').upper()
     if read_only in {'1', 'ON', 'TRUE', 'YES'}:
         reasons.append('server is read-only')
+
+    event_scheduler = normalized.get('event_scheduler', '').upper()
+    if event_scheduler not in {'ON', '1'}:
+        reasons.append('event_scheduler must already be ON; CMND will not change a shared server global setting')
+
+    local_infile = normalized.get('local_infile', '').upper()
+    if local_infile not in {'OFF', '0'}:
+        reasons.append('local_infile must already be OFF for the reviewed shared-server profile')
+
+    sql_mode = normalized.get('sql_mode', '')
+    modes = {item.strip().upper() for item in sql_mode.split(',') if item.strip()}
+    if modes != {'NO_ENGINE_SUBSTITUTION'}:
+        reasons.append('sql_mode must already match the reviewed NO_ENGINE_SUBSTITUTION profile')
 
     if family == 'mysql' and version.startswith('5.7.'):
         qualification = 'matches-current-qualified-family'
