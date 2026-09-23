@@ -8,6 +8,7 @@ from cmnd_linux.database_compatibility import REQUIRED_VARIABLES, assess, parse_
 COMPATIBLE_VARIABLES = {
     'lower_case_table_names': '1',
     'event_scheduler': 'ON',
+    'local_infile': 'OFF',
     'sql_mode': 'NO_ENGINE_SUBSTITUTION',
     'character_set_server': 'latin1',
     'collation_server': 'latin1_swedish_ci',
@@ -34,6 +35,16 @@ class DatabaseCompatibilityTests(unittest.TestCase):
         self.assertFalse(result.compatible)
         self.assertTrue(any('changing it on an existing populated server is unsafe' in reason
                             for reason in result.reasons))
+
+    def test_shared_server_global_profile_must_already_match(self):
+        for key, value, fragment in (
+            ('event_scheduler', 'OFF', 'event_scheduler'),
+            ('local_infile', 'ON', 'local_infile'),
+            ('sql_mode', 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION', 'sql_mode'),
+        ):
+            result = assess('5.7.44', dict(COMPATIBLE_VARIABLES, **{key: value}))
+            self.assertFalse(result.compatible)
+            self.assertTrue(any(fragment in reason for reason in result.reasons))
 
     def test_mysql8_requires_separate_shared_database_qualification(self):
         result = assess('8.0.43', COMPATIBLE_VARIABLES)
