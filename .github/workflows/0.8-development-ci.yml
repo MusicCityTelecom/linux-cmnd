@@ -62,6 +62,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Validate installer source and maintainer scripts
+        run: |
+          python -m compileall -q src scripts
+          sh -n packaging/debian/preinst packaging/debian/postinst packaging/debian/prerm packaging/debian/postrm packaging/debian/cmndctl
+          sh -n packaging/cmnd-linux/config packaging/cmnd-linux/postinst packaging/cmnd-linux/prerm packaging/cmnd-linux/postrm
       - name: Build payload and user-facing meta packages
         env:
           PYTHONPATH: src
