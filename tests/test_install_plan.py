@@ -18,7 +18,7 @@ def base_inventory():
         },
         'docker': {'docker': {'present': False}, 'daemon_access': False, 'running_containers': []},
         'runtime': {'java': {'present': False, 'version': None, 'path': None}},
-        'cmnd': {'package_version': None, 'paths': {}},
+        'cmnd': {'package_version': None, 'paths': {}, 'runtime_paths': {}, 'active_runtime_detected': False},
     }
 
 
@@ -69,11 +69,35 @@ class InstallPlanTests(unittest.TestCase):
 
     def test_existing_cmnd_blocks_fresh_install(self):
         inventory = base_inventory()
-        inventory['cmnd'] = {'package_version': '0.7.1', 'paths': {'/opt/cmnd': True}}
+        inventory['cmnd'] = {
+            'package_version': '0.7.1',
+            'paths': {'/opt/cmnd': True},
+            'runtime_paths': {'/var/lib/cmnd-deployment': True},
+            'active_runtime_detected': True,
+        }
         plan = build_plan(inventory)
         self.assertFalse(plan['fresh_install_allowed'])
         self.assertTrue(plan['existing_cmnd_detected'])
         self.assertTrue(any('Existing CMND state' in warning for warning in plan['warnings']))
+
+
+    def test_tooling_package_alone_does_not_block_first_activation(self):
+        inventory = base_inventory()
+        inventory['cmnd'] = {
+            'package_version': '0.8.0',
+            'paths': {'/opt/linux-cmnd': True, '/opt/cmnd': True, '/etc/cmnd': True},
+            'runtime_paths': {
+                '/var/lib/cmnd-deployment': False,
+                '/opt/cmnd/tomcat': False,
+                '/opt/cmnd/SmartCMS': False,
+                '/opt/Philips': False,
+                '/etc/cmnd/deployment.json': False,
+            },
+            'active_runtime_detected': False,
+        }
+        plan = build_plan(inventory)
+        self.assertTrue(plan['fresh_install_allowed'])
+        self.assertFalse(plan['existing_cmnd_detected'])
 
     def test_unrelated_nginx_is_preserved(self):
         inventory = base_inventory()
