@@ -46,6 +46,21 @@ def _assigned_ipv4():
     try:interfaces=json.loads(r.stdout)
     except Exception:return []
     return [a['local'] for i in interfaces if 'UP' in i.get('flags',[]) for a in i.get('addr_info',[]) if a.get('family')=='inet' and isinstance(a.get('local'),str)]
+def _default_route_ipv4(assigned):
+    # This is a local routing-table lookup; it does not contact 1.1.1.1.
+    result=_run(['ip','-j','route','get','1.1.1.1'],timeout=10)
+    if result.returncode:
+        return None
+    try:
+        routes=json.loads(result.stdout)
+    except Exception:
+        return None
+    for route in routes if isinstance(routes,list) else []:
+        candidate=route.get('prefsrc') or route.get('src')
+        if isinstance(candidate,str) and candidate in assigned and not candidate.startswith('127.'):
+            return candidate
+    return None
+
 def choose_server_ip(requested=None):
     assigned=_assigned_ipv4()
     if requested:
@@ -53,7 +68,11 @@ def choose_server_ip(requested=None):
         except OSError as e:raise ConfigError('server IP must be a literal IPv4 address') from e
         if requested!='127.0.0.1' and requested not in assigned: raise ConfigError('requested server IP is not assigned to an active local interface')
         return requested
-    values=[v for v in assigned if not v.startswith('127.')]; return values[0] if values else '127.0.0.1'
+    preferred=_default_route_ipv4(assigned)
+    if preferred:
+        return preferred
+    values=[v for v in assigned if not v.startswith('127.')]
+    return values[0] if values else '127.0.0.1'
 def _occupied(inv): return {int(x['port']) for x in inv.get('listeners',{}).get('entries',[]) if isinstance(x,dict) and isinstance(x.get('port'),int)}
 def _planned_ports(inv,plan,database_mode):
     c=plan['components']; ports={'tomcat_http':int(c['tomcat']['ports']['http']),'tomcat_https':int(c['tomcat']['ports']['https']),'apache_http':int(c['apache']['ports']['http']),'apache_https':int(c['apache']['ports']['https'])}
