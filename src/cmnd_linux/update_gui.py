@@ -210,8 +210,11 @@ def handler(state: GuiState):
 
 def serve(config_path: Path):
     config = json.loads(config_path.read_text())
+    port = config.get('listen_port', 9078)
+    if type(port) is not int or not 1024 <= port <= 65535:
+        raise ValueError('management listen_port must be an unprivileged integer port')
     state = GuiState(config)
-    server = ManagementServer(('127.0.0.1', 9078), handler(state))
+    server = ManagementServer(('127.0.0.1', port), handler(state))
     if config.get('check_on_startup', True):
         state.check()
     server.serve_forever()
