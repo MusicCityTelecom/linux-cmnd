@@ -2,13 +2,18 @@
 set -eu
 
 case "${1:-}" in
-  remove|deconfigure|upgrade)
+  remove)
     if command -v systemctl >/dev/null 2>&1; then
       systemctl stop cmnd-tomcat.service cmnd-apache.service cmnd-php.service cmnd-mysql.service cmnd-admin.service 2>/dev/null || true
     fi
     if [ -x /usr/bin/cmndctl ] && [ -f /etc/cmnd/deployment.json ]; then
       /usr/bin/cmndctl apache-detach --execute 2>/dev/null || true
     fi
+    ;;
+  upgrade|deconfigure)
+    # Preserve the active runtime across package replacement. The new package's
+    # postinst validates/preserves the deployment marker instead of re-running
+    # a destructive fresh-install transaction.
     ;;
 esac
 exit 0
