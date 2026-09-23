@@ -1,6 +1,9 @@
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+import subprocess
 
+from cmnd_linux import apt_installer
 from cmnd_linux.apt_installer import _planned_ports, render_config
 from cmnd_linux.apache_integration import render as render_apache
 from cmnd_linux.config import Config
@@ -62,6 +65,15 @@ class AptCoexistenceTests(unittest.TestCase):
         self.assertNotIn(8080, ports.values())
         self.assertNotIn(8082, ports.values())
         self.assertNotIn(3306, ports.values())
+
+    def test_auto_server_ip_prefers_default_route_source(self):
+        def fake_run(args, timeout=1800):
+            if args[:4] == ['ip', '-j', 'route', 'get']:
+                return subprocess.CompletedProcess(args, 0, '[{\"prefsrc\":\"10.1.10.14\"}]', '')
+            raise AssertionError(args)
+        with patch.object(apt_installer, '_assigned_ipv4', return_value=['172.17.0.1', '10.1.10.14']), \
+             patch.object(apt_installer, '_run', side_effect=fake_run):
+            self.assertEqual(apt_installer.choose_server_ip(), '10.1.10.14')
 
     def test_generated_config_has_empty_tv_allowlist(self):
         text = render_config('10.1.10.14', {
