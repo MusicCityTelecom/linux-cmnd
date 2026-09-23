@@ -169,7 +169,7 @@ def deploy(i:CoexistInputs,*,execute=False,accept_legacy=False):
     if os.name!='posix' or not hasattr(os,'geteuid') or os.geteuid()!=0 or not accept_legacy:
         raise ConfigError('root Linux execution and legacy-runtime acceptance required')
     import pwd
-    os.umask(0o077); STATE.mkdir(mode=0o700); host_apache=False
+    os.umask(0o077); STATE.mkdir(mode=0o700); host_apache=False; shared_initialized=False
     try:
         values={k:secrets.token_hex(24) for k in (*REQUIRED_SECRETS,'tpvision_db_password')}; write_new(STATE/'secrets.json',json.dumps(values)); write_new(STATE/'certificate-password',values['cert_ca_password'])
         addresses=json.loads(run('ip','-j','-4','address','show')); ips=sorted({a['local'] for x in addresses if 'UP' in x.get('flags',[]) for a in x.get('addr_info',[]) if a.get('family')=='inet'}); public,_=native_endpoint(c)
@@ -203,8 +203,13 @@ def deploy(i:CoexistInputs,*,execute=False,accept_legacy=False):
         units=_units(i.java_home,i.database_mode,i.apache_mode,i.apt_managed)
         for name,text in units.items():write_new(Path('/etc/systemd/system')/name,text,0o644)
         run('systemctl','daemon-reload'); run('systemctl','enable','--now','cmnd-egress'); apply_policy(policy,execute=True)
-        if i.database_mode=='isolated':_isolated_db(i,c,values)
-        else: report['shared_database_initialization']=i.shared_database.initialize(i.vendor,values); write_health_files(values,c.database_port); wait_shared_database()
+        if i.database_mode=='isolated':
+            _isolated_db(i,c,values)
+        else:
+            report['shared_database_initialization']=i.shared_database.initialize(i.vendor,values)
+            shared_initialized=True
+            write_health_files(values,c.database_port)
+            wait_shared_database()
         adminpass=_admin(i)
         write_new(STATE/'initial-admin.json',json.dumps({'username':'admin','password':adminpass}))
         from .update_gui import password_record
@@ -242,5 +247,17 @@ def deploy(i:CoexistInputs,*,execute=False,accept_legacy=False):
         if host_apache:
             try:apache_detach(execute=True)
             except Exception:pass
+        if shared_initialized and i.shared_database is not None:
+            try:
+                report['shared_database_rollback']=i.shared_database.rollback_fresh()
+                health=Path('/etc/cmnd/shared-database')
+                if health.is_dir() and not health.is_symlink():
+                    shutil.rmtree(health)
+            except Exception as rollback_error:
+                try:
+                    write_new(STATE/'SHARED_DATABASE_ROLLBACK_FAILED',
+                              'Fresh shared-database rollback failed; inspect the exact CMND namespaces before retry.\n')
+                except Exception:
+                    pass
         if not (STATE/'FAILED').exists():write_new(STATE/'FAILED','Incomplete 0.8 coexistence deployment; preserve state and inspect private logs.\n')
         raise
