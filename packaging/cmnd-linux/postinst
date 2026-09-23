@@ -4,6 +4,28 @@ set -eu
 
 [ "${1:-}" = configure ] || exit 0
 
+if [ -f /etc/cmnd/deployment.json ] && [ ! -L /etc/cmnd/deployment.json ]; then
+  if python3 - <<'PY'
+import json, os, pathlib, sys
+p = pathlib.Path('/etc/cmnd/deployment.json')
+try:
+    st = p.stat()
+    data = json.loads(p.read_text(encoding='utf-8'))
+except Exception:
+    sys.exit(1)
+safe = st.st_uid == 0 and not (st.st_mode & 0o022) and st.st_size < 65536
+managed = data.get('managed_by') in {'linux-cmnd-apt', 'linux-cmnd-native', 'linux-cmnd-coexist'}
+active = data.get('state') == 'active'
+sys.exit(0 if safe and managed and active else 1)
+PY
+  then
+    echo "cmnd-linux: existing active CMND deployment preserved; fresh activation skipped."
+    exit 0
+  fi
+  echo "cmnd-linux: unrecognized or unsafe deployment marker; refusing package reconfiguration." >&2
+  exit 1
+fi
+
 db_get cmnd-linux/accept-legacy-runtime
 if [ "$RET" != true ]; then
   echo "cmnd-linux installed but not activated: legacy runtime acceptance was not granted." >&2
