@@ -91,8 +91,27 @@ def preflight(i:CoexistInputs,c:Config):
         if not i.shared_database or i.shared_database.port!=c.database_port: raise ConfigError('shared DB session/port mismatch')
         db.update(i.shared_database.validate_for_fresh_cmnd())
     if i.apache_mode=='host' and not apache_supported(): raise ConfigError('host Apache layout unsupported')
+    if shutil.disk_usage('/var/lib').free < 10 * 1024**3:
+        raise ConfigError('at least 10 GiB free deployment space is required')
+    memory = re.search(r'^MemTotal:\\s+(\\d+)', Path('/proc/meminfo').read_text(), re.M)
+    if not memory or int(memory.group(1)) < 5_500_000:
+        raise ConfigError('at least 6 GiB installed RAM is required')
     run('docker','image','inspect',i.php_image)
-    return {'os':list(distro),'database':db,'apache_mode':i.apache_mode,'vendor_inputs_verified':len(VENDOR_INPUT_HASHES)}
+    php_probe = (
+        'if(PHP_VERSION!=="5.6.40"){exit(2);} '
+        'foreach(array("pdo_mysql","mysqli","gd","zip","xmlrpc","pcntl","curl") as $m)'
+        '{if(!extension_loaded($m)){exit(3);}} '
+        'foreach(array("/usr/local/bin/cutycapt.sh","/usr/bin/cutycapt","/usr/bin/xvfb-run",'
+        '"/usr/bin/ffmpeg","/usr/bin/ffprobe","/usr/bin/convert") as $p)'
+        '{if(!is_executable($p)){exit(4);}}'
+    )
+    run('docker','run','--rm','--network','none','--read-only','--cap-drop','ALL',
+        '--security-opt','no-new-privileges','--user','65534:65534','--memory','256m',
+        '--pids-limit','32',i.php_image,'php','-r',php_probe)
+    return {'os':list(distro),'database':db,'apache_mode':i.apache_mode,
+            'vendor_inputs_verified':len(VENDOR_INPUT_HASHES),
+            'resource_preflight':{'memory_kib':int(memory.group(1)),'disk_free':shutil.disk_usage('/var/lib').free},
+            'php_runtime_verified':True}
 
 def _isolated_db(i,c,values):
     root=secrets.token_hex(32); write_new(STATE/'mysql-root-password',root); write_new(STATE/'mysql-client.cnf',f'[client]\nuser=root\npassword={root}\nhost=127.0.0.1\nport={c.database_port}\nprotocol=tcp\n'); (STATE/'mysql').mkdir(mode=0o700)
