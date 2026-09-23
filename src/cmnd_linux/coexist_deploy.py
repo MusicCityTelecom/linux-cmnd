@@ -6,7 +6,7 @@ CMND-owned fragment in an existing Debian/Ubuntu Apache service.
 """
 from __future__ import annotations
 from dataclasses import dataclass
-import hashlib, json, os, platform, pwd, re, secrets, shutil, socket, ssl, subprocess, time
+import hashlib, json, os, platform, re, secrets, shutil, socket, ssl, subprocess, time
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
@@ -130,7 +130,9 @@ def _ready(c,db_mode,seconds=900):
 def deploy(i:CoexistInputs,*,execute=False,accept_legacy=False):
     c=load_config(i.config); report=preflight(i,c)|{'executed':execute,'database_mode':i.database_mode,'apache_mode':i.apache_mode,'apt_managed':i.apt_managed,'readiness_verified':False,'scope':'0.8 coexistence candidate'}
     if not execute:return report
-    if os.geteuid()!=0 or not accept_legacy:raise ConfigError('root and legacy-runtime acceptance required')
+    if os.name!='posix' or not hasattr(os,'geteuid') or os.geteuid()!=0 or not accept_legacy:
+        raise ConfigError('root Linux execution and legacy-runtime acceptance required')
+    import pwd
     os.umask(0o077); STATE.mkdir(mode=0o700); host_apache=False
     try:
         values={k:secrets.token_hex(24) for k in (*REQUIRED_SECRETS,'tpvision_db_password')}; write_new(STATE/'secrets.json',json.dumps(values)); write_new(STATE/'certificate-password',values['cert_ca_password'])
