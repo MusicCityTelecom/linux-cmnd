@@ -19,7 +19,7 @@ class PackageConfigPreservationTests(unittest.TestCase):
     def test_native_upgrade_preserves_operator_environments(self):
         with tempfile.TemporaryDirectory(prefix='cmnd-package-') as directory:
             root = Path(directory)
-            (root / 'deployment.json').write_text(json.dumps({'managed_by': 'linux-cmnd-native'}))
+            (root / 'deployment.json').write_text(json.dumps({'managed_by': 'linux-cmnd-native', 'state': 'active'}))
             for name in ('tomcat.env', 'apache.env', 'compose.env'):
                 (root / name).write_text('operator supplied value\n')
             before = {p.name: p.read_bytes() for p in root.iterdir()}
@@ -27,11 +27,17 @@ class PackageConfigPreservationTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(before, {p.name: p.read_bytes() for p in root.iterdir()})
 
+    def test_apt_managed_upgrade_marker_is_accepted(self):
+        with tempfile.TemporaryDirectory(prefix='cmnd-package-') as directory:
+            root = Path(directory)
+            (root / 'deployment.json').write_text(json.dumps({'managed_by': 'linux-cmnd-apt', 'state': 'active'}))
+            self.assertEqual(self.guard(root).returncode, 0)
+
     def test_unrecognized_or_symlink_marker_is_rejected(self):
         with tempfile.TemporaryDirectory(prefix='cmnd-package-') as directory:
             root = Path(directory)
             marker = root / 'deployment.json'
-            marker.write_text(json.dumps({'managed_by': 'unrecognized'}))
+            marker.write_text(json.dumps({'managed_by': 'unrecognized', 'state': 'active'}))
             self.assertNotEqual(self.guard(root).returncode, 0)
             marker.rename(root / 'other.json')
             marker.symlink_to(root / 'other.json')
