@@ -169,7 +169,7 @@ Alias /SmartCMS {layout.cms}
 '''
         if port == config.apache_https:
             apache += f'SSLEngine on\nSSLCertificateFile {layout.certificate}\nSSLCertificateKeyFile {layout.key}\n'
-            apache += ('ProxyRequests Off\nProxyPass /linux-cmnd/ http://127.0.0.1:{layout.management_port}/ connectiontimeout=5 timeout=30\n'
+            apache += (f'ProxyRequests Off\nProxyPass /linux-cmnd/ http://127.0.0.1:{layout.management_port}/ connectiontimeout=5 timeout=30\n'
                        f'ProxyPassReverse /linux-cmnd/ http://127.0.0.1:{layout.management_port}/\n<Location /linux-cmnd/>\nRequire all granted\n</Location>\n')
         else:
             apache += f'Redirect /linux-cmnd/ https://{host}:{config.apache_https}/linux-cmnd/\n'
