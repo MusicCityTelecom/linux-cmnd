@@ -170,7 +170,9 @@ def _docker_plan(inventory: dict, database_plan: dict) -> dict:
 
 def build_plan(inventory: dict) -> dict:
     occupied = _occupied(inventory)
-    reserved: set[int] = set()
+    # Reserve the legacy private defaults so public CMND listeners never consume them.
+    # apt_installer may move these private listeners if the host already uses them.
+    reserved: set[int] = {DEFAULT_PORTS['php_fpm'], DEFAULT_PORTS['management']}
     cmnd = inventory.get('cmnd', {})
     runtime_paths = cmnd.get('runtime_paths', {}) if isinstance(cmnd, dict) else {}
     existing_cmnd = bool(cmnd.get('active_runtime_detected')) or any(
