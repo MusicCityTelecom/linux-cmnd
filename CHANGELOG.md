@@ -21,6 +21,20 @@
   are never repository inputs.
 - Added branch-only CI for Ubuntu and Windows source regressions, package-build
   smoke tests and verification that 0.8 remains descended from exact `v0.7.1`.
+- Completed the four-package APT transaction model: `linux-cmnd`,
+  `cmnd-vendor-759`, `cmnd-tomcat9` and user-facing `cmnd-linux`. Ubuntu
+  24.04 CI now executes maintainer-script syntax checks and a real non-activating
+  `apt-get install`/remove smoke test of the generated packages.
+- Main and private CMND listeners are collision-aware. Historical ports remain
+  the defaults, while Tomcat, SmartCMS/Apache, isolated database, PHP-FPM and
+  management listeners move only when the host already owns those ports.
+- Existing shared MySQL reuse now requires the reviewed MySQL 5.7 global profile
+  to be present already; CMND does not alter unrelated server-wide settings.
+  Failed fresh shared-database activation has bounded rollback for only the CMND
+  schemas/accounts created by that transaction.
+- Added a repeatable Ubuntu 24.04 full-build workflow that consumes the verified
+  Philips 7.5.9 release bundle and pinned Tomcat archive and emits the four
+  development test packages as one Actions artifact.
 - Ubuntu 24.04 remains the qualified runtime baseline. Ubuntu 22.04 and 26.04 are
   development targets and must be separately qualified before being called
   supported. Docker/Compose production deployment remains a later 0.8 milestone.
