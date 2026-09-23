@@ -4,7 +4,7 @@ set -eu
 case "${1:-}" in
   remove)
     if command -v systemctl >/dev/null 2>&1; then
-      systemctl stop cmnd-tomcat.service cmnd-apache.service cmnd-php.service cmnd-mysql.service cmnd-admin.service 2>/dev/null || true
+      systemctl disable --now cmnd-update.path cmnd-tomcat.service cmnd-apache.service cmnd-php.service cmnd-mysql.service cmnd-admin.service cmnd-egress.service 2>/dev/null || true
     fi
     if [ -x /usr/bin/cmndctl ] && [ -f /etc/cmnd/deployment.json ]; then
       /usr/bin/cmndctl apache-detach --execute 2>/dev/null || true
