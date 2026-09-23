@@ -18,7 +18,7 @@ from .artifacts import file_hash
 from .certificates import CertificateConfig, provision_certificates
 from .config import Config, ConfigError, load_config
 from .egress import EgressPolicy, apply_policy
-from .native_config import native_endpoint, render_native_files
+from .native_config import NativeLayout, native_endpoint, render_native_files
 from .native_deploy import (BASELINE, ETC, LAYOUT, MANAGEMENT, MYSQL_IMAGE, SCHEMAS, STATE,
     _mysql, _owned_tree, https_origin, mysql_server_options, run, validate_baseline,
     validate_image, wait_database, wait_php, write_new)
@@ -31,6 +31,10 @@ class CoexistInputs:
     config: Path; vendor: Path; tomcat_archive: Path; php_image: str; java_home: Path
     database_mode: str='isolated'; apache_mode: str='standalone'
     shared_database: SharedDatabaseSession|None=None; apt_managed: bool=True
+    php_fpm_port: int=9000; management_port: int=9078
+
+    def layout(self) -> NativeLayout:
+        return NativeLayout(fpm_port=self.php_fpm_port, management_port=self.management_port)
 
 def os_support(content,machine):
     values={}
@@ -62,9 +66,22 @@ def _port_free(port):
         try:s.bind(('0.0.0.0',port)); return True
         except OSError:return False
 
+def _wait_php(port,seconds=60):
+    if type(port) is not int or not 1<=port<=65535:
+        raise ConfigError('invalid PHP-FPM readiness port')
+    deadline=time.monotonic()+seconds
+    while time.monotonic()<deadline:
+        try:
+            with socket.create_connection(('127.0.0.1',port),timeout=1):
+                return
+        except OSError:
+            time.sleep(0.5)
+    raise RuntimeError('PHP-FPM did not become ready on planned port')
+
 def preflight(i:CoexistInputs,c:Config):
     if i.database_mode not in {'isolated','shared'} or i.apache_mode not in {'standalone','host'}: raise ConfigError('invalid coexistence mode')
-    native_endpoint(c); render_native_files(c,{k:'preflight-placeholder' for k in REQUIRED_SECRETS}); validate_image(i.php_image)
+    layout=i.layout()
+    native_endpoint(c); render_native_files(c,{k:'preflight-placeholder' for k in REQUIRED_SECRETS},layout=layout); validate_image(i.php_image)
     distro=os_support(Path('/etc/os-release').read_text(),platform.machine()); validate_baseline(); _tomcat_members(i.tomcat_archive)
     for name,expected in VENDOR_INPUT_HASHES.items():
         p=i.vendor/name
@@ -79,7 +96,7 @@ def preflight(i:CoexistInputs,c:Config):
         if p.exists() or p.is_symlink(): raise ConfigError('fresh deployment refuses existing state: '+str(p))
     for name in ('cmnd-native-mysql','cmnd-native-php'):
         if subprocess.run(['docker','inspect',name],capture_output=True).returncode==0: raise ConfigError('existing CMND container: '+name)
-    ports={c.tomcat_http,c.tomcat_https,c.apache_http,c.apache_https,LAYOUT.fpm_port,9078}
+    ports={c.tomcat_http,c.tomcat_https,c.apache_http,c.apache_https,layout.fpm_port,layout.management_port}
     if len(ports|{c.database_port})!=7: raise ConfigError('CMND ports collide')
     for port in ports:
         if not _port_free(port): raise ConfigError('planned CMND port occupied: '+str(port))
@@ -161,7 +178,12 @@ def deploy(i:CoexistInputs,*,execute=False,accept_legacy=False):
             except KeyError: run('useradd','--system','--user-group','--home-dir',home,'--shell','/usr/sbin/nologin',user); account=pwd.getpwnam(user)
             if account.pw_uid==0:raise ConfigError('unsafe existing CMND service account')
         java,cms=pwd.getpwnam('cmnd'),pwd.getpwnam('cmnd-cms'); webgid=pwd.getpwnam('www-data').pw_gid if i.apache_mode=='host' else cms.pw_gid
-        certs=provision_certificates(CertificateConfig(STATE/'certificates',public,ips,socket.gethostname(),STATE/'certificate-password',STATE/'certificate-password')); stage_application(ApplicationInputs(i.vendor,i.tomcat_archive,certs),c,values,STATE/'candidate',execute=True,database_host='127.0.0.1'); payload,native=STATE/'candidate/payload',STATE/'candidate/native-config'; Path('/opt/cmnd').mkdir(mode=0o755,exist_ok=True)
+        layout=i.layout()
+        certs=provision_certificates(CertificateConfig(STATE/'certificates',public,ips,socket.gethostname(),STATE/'certificate-password',STATE/'certificate-password'))
+        stage_application(ApplicationInputs(i.vendor,i.tomcat_archive,certs),c,values,STATE/'candidate',
+                          execute=True,database_host='127.0.0.1',layout=layout)
+        payload,native=STATE/'candidate/payload',STATE/'candidate/native-config'
+        Path('/opt/cmnd').mkdir(mode=0o755,exist_ok=True)
         for name,target in (('tomcat',Path(LAYOUT.tomcat)),('SmartCMS',Path(LAYOUT.cms)),('Philips',Path('/opt/Philips'))):shutil.copytree(payload/name,target)
         (Path(LAYOUT.tomcat)/'conf/Catalina/localhost').mkdir(parents=True,exist_ok=True); _owned_tree(Path(LAYOUT.tomcat),java.pw_uid,java.pw_gid); _owned_tree(Path('/opt/Philips'),java.pw_uid,java.pw_gid); _owned_tree(Path(LAYOUT.cms),0,webgid); _owned_tree(Path(LAYOUT.cms)/'sites/default/files',cms.pw_uid,webgid)
         for d,uid,gid in ((Path('/var/lib/cmnd'),java.pw_uid,java.pw_gid),(Path('/var/lib/cmnd/smartcontrol'),java.pw_uid,java.pw_gid),(Path('/var/log/cmnd'),java.pw_uid,java.pw_gid),(Path(LAYOUT.php_uploads),cms.pw_uid,cms.pw_gid),(Path(LAYOUT.pgt),cms.pw_uid,cms.pw_gid)):d.mkdir(parents=True,exist_ok=True); os.chown(d,uid,gid); d.chmod(0o750)
@@ -197,7 +219,7 @@ def deploy(i:CoexistInputs,*,execute=False,accept_legacy=False):
         queue.mkdir(mode=0o700)
         os.chown(queue,admin.pw_uid,admin.pw_gid)
         queue.chmod(0o700)
-        write_new(MANAGEMENT/'admin.json',json.dumps({'password':password_record(adminpass),'origin':https_origin(public,c.apache_https),'check_on_startup':not i.apt_managed,'applications':{'TV management':f'https://{public}:{c.tomcat_https}/SmartInstall/','Site and content editor':f'https://{public}:{c.apache_https}/SmartCMS/'}}),0o640)
+        write_new(MANAGEMENT/'admin.json',json.dumps({'password':password_record(adminpass),'origin':https_origin(public,c.apache_https),'check_on_startup':not i.apt_managed,'listen_port':layout.management_port,'applications':{'TV management':f'https://{public}:{c.tomcat_https}/SmartInstall/','Site and content editor':f'https://{public}:{c.apache_https}/SmartCMS/'}}),0o640)
         write_new(MANAGEMENT/'updates.json',json.dumps({'enabled':not i.apt_managed,'channel':'apt' if i.apt_managed else 'preview','token_file':None}),0o640)
         for management_file in MANAGEMENT.iterdir():
             os.chown(management_file,0,admin.pw_gid)
@@ -206,11 +228,15 @@ def deploy(i:CoexistInputs,*,execute=False,accept_legacy=False):
         shutil.copyfile(BASELINE,'/var/lib/cmnd-updates/current.deb')
         Path('/var/lib/cmnd-updates/current.deb').chmod(0o600)
         create=['docker','create','--name','cmnd-native-php','--network','host','--user',f'{cms.pw_uid}:{cms.pw_gid}','--read-only','--cap-drop','ALL','--pids-limit','128','--memory','1g','--security-opt','no-new-privileges','--tmpfs','/tmp:rw,nosuid,noexec,size=256m']; create += (['--group-add',str(webgid)] if i.apache_mode=='host' else []); create += ['--mount',f'type=bind,src={LAYOUT.cms},dst={LAYOUT.cms},readonly','--mount',f'type=bind,src={LAYOUT.cms}/sites/default/files,dst={LAYOUT.cms}/sites/default/files','--mount',f'type=bind,src={LAYOUT.pgt},dst={LAYOUT.pgt}','--mount',f'type=bind,src={LAYOUT.php_uploads},dst={LAYOUT.php_uploads}','--mount','type=bind,src=/etc/cmnd/php-fpm.conf,dst=/usr/local/etc/php-fpm.conf,readonly','--mount','type=bind,src=/etc/ssl/certs,dst=/etc/ssl/certs,readonly',i.php_image]; run(*create); run('systemctl','start','cmnd-php'); wait_php(); run('docker','exec','-i','-e','CMND_CMS_EXECUTE=1','cmnd-native-php','php',data=(ETC/'configure-cms.php').read_bytes())
-        if i.apache_mode=='host': report['host_apache']=apache_apply(c,execute=True); host_apache=True
+        if i.apache_mode=='host': report['host_apache']=apache_apply(c,execute=True,layout=layout,management_port=layout.management_port); host_apache=True
         else: run('apache2','-t','-f',ETC/'apache.conf'); run('systemctl','start','cmnd-apache')
         run('systemctl','start','cmnd-admin','cmnd-tomcat'); report.update(_ready(c,i.database_mode))
         if not report['readiness_verified']:raise RuntimeError('coexistence readiness failed')
-        enabled=['cmnd-php','cmnd-tomcat','cmnd-admin']+(['cmnd-mysql'] if i.database_mode=='isolated' else [])+(['cmnd-apache'] if i.apache_mode=='standalone' else []); run('systemctl','enable',*enabled); write_new(ETC/'deployment.json',json.dumps({'state':'active','managed_by':'linux-cmnd-apt' if i.apt_managed else 'linux-cmnd-coexist','database_mode':i.database_mode,'apache_mode':i.apache_mode,'vendor':'7.5.9','config_sha256':file_hash(i.config)})); write_new(STATE/'qualification.json',json.dumps(report,indent=2)); return report
+        enabled=['cmnd-php','cmnd-tomcat','cmnd-admin']+(['cmnd-mysql'] if i.database_mode=='isolated' else [])+(['cmnd-apache'] if i.apache_mode=='standalone' else [])
+        run('systemctl','enable',*enabled)
+        write_new(ETC/'deployment.json',json.dumps({'state':'active','managed_by':'linux-cmnd-apt' if i.apt_managed else 'linux-cmnd-coexist','database_mode':i.database_mode,'apache_mode':i.apache_mode,'php_fpm_port':layout.fpm_port,'management_port':layout.management_port,'vendor':'7.5.9','config_sha256':file_hash(i.config)}))
+        write_new(STATE/'qualification.json',json.dumps(report,indent=2))
+        return report
     except Exception:
         subprocess.run(['systemctl','stop','cmnd-tomcat','cmnd-apache','cmnd-php','cmnd-admin'],capture_output=True,timeout=120)
         if host_apache:
