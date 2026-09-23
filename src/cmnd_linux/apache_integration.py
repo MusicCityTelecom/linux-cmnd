@@ -26,8 +26,9 @@ def supported() -> bool:
             and all(shutil.which(name) for name in ('apache2ctl', 'a2enmod', 'a2enconf', 'a2disconf', 'systemctl')))
 
 
-def render(config: Config, *, layout: NativeLayout = NativeLayout(), management_port: int = 9078) -> str:
+def render(config: Config, *, layout: NativeLayout = NativeLayout(), management_port: int | None = None) -> str:
     host, _ = native_endpoint(config)
+    management_port = layout.management_port if management_port is None else management_port
     if type(management_port) is not int or not 1024 <= management_port <= 65535:
         raise ConfigError('invalid management port for host Apache integration')
     if layout.fpm_port in {config.apache_http, config.apache_https, management_port}:
@@ -91,8 +92,9 @@ def _run(args: list[str], *, timeout: int = 60) -> subprocess.CompletedProcess[s
     return result
 
 
-def apply(config: Config, *, execute: bool = False) -> dict:
-    content = render(config)
+def apply(config: Config, *, execute: bool = False,
+          layout: NativeLayout = NativeLayout(), management_port: int | None = None) -> dict:
+    content = render(config, layout=layout, management_port=management_port)
     if not supported():
         raise ConfigError('existing Apache is not a supported Debian/Ubuntu apache2 layout')
     if CONF_AVAILABLE.exists() or CONF_AVAILABLE.is_symlink() or CONF_ENABLED.exists() or CONF_ENABLED.is_symlink():
