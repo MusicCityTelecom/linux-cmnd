@@ -145,6 +145,23 @@ class SharedDatabaseSession:
         return {'compatible': True, 'namespace_clear': True, 'tcp_loopback_reachable': True,
                 'changes_performed': False, 'compatibility': compatibility}
 
+    def rollback_fresh(self) -> dict:
+        """Remove only the fixed CMND namespaces from a failed fresh install.
+
+        Callers may use this only after this session successfully passed the
+        namespace-clear gate and created the fresh CMND objects.
+        """
+        removed_users: list[str] = []
+        removed_schemas: list[str] = []
+        for _schema, user, _folder, _numbers in reversed(SCHEMA_SPECS):
+            for host in reversed(APP_HOSTS):
+                self.execute(f'DROP USER IF EXISTS {_sql_string(user)}@{_sql_string(host)};', timeout=20)
+                removed_users.append(f'{user}@{host}')
+        for schema, _user, _folder, _numbers in reversed(SCHEMA_SPECS):
+            self.execute(f'DROP DATABASE IF EXISTS `{schema}`;', timeout=60)
+            removed_schemas.append(schema)
+        return {'users_removed': removed_users, 'schemas_removed': removed_schemas}
+
     def initialize(self, vendor: Path, values: Mapping[str, str]) -> dict:
         self.validate_for_fresh_cmnd()
         vendor = Path(vendor)
